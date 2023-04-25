@@ -53,7 +53,7 @@ const LocalDashboard = () => {
 				</div>
 			</div>
 			{
-				addTodoToggle && <AddTodo />
+				addTodoToggle && <AddTodo setAddTodoToggle={setAddTodoToggle} />
 			}
 		</>
 
