@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { BsFillGearFill, BsBox, BsBoxSeam } from 'react-icons/bs'
 import { GoPlus } from 'react-icons/go'
 import { useTodos } from '../../data/context/TodosContext'
+import AddTaskModal from './AddTaskModal'
 
 const LocalDashboard = () => {
 	const {tasks, setTasks, colums, setColumns} = useTodos()
@@ -97,6 +98,9 @@ const LocalDashboard = () => {
 
 				</div>
 			</div>
+			{
+				destinationColumn && <AddTaskModal destinationColumn={destinationColumn} setDestinationColumn={setDestinationColumn} />
+			}
 		</>
 	)
 }
