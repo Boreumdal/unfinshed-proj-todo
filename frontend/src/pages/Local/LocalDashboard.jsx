@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { BsFillGearFill } from 'react-icons/bs'
+import { BsFillGearFill, BsBox, BsBoxSeam } from 'react-icons/bs'
 import { GoPlus } from 'react-icons/go'
 import { useTodos } from '../../data/context/TodosContext'
 
@@ -7,6 +7,7 @@ const LocalDashboard = () => {
 	const {tasks, setTasks, colums, setColumns} = useTodos()
 	const [addColumnToggle, setAddColumnToggle] = useState(true)
 	const [addColumn, setAddColumn] = useState('')
+	const [destinationColumn, setDestinationColumn] = useState('')
 
 	const handleAddColumn = e => {
 		setAddColumn(e.target.value)
@@ -66,10 +67,20 @@ const LocalDashboard = () => {
 						{
 							tasks.columns && tasks.columns.length > 0 ? (
 								tasks.columns.map((task, idx) => (
-									<div key={idx}>
-										<div className='flex items-center justify-between font-medium'>
+									<div key={idx} className='mt-4 flex flex-col gap-2 max-h-[270px] bg-white shadow-sm py-3 px-3'>
+										<div className='flex items-center justify-between font-medium px-2 py-1'>
 											<h3>{ task }</h3>
-											<button>+</button>
+											<button onClick={() => setDestinationColumn(task)}><GoPlus /></button>
+										</div>
+										<div className='flex flex-col gap-2 overflow-y-auto'>
+											<div className='flex items-center gap-2 h-[28px] px-2 hover:bg-[#f8f8f8] duration-300 rounded-sm cursor-pointer'>
+												<span><BsBox /></span>
+												<p className='truncate'>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Repudiandae, in sit. Aperiam sapiente voluptatem facilis voluptatibus. Minus, vitae.</p>
+											</div>
+											<div className='flex items-center gap-2 h-[28px] px-2 hover:bg-[#f8f8f8] duration-300 rounded-sm cursor-pointer'>
+												<span><BsBoxSeam /></span>
+												<p className='truncate'>No task added</p>
+											</div>
 										</div>
 									</div>
 								))
