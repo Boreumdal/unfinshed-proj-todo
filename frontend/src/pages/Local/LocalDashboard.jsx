@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { BsFillGearFill, BsBox, BsBoxSeam, BsTrashFill, BsStarFill, BsStar, BsThreeDots, BsCheckLg } from 'react-icons/bs'
+import { BsFillGearFill, BsBox, BsBoxSeam, BsTrashFill, BsStarFill, BsStar, BsThreeDots, BsCheckLg, BsArrowCounterclockwise } from 'react-icons/bs'
 import { GoPlus } from 'react-icons/go'
 import { RxCross2 } from 'react-icons/rx'
 import { useTodos } from '../../data/context/TodosContext'
@@ -56,6 +56,28 @@ const LocalDashboard = () => {
 		fetchLocalstorage()
 	}
 
+	const doneTask = id => {
+		const localStored = JSON.parse(localStorage.getItem('p1project'))
+		const indexOfTarget = localStored.tasks.findIndex(item => item.id === id)
+
+		localStored.tasks[indexOfTarget].status = 'done'
+
+		localStorage.setItem('p1project', JSON.stringify(localStored))
+		
+		fetchLocalstorage()
+	}
+
+	const undoDoneTask = id => {
+		const localStored = JSON.parse(localStorage.getItem('p1project'))
+		const indexOfTarget = localStored.tasks.findIndex(item => item.id === id)
+
+		localStored.tasks[indexOfTarget].status = 'todo'
+
+		localStorage.setItem('p1project', JSON.stringify(localStored))
+		
+		fetchLocalstorage()
+	}
+
 	useEffect(() => {
 		fetchLocalstorage()
 	}, [destinationColumn])
@@ -94,15 +116,21 @@ const LocalDashboard = () => {
 										<div className='flex flex-col gap-2 overflow-y-auto'>
 											{
 												tasks.tasks.filter(todo => todo.column === task).length > 0 ? tasks.tasks.filter(todo => todo.column === task && !todo.marks.deleted).map(item => (
-														<div key={item?.id} onMouseLeave={() => setTooltip('')} className='flex items-center gap-2 h-[28px] px-2 hover:bg-[#f8f8f8] duration-300 rounded-sm relative task-item'>
-															<span><BsBox /></span>
+														<div key={item?.id} onMouseLeave={() => setTooltip('')} className={(item?.status !== 'todo' && 'opacity-40 line-through') + ' flex items-center gap-2 h-[28px] px-2 hover:bg-[#f8f8f8] duration-300 rounded-sm relative task-item'}>
+															<span>{ item?.status !== 'todo' ? <BsCheckLg /> : <BsBox />}</span>
 															<p className={(tooltip === item?.id ? 'w-[54%]' : 'task-item-text w-[84%]') + ' truncate '}>{item?.title}</p>
 															<div className='h-full hidden duration-200 items-center gap-1 absolute right-2 task-item-action	z-20'>
 																{
 																	tooltip === item?.id && (
 																		<div className='flex items-center gap-1 bg-[#f8f8f8]'>
 																			<button onClick={() => deleteTask(item?.id)} className='w-[22px] hover:text-white hover:bg-[#393E46] aspect-square rounded-md grid place-items-center duration-200'><BsTrashFill /></button>
-																			<button onClick={() => setTooltip(item?.id)} className='w-[22px] hover:text-white hover:bg-[#393E46] aspect-square rounded-md grid place-items-center duration-200'><BsCheckLg /></button>
+																			{
+																				item?.status === 'todo'
+																				? <button onClick={() => doneTask(item?.id)} className='w-[22px] hover:text-white hover:bg-[#393E46] aspect-square rounded-md grid place-items-center duration-200'><BsCheckLg /></button>
+																				: <button onClick={() => undoDoneTask(item?.id)} className='w-[22px] hover:text-white hover:bg-[#393E46] aspect-square rounded-md grid place-items-center duration-200'><BsArrowCounterclockwise /></button>
+																			}
+																			
+																			
 																			<button onClick={() => removeMark(item?.id)}  className='w-[22px] hover:text-white hover:bg-[#393E46] aspect-square rounded-md grid place-items-center duration-200'>{ item?.marks.marked ? <span className='text-sunglow'><BsStarFill /></span> : <span><BsStar /></span> }</button>
 																		</div>
 																	)
