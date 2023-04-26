@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react'
-import { BsFillGearFill, BsBox, BsBoxSeam, BsTrashFill, BsStarFill, BsStar, BsThreeDots, BsCheckLg, BsArrowCounterclockwise } from 'react-icons/bs'
+import { BsFillGearFill, BsBox, BsBoxSeam, BsTrashFill, BsStarFill, BsStar, BsThreeDots, BsCheckLg, BsArrowCounterclockwise, BsFillPersonFill, BsWrench } from 'react-icons/bs'
 import { GoPlus } from 'react-icons/go'
 import { RxCross2 } from 'react-icons/rx'
 import { useTodos } from '../../data/context/TodosContext'
 import AddTaskModal from './AddTaskModal'
 import { toast } from 'react-toastify'
+import DisplayTask from './DisplayTask'
 
 const LocalDashboard = () => {
 	const {tasks, setTasks, colums, setColumns} = useTodos()
-	const [addColumnToggle, setAddColumnToggle] = useState(true)
+	const [addColumnToggle, setAddColumnToggle] = useState(false)
 	const [addColumn, setAddColumn] = useState('')
 	const [tooltip, setTooltip] = useState('')
 	const [destinationColumn, setDestinationColumn] = useState('')
@@ -92,9 +93,9 @@ const LocalDashboard = () => {
 
 	return (
 		<>
-			<div className='flex text-[#232931]'>
+			<div className='flex justify-between text-[#232931]'>
 				<div className='w-[28%] h-screen p-5'>
-					<div className='flex flex-col gap-5 w-full h-full drop-shadow-lg rounded-lg py-5 px-5 bg-[#fafafa] overflow-hidden'>
+					<div className='flex flex-col gap-5 w-full h-full drop-shadow-lg rounded-lg py-5 px-5 bg-[#f8f8f8] overflow-hidden'>
 
 						<div className='h-[38px] flex items-center justify-between'>
 							<h1 className='text-3xl font-bold'>TodoList</h1>
@@ -127,7 +128,7 @@ const LocalDashboard = () => {
 							{
 								tasks.columns && tasks.columns.length > 0 ? (
 									tasks.columns.map((task, idx) => (
-										<div key={idx} className=' flex flex-col gap-2 max-h-[270px] bg-white rounded-sm shadow-sm py-3 px-3'>
+										<div key={idx} className=' flex flex-col gap-2 bg-white rounded-sm shadow-sm py-3 px-3'>
 											<div className='flex items-center justify-between font-medium px-2 py-1'>
 												<h3>{ task }</h3>
 												<button onClick={() => setDestinationColumn(task)}><GoPlus /></button>
@@ -184,8 +185,8 @@ const LocalDashboard = () => {
 						</div>
 					</div>
 				</div>
-				<div>
-
+				<div className='w-[72%] p-5 bg-red-50'>
+					<DisplayTask tasks={tasks} />
 				</div>
 			</div>
 			{
