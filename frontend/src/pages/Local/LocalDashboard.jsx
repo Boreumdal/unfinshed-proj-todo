@@ -4,6 +4,7 @@ import { GoPlus } from 'react-icons/go'
 import { RxCross2 } from 'react-icons/rx'
 import { useTodos } from '../../data/context/TodosContext'
 import AddTaskModal from './AddTaskModal'
+import { toast } from 'react-toastify'
 
 const LocalDashboard = () => {
 	const {tasks, setTasks, colums, setColumns} = useTodos()
@@ -19,9 +20,16 @@ const LocalDashboard = () => {
 	const handleAddColumnSubmit = () => {
 		const localStored = JSON.parse(localStorage.getItem('p1project'))
 
-		localStorage.setItem('p1project', JSON.stringify({ ...localStored, columns: [...localStored.columns, addColumn] }))
-		setAddColumn('')
-		fetchLocalstorage()
+		if (localStored.columns.indexOf(addColumn) === -1){
+			localStorage.setItem('p1project', JSON.stringify({ ...localStored, columns: [...localStored.columns, addColumn] }))
+
+			setAddColumn('')
+			setAddColumnToggle(false)
+			fetchLocalstorage()
+		} else {
+			toast.error('Column already exists')
+		}
+
 	}
 
 	const fetchLocalstorage = () => {
@@ -86,23 +94,32 @@ const LocalDashboard = () => {
 		<>
 			<div className='flex text-[#232931]'>
 				<div className='w-[28%] h-screen p-5'>
-					<div className='flex flex-col w-full h-full drop-shadow-lg rounded-lg py-5 px-5 bg-[#fafafa] overflow-hidden'>
+					<div className='flex flex-col gap-5 w-full h-full drop-shadow-lg rounded-lg py-5 px-5 bg-[#fafafa] overflow-hidden'>
 
 						<div className='h-[38px] flex items-center justify-between'>
 							<h1 className='text-3xl font-bold'>TodoList</h1>
 							<div className='flex items-center gap-3'>
-								<button onClick={() => setAddColumnToggle(!addColumnToggle)} className='text-xl bg-[#393E46] text-white rounded-md h-[32px] aspect-square grid place-items-center'><GoPlus /></button>
-								<button onClick={() => console.log(tasks)} className='text-xl bg-[#393E46] text-white rounded-md h-[32px] aspect-square grid place-items-center'><BsFillGearFill /></button>
+								<button onClick={() => setAddColumnToggle(!addColumnToggle)} className='text-xl bg-[#393E46] text-white rounded-md h-[32px] aspect-square flex items-center justify-center'>{ addColumnToggle ? <RxCross2 /> : <GoPlus />}</button>
+								<button onClick={() => console.log(tasks)} className='text-xl bg-[#393E46] text-white rounded-md h-[32px] aspect-square flex items-center justify-center'><BsFillGearFill /></button>
 							</div>
 						</div>
 						{
 							addColumnToggle && (
-								<div className='flex items-center justify-between gap-2 h-[38px] max-h-[38px] my-5'>
-									<input type="text" name='column' className='h-full px-3 border shadow-sm w-full block rounded' value={addColumn} onChange={handleAddColumn} placeholder='Column name...' />
-									<button className='bg-[#4ECCA3] h-full px-4 gap-1 rounded shadow-sm text-white flex items-center font-medium hover:brightness-95 duration-200' onClick={handleAddColumnSubmit} disabled={!addColumn}>
-										<GoPlus />
-										<span>Add</span>
-									</button>
+								<div className='absolute inset-0 grid place-items-center z-50'>
+									<div className='absolute bg-white shadow-md w-[260px] flex flex-col gap-2 rounded-md'>
+										<h1 className='text-xl font-medium mx-4 pt-4 pb-2 border-b'>Add a column</h1>
+										<div className='flex flex-col items-center justify-between gap-3 px-5 py-3'>
+											<input type="text" name='column' className='h-[38px] px-3 border bg-gray-50 shadow-sm w-full block rounded' value={addColumn} onChange={handleAddColumn} placeholder='Column name...' />
+											<div className='flex justify-end w-full'>
+												<button onClick={() => setAddColumnToggle(false)} className='h-[32px] w-[72px] px-4 flex items-center justify-center gap-1 rounded hover:text-blue-400 hover:brightness-95 duration-200 disabled:brightness-90 disabled:bg-[#383838] disabled:cursor-not-allowed font-medium'>Cancel</button>
+												<button onClick={handleAddColumnSubmit} className='h-[32px] w-[72px] bg-[#4ECCA3] px-4 flex items-center justify-center gap-1 rounded text-white hover:brightness-95 duration-200 disabled:brightness-90 disabled:bg-[#383838] disabled:cursor-not-allowed font-medium'>
+													<GoPlus />
+													<span>Add</span>
+												</button>
+											</div>
+										</div>
+									</div>
+									<div onClick={() => setAddColumnToggle(false)} className='bg-[#9595952d] w-full h-full'></div>
 								</div>
 							)
 						}
