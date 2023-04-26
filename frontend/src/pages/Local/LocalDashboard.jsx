@@ -36,12 +36,6 @@ const LocalDashboard = () => {
 		fetchLocalstorage()
 	}, [destinationColumn])
 
-	useEffect(() => {
-		// if (tasks && tasks.length !== 0){
-		// 	setColumns(tasks.map(task => task.column))
-		// }
-	}, [tasks])
-
 	return (
 		<>
 			<div className='flex text-[#232931]'>
@@ -75,10 +69,14 @@ const LocalDashboard = () => {
 										</div>
 										<div className='flex flex-col gap-2 overflow-y-auto'>
 											{
-												tasks.tasks.filter(todo => todo.column === task).length > 0 ? tasks.tasks.filter(todo => todo.column === task).map((item, idx) => (
-													<div key={idx} className='flex items-center gap-2 h-[28px] px-2 hover:bg-[#f8f8f8] duration-300 rounded-sm cursor-pointer'>
+												tasks.tasks.filter(todo => todo.column === task).length > 0 ? tasks.tasks.filter(todo => todo.column === task).map(item => (
+													<div key={item?.id} className='flex items-center gap-2 h-[28px] px-2 hover:bg-[#f8f8f8] duration-300 rounded-sm cursor-pointer relative task-item'>
 														<span><BsBox /></span>
 														<p className='truncate'>{item?.title}</p>
+														<div className='h-full bg-orange-300 hidden duration-200 items-center gap-1 absolute right-0 task-item-action'>
+															<button className='w-[20px] aspect-square bg-blue-300'>M</button>
+															<button className='w-[20px] aspect-square bg-blue-300'>D</button>
+														</div>
 													</div>
 												)) : (
 													<div className='flex items-center gap-2 h-[28px] px-2 hover:bg-[#f8f8f8] duration-300 rounded-sm cursor-pointer'>

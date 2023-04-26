@@ -24,6 +24,13 @@ body {
     background-color: transparent;
 }
 
+.task-item {
+    
+}
+.task-item:hover .task-item-action {
+    display: flex;
+}
+
 :disabled {
     cursor: not-allowed;
 }

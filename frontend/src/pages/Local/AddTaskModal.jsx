@@ -1,9 +1,12 @@
 import React, { useState } from 'react'
 import { GoPlus } from 'react-icons/go'
 import PulseLoader from 'react-spinners/PulseLoader'
+import { v4 as uuidv4 } from 'uuid'
+import { toast } from 'react-toastify';
 
 const AddTaskModal = ({ destinationColumn, setDestinationColumn }) => {
     const taskDefault = {
+        id: '',
         column: destinationColumn,
         title: '',
         description: '',
@@ -55,6 +58,7 @@ const AddTaskModal = ({ destinationColumn, setDestinationColumn }) => {
 
         const task = {
             ...taskItem,
+            id: uuidv4(),
             createdAt: Date.now(),
             description: taskItem.description ? taskItem.description : 'No description',
             dueDate: taskItem.dueDate ? taskItem.dueDate : 'No due date'
@@ -62,11 +66,16 @@ const AddTaskModal = ({ destinationColumn, setDestinationColumn }) => {
 
         addTodoLocal(task)
 
-        setTimeout(() => {
+        const back = setTimeout(() => {
             setTaskItem(taskDefault)
             setUiLoading(false)
             setDestinationColumn('')
-        }, 1500)
+
+            toast.success('Task added')
+
+            return clearTimeout(back)
+        }, 1200)
+
     }
 
     const addTodoLocal = task => {
@@ -106,7 +115,7 @@ const AddTaskModal = ({ destinationColumn, setDestinationColumn }) => {
                         </div>
                     </div>
                     <div className='flex gap-2 justify-end mt-2'>
-                        <button type='button' onClick={() => console.log(localStorage.getItem('p1project'))} className='h-[32px] bg-transparent px-4 flex items-center gap-1 rounded hover:text-blue-theme duration-200'>Show</button>
+                        <button type='button' onClick={() => console.log(JSON.parse(localStorage.getItem('p1project')))} className='h-[32px] bg-transparent px-4 flex items-center gap-1 rounded hover:text-blue-theme duration-200'>Show</button>
                         <button type='button' onClick={() => setDestinationColumn('')} className='h-[32px] bg-transparent px-4 flex items-center gap-1 rounded hover:text-blue-theme duration-200'>Cancel</button>
                         <button type='submit' className='h-[32px] w-[72px] bg-[#4ECCA3] px-4 flex items-center justify-center gap-1 rounded text-white hover:brightness-95 duration-200 disabled:brightness-90 disabled:bg-[#383838] disabled:cursor-not-allowed font-medium' disabled={!taskItem.title || (hasDue && !taskItem.dueDate)}>
                             {
