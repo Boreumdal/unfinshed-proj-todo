@@ -34,7 +34,7 @@ const LocalDashboard = () => {
 
 	useEffect(() => {
 		fetchLocalstorage()
-	}, [])
+	}, [destinationColumn])
 
 	useEffect(() => {
 		// if (tasks && tasks.length !== 0){
@@ -74,14 +74,19 @@ const LocalDashboard = () => {
 											<button onClick={() => setDestinationColumn(task)}><GoPlus /></button>
 										</div>
 										<div className='flex flex-col gap-2 overflow-y-auto'>
-											<div className='flex items-center gap-2 h-[28px] px-2 hover:bg-[#f8f8f8] duration-300 rounded-sm cursor-pointer'>
-												<span><BsBox /></span>
-												<p className='truncate'>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Repudiandae, in sit. Aperiam sapiente voluptatem facilis voluptatibus. Minus, vitae.</p>
-											</div>
-											<div className='flex items-center gap-2 h-[28px] px-2 hover:bg-[#f8f8f8] duration-300 rounded-sm cursor-pointer'>
-												<span><BsBoxSeam /></span>
-												<p className='truncate'>No task added</p>
-											</div>
+											{
+												tasks.tasks.filter(todo => todo.column === task).length > 0 ? tasks.tasks.filter(todo => todo.column === task).map((item, idx) => (
+													<div key={idx} className='flex items-center gap-2 h-[28px] px-2 hover:bg-[#f8f8f8] duration-300 rounded-sm cursor-pointer'>
+														<span><BsBox /></span>
+														<p className='truncate'>{item?.title}</p>
+													</div>
+												)) : (
+													<div className='flex items-center gap-2 h-[28px] px-2 hover:bg-[#f8f8f8] duration-300 rounded-sm cursor-pointer'>
+														<span><BsBoxSeam /></span>
+														<p className='truncate'>No task added</p>
+													</div>
+												)
+											}
 										</div>
 									</div>
 								))
