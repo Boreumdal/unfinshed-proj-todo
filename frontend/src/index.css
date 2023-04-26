@@ -24,11 +24,20 @@ body {
     background-color: transparent;
 }
 
-.task-item {
-    
+.task-item:hover .task-item-text {
+    width: 76%;
 }
+
 .task-item:hover .task-item-action {
     display: flex;
+}
+
+.task-item:hover .task-mark {
+    margin-right: 25px;
+}
+
+.task-item:hover .item-marked {
+    margin-right: 24px;
 }
 
 :disabled {
