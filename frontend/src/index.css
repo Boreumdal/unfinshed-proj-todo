@@ -24,6 +24,15 @@ body {
     background-color: transparent;
 }
 
+.task-list-nav::-webkit-scrollbar {
+    appearance: none;
+    width: 4px;
+}
+.task-list-nav::-webkit-scrollbar-thumb {
+    background-color: #393e46;
+    border-radius: 5px;
+}
+
 .task-item:hover .task-item-text {
     width: 76%;
 }
