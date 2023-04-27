@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { BsCalendar2, BsCalendar2Check, BsCalendar2Heart, BsCaretDownFill, BsCaretUpFill } from 'react-icons/bs'
 
-const DisplayTask = ({tasks}) => {
+const DisplayTask = ({tasks, setOpenedData}) => {
 	const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 	const year = new Date().getFullYear()
 	const [noDue, setNoDue] = useState([])
@@ -40,13 +40,14 @@ const DisplayTask = ({tasks}) => {
 						<div className='grid grid-cols-3 gap-2 mt-4'>
 							{
 								tasks && tasks.tasks.length > 0 && tasks.tasks.filter(task => task.dueDate.slice(0,10) === date).map(item => (
-									<div key={item.id} className={(item.status !== 'todo' && 'opacity-50') + ' duration-200 font-medium bg-[#EEEEEE] w-full h-[35px] flex items-center px-3 rounded shadow-sm'}>
+									<div key={item.id} className={(item.status !== 'todo' && 'opacity-50') + ' duration-200 font-medium bg-[#EEEEEE] w-full h-[35px] flex items-center justify-between px-3 rounded shadow-sm'}>
 										<div className='flex items-center gap-2'>
 											{
 												item.status === 'todo' ? item.marks.marked ? <span><BsCalendar2Heart /></span> : <span><BsCalendar2 /></span> : item.marks.marked ? <span><BsCalendar2Heart /></span> : <span><BsCalendar2Check /></span> 
 											}
 											<h1 className='font-medium'>{item.title}</h1>
 										</div>
+										<button onClick={() => setOpenedData(item)}>Open</button>
 									</div>
 								))
 							}
@@ -73,6 +74,7 @@ const DisplayTask = ({tasks}) => {
 									}
 									<h1 className='font-medium'>{item.title}</h1>
 								</div>
+								<button onClick={() => setOpenedData(item)}>Open</button>
 							</div>
 						))
 					}

@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import { BsFillGearFill, BsBox, BsBoxSeam, BsTrashFill, BsStarFill, BsStar, BsThreeDots, BsCheckLg, BsArrowCounterclockwise, BsFillPersonFill, BsWrench } from 'react-icons/bs'
+import { BsFillGearFill, BsBox, BsBoxSeam, BsTrashFill, BsStarFill, BsStar, BsThreeDots, BsCheckLg, BsArrowCounterclockwise, BsFillPersonFill, BsWrench, BsCaretUpFill } from 'react-icons/bs'
 import { GoPlus } from 'react-icons/go'
 import { RxCross2 } from 'react-icons/rx'
+import { FaStickyNote, FaStar } from 'react-icons/fa'
 import { useTodos } from '../../data/context/TodosContext'
 import AddTaskModal from './AddTaskModal'
 import { toast } from 'react-toastify'
@@ -18,6 +19,9 @@ const LocalDashboard = () => {
 	const [destinationColumn, setDestinationColumn] = useState('')
 	const [addColumn, setAddColumn] = useState('')
 	const [addColumnToggle, setAddColumnToggle] = useState(false)
+
+	const [openedData, setOpenedData] = useState({})
+	const [openedDataToggle, setOpenedDataToggle] = useState(false)
 
 	const handleAddColumn = e => {
 		setAddColumn(e.target.value)
@@ -217,8 +221,9 @@ const LocalDashboard = () => {
 						</div>
 					</div>
 				</div>
-				<div className='w-[72%] h-screen p-5 relative bg-red-400'>
-					<div className='h-[80px] bg-gray-400 flex items-center gap-2'>
+
+				<div className='w-[72%] h-screen py-5 pr-5 relative'>
+					<div className='h-[80px] flex items-center gap-2 bg-[#f8f8f8] px-4 rounded-lg shadow-md'>
 						<h1 className='text-5xl'>{time}</h1>
 						<div className='flex items-center gap-2'>
 							<h1 className='text-5xl'>{ today.slice(8)}</h1>
@@ -227,14 +232,80 @@ const LocalDashboard = () => {
 								<p className='text-lg leading-5'>{ months[+today.slice(5, 7) - 1]}</p>
 							</div>
 						</div>
+						<button onClick={() => console.log(openedData)}>aaa</button>
 					</div>
-					<div className='h-full overflow-y-auto'>
-						<DisplayTask tasks={tasks} />
+					
+					<div className='h-full overflow-y-auto px-4'>
+						<DisplayTask tasks={tasks} setOpenedData={setOpenedData} />
 					</div>
-					<button className='absolute bottom-5 right-5 aspect-square h-[30px] bg-red-200'>U</button>
-					<div className='absolute bottom-4 right-[0] mr-[50px] w-[400px] h-[400px] bg-yellow-200'>
+					
 
-					</div>
+			
+					{
+						openedData.id && (
+							<button onClick={() => setOpenedDataToggle(!openedDataToggle)} className='absolute bottom-6 right-7 h-[38px] px-5 gap-2 text-lg bg-gray-100 rounded-lg shadow-md flex items-center font-medium'>
+								<span className={(openedDataToggle ? 'rotate-180' : 'rotate-0') + ' duration-300'}><BsCaretUpFill /></span>
+								<span>{openedDataToggle ? 'Close Task Details' : 'Open Task Details' }</span>
+							</button>
+						)
+					}
+					{
+						openedDataToggle && (
+							<div className='absolute bottom-6 mb-[44px] right-7 w-[420px] bg-gray-100 p-6 rounded-lg shadow-lg font-medium'>
+								<h1 className='font-bold text-3xl'>Task</h1>
+								<h1 className='font-bold py-2 border-b'><span className='font-medium text-gray-500'>From column </span>Title</h1>
+								
+								<div className='my-5 flex flex-col gap-3'>
+									<div className=''>
+										<h3 className='font-bold'>Title</h3>
+										<p className='text-gray-500'>Lorem ipsum</p>
+									</div>
+									<div className=''>
+										<h3 className='font-bold'>Description</h3>
+										<p className='text-gray-500'>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Similique, odit reprehenderit. Praesentium fuga quia dicta.</p>
+									</div>
+								</div>
+
+								<div className='mt-5 flex flex-col gap-3'>
+									<div className=''>
+										<h3 className='font-bold'>Due Date</h3>
+										<p className='text-gray-500'>January 1 2023</p>
+										<p className='text-gray-500'>12:12 AM</p>
+									</div>
+									<div className=''>
+										<h3 className='font-bold'>Marks</h3>
+										<div className='flex items-center gap-2'>
+											{
+												openedData.status === 'todo' && (
+													<div className='text-sm py-1 px-3 bg-gray-600 w-fit text-white font-medium rounded-md flex items-center gap-1'>
+														<span><FaStickyNote /></span>
+														<span>Todo</span>
+													</div>
+												)
+											}
+											{
+												openedData.marks.marked && (
+													<div className='text-sm py-1 px-3 bg-gray-600 w-fit text-white font-medium rounded-md flex items-center gap-1'>
+														<span><FaStar /></span>
+														<span>Important</span>
+													</div>
+												)
+											}
+
+										</div>
+									</div>
+								</div>
+
+								<div className='mt-10 grid grid-cols-3 gap-2'>
+									<button className='hover:bg-[#FF6D60] bg-gray-600 duration-200 ease-in-out h-[38px] rounded-md w-full font-medium text-white shadow'>Edit</button>
+									<button className='hover:bg-emerald-theme bg-gray-600 duration-200 ease-in-out h-[38px] rounded-md w-full font-medium text-white shadow'>Archive</button>
+									<button className='hover:bg-pink-theme bg-gray-600 duration-200 ease-in-out h-[38px] rounded-md w-full font-medium text-white shadow'>Delete</button>
+								</div>
+							</div>
+						)
+					}
+					
+
 				</div>
 			</div>
 			{
