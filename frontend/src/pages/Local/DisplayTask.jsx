@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react'
 import { BsCalendar2, BsCalendar2Check, BsCalendar2Heart, BsCaretDownFill, BsCaretUpFill } from 'react-icons/bs'
 
-const DisplayTask = ({tasks, setOpenedData, openedData, setOpenedDataToggle}) => {
+const DisplayTask = ({tasks, setOpenedDataId, openedDataId, setOpenedDataToggle}) => {
 	const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 	const year = new Date().getFullYear()
 	const [noDue, setNoDue] = useState([])
 	const [dates, setDates] = useState([])
 
 	const openTaskHandler = item => {
-		setOpenedData(item)
+		setOpenedDataId(item)
 
-		if (!openedData){
+		if (!openedDataId){
 			const timed = setTimeout(() => {
 				setOpenedDataToggle(true)
 
@@ -41,7 +41,7 @@ const DisplayTask = ({tasks, setOpenedData, openedData, setOpenedDataToggle}) =>
 	return (
 		<div className='flex flex-col gap-5'>
 			{
-				dates && dates.length > 0 ? dates.map((date, idx) => (
+				dates && dates.length > 0 ? dates.sort((a, b) => Date.parse(a) - Date.parse(b)).map((date, idx) => (
 					<div key={idx} className='mt-2 '>
 						<div className='flex items-center font-medium gap-2'>
 							<h1 className='text-5xl'>{date.slice(8)}</h1>
@@ -53,7 +53,7 @@ const DisplayTask = ({tasks, setOpenedData, openedData, setOpenedDataToggle}) =>
 
 						<div className='grid grid-cols-3 gap-2 mt-4'>
 							{
-								tasks && tasks.tasks.length > 0 && tasks.tasks.filter(task => task.dueDate.slice(0,10) === date).map(item => (
+								tasks && tasks.tasks.length > 0 && tasks.tasks.filter(task => task.marks.deleted !== true).filter(task => task.dueDate.slice(0,10) === date).map(item => (
 									<div key={item.id} className={(item.status !== 'todo' && 'opacity-50') + ' duration-200 font-medium bg-[#EEEEEE] w-full h-[35px] flex items-center justify-between px-3 rounded shadow-sm'}>
 										<div className='flex items-center gap-2'>
 											{
@@ -61,23 +61,28 @@ const DisplayTask = ({tasks, setOpenedData, openedData, setOpenedDataToggle}) =>
 											}
 											<h1 className='font-medium'>{item.title}</h1>
 										</div>
-										<button onClick={() => openTaskHandler(item)}>Open</button>
+										<button onClick={() => openTaskHandler(item.id)}>Open</button>
 									</div>
 								))
 							}
 						</div>
 
 					</div>
-				)) : <div>No dates found</div>
+				)) : <p className='font-medium'>No dates found</p>
 			}
 			<div className=''>
-				<div className='flex items-center font-medium gap-2'>
-					<h1 className='text-5xl'>00</h1>
-					<div className='flex flex-col'>
-						<p className='text-sm leading-5'>{year}</p>
-						<p className='text-lg leading-5'>No Due</p>
-					</div>
-				</div>
+				{
+					noDue && noDue.length > 0 && (
+						<div className='flex items-center font-medium gap-2'>
+							<h1 className='text-5xl'>00</h1>
+							<div className='flex flex-col'>
+								<p className='text-sm leading-5'>{year}</p>
+								<p className='text-lg leading-5'>No Due</p>
+							</div>
+						</div>
+					)
+				}
+				
 				<div className='grid grid-cols-3 gap-2 mt-4'>
 					{
 						noDue && noDue.filter(item => item.marks.deleted !== true).map((item, idx) => (
@@ -88,7 +93,7 @@ const DisplayTask = ({tasks, setOpenedData, openedData, setOpenedDataToggle}) =>
 									}
 									<h1 className='font-medium'>{item.title}</h1>
 								</div>
-								<button onClick={() => openTaskHandler(item)}>Open</button>
+								<button onClick={() => openTaskHandler(item.id)}>Open</button>
 							</div>
 						))
 					}

@@ -7,6 +7,7 @@ import { useTodos } from '../../data/context/TodosContext'
 import AddTaskModal from './AddTaskModal'
 import { toast } from 'react-toastify'
 import DisplayTask from './DisplayTask'
+import OpenData from './OpenData'
 
 const LocalDashboard = () => {
 	const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
@@ -22,7 +23,7 @@ const LocalDashboard = () => {
 	const [addColumn, setAddColumn] = useState('')
 	const [addColumnToggle, setAddColumnToggle] = useState(false)
 
-	const [openedData, setOpenedData] = useState({})
+	const [openedDataId, setOpenedDataId] = useState('')
 	const [openedDataToggle, setOpenedDataToggle] = useState(false)
 
 	const handleAddColumn = e => {
@@ -114,6 +115,18 @@ const LocalDashboard = () => {
 		setToday(`${year}-${month}-${calendar}`)
 	}
 
+	const purge = () => {
+		setOpenedDataId('')
+		localStorage.setItem('p1project', JSON.stringify({columns: [], tasks: [] }))
+		fetchLocalstorage()
+	}
+
+	const refill = () => {
+		const data = '{"columns":["Monday","Vacation"],"tasks":[{"id":"7441287d-a44a-4fe0-8110-ae904247f21b","column":"Monday","title":"First","description":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Nec ultrices dui sapien eget mi.","dueDate":"No due date","status":"todo","tags":[],"list":[],"marks":{"marked":false,"archived":false,"deleted":false},"createdAt":1682580826845},{"id":"cdec05a3-50d0-415b-9a8d-2c167874704d","column":"Monday","title":"Sleep","description":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Placerat vestibulum lectus mauris ultrices eros in cursus.","dueDate":"2023-05-11T18:58","status":"todo","tags":[],"list":[],"marks":{"marked":false,"archived":false,"deleted":false},"createdAt":1682582334420},{"id":"aa76fdce-f6fd-40a3-a567-8411a05b6085","column":"Monday","title":"Eat","description":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Placerat vestibulum lectus mauris ultrices eros in cursus.","dueDate":"2023-05-06T15:59","status":"todo","tags":[],"list":[],"marks":{"marked":true,"archived":false,"deleted":false},"createdAt":1682582355634},{"id":"a47784d3-bf46-45fa-bdb9-4791a57f9f9e","column":"Monday","title":"Fa","description":"No description","dueDate":"2023-05-06T15:00","status":"todo","tags":[],"list":[],"marks":{"marked":false,"archived":false,"deleted":false},"createdAt":1682582375813},{"id":"0f38dccc-2afb-41e9-9bb7-07377cafabdf","column":"Vacation","title":"Sleep","description":"No description","dueDate":"2023-05-23T16:00","status":"todo","tags":[],"list":[],"marks":{"marked":false,"archived":false,"deleted":false},"createdAt":1682582439974},{"id":"79370308-3d91-4c5a-bb98-b56f9c0acd02","column":"Vacation","title":"Gala","description":"No description","dueDate":"2023-05-20T16:00","status":"todo","tags":[],"list":[],"marks":{"marked":true,"archived":false,"deleted":false},"createdAt":1682582452876},{"id":"086b7e60-b2cb-44fc-b84f-18a2aef95dc7","column":"Vacation","title":"Outing","description":"No description","dueDate":"2023-05-11T16:01","status":"todo","tags":[],"list":[],"marks":{"marked":true,"archived":false,"deleted":false},"createdAt":1682582473842},{"id":"6e2a13f9-5b9e-4867-9ad7-7c867937b0ee","column":"Monday","title":"Fire","description":"No description","dueDate":"No due date","status":"todo","tags":[],"list":[],"marks":{"marked":false,"archived":false,"deleted":false},"createdAt":1682582607736},{"id":"6295bd72-1a60-44ce-94e5-65c3dcb581b4","column":"Vacation","title":"Play","description":"No description","dueDate":"No due date","status":"todo","tags":[],"list":[],"marks":{"marked":false,"archived":false,"deleted":false},"createdAt":1682582617105}]}'
+		localStorage.setItem('p1project', data)
+		fetchLocalstorage()
+	}
+
 	useEffect(() => {
 		currentDate()
 
@@ -138,7 +151,7 @@ const LocalDashboard = () => {
 							<h1 className='text-3xl font-bold'>TodoList</h1>
 							<div className='flex items-center gap-3'>
 								<button onClick={() => setAddColumnToggle(!addColumnToggle)} className='text-xl bg-[#393E46] text-white rounded-md h-[32px] aspect-square flex items-center justify-center'>{ addColumnToggle ? <RxCross2 /> : <GoPlus />}</button>
-								<button onClick={() => console.log(tasks)} className='text-xl bg-[#393E46] text-white rounded-md h-[32px] aspect-square flex items-center justify-center'><BsFillGearFill /></button>
+								<button className='text-xl bg-[#393E46] text-white rounded-md h-[32px] aspect-square flex items-center justify-center'><BsFillGearFill /></button>
 							</div>
 						</div>
 						{
@@ -215,7 +228,7 @@ const LocalDashboard = () => {
 									))
 								) : (
 									<div>
-										No
+										<p className='text-sm font-medium'>No column found.<br />Add one by clicking the + icon above</p>
 									</div>
 								)
 							}
@@ -225,95 +238,47 @@ const LocalDashboard = () => {
 
 				<div className='w-[72%] h-screen py-5 pr-5 relative'>
 					<div className='h-[80px] flex items-center justify-between bg-[#f8f8f8] px-4 rounded-lg shadow-md'>
-						<div className='flex flex-col font-mono'>
-							{/* <h1 className='text-5xl'>{time}</h1>
-							<div className='flex items-center gap-2'>
-								<h1 className='text-5xl'>{ today.slice(8)}</h1>
-								<div className='flex flex-col font-medium'>
-									<p className='text-sm leading-5'>{ today.slice(0, 4)}</p>
-									<p className='text-lg leading-5'>{ months[+today.slice(5, 7) - 1]}</p>
-								</div>
-							</div> */}
-							<h1 className='text-3xl font-bold'>Calendar</h1>
-							<p className='text-xl font-bold'>{`${day} ${time}`}</p>
+						<div className='flex items-center gap-3 font-mono'>
+							<div className='flex flex-col items-center'>
+								<h1 className='text-3xl font-bold'>Calendar</h1>
+								<p className='text-xl font-bold'>{`${day} ${time}`}</p>
+							</div>
+							<div>
+								{/* <div className='flex items-center gap-1'>
+									<h1 className='text-5xl'>{ today.slice(8)}</h1>
+									<div className='flex flex-col font-medium'>
+										<p className='text-sm leading-5'>{ today.slice(0, 4)}</p>
+										<p className='text-lg leading-5 font-bold'>{ months[+today.slice(5, 7) - 1]}</p>
+									</div>
+								</div> */}
+							</div>
 						</div>
-						<button onClick={() => console.log(openedData)} className='text-sm py-1 px-3 font-bold bg-red-400 text-white rounded-md'>Debug Button</button>
+						<div className='flex items-center gap-1'>
+							<button onClick={() => console.log('oi')} className='text-sm py-1 px-3 font-bold bg-red-400 text-white rounded-md'>Debug Button</button>
+							<button onClick={() => purge()} className='text-sm py-1 px-3 font-bold bg-red-400 text-white rounded-md' disabled={openedDataToggle}>Clear</button>
+							<button onClick={() => refill()} className='text-sm py-1 px-3 font-bold bg-red-400 text-white rounded-md'>Fill</button>
+						</div>
 					</div>
 					
 					<div className='h-full overflow-y-auto p-4'>
-						<DisplayTask tasks={tasks} setOpenedData={setOpenedData} openedData={openedData} setOpenedDataToggle={setOpenedDataToggle} />
+						<DisplayTask tasks={tasks} setOpenedDataId={setOpenedDataId} openedDataId={openedDataId} setOpenedDataToggle={setOpenedDataToggle} />
 					</div>
-					
 
-			
 					{
-						openedData.id && (
+						openedDataId !== '' && (
 							<button onClick={() => setOpenedDataToggle(!openedDataToggle)} className='absolute bottom-6 right-7 h-[38px] px-5 gap-2 text-lg bg-gray-100 rounded-lg drop-shadow-md flex items-center font-medium'>
 								<span className={(openedDataToggle ? 'rotate-180' : 'rotate-0') + ' duration-300'}><BsCaretUpFill /></span>
 								<span>{openedDataToggle ? 'Close Task Details' : 'Open Task Details' }</span>
 							</button>
 						)
 					}
+
 					{
 						openedDataToggle && (
-							<div className='absolute bottom-6 mb-[44px] right-7 w-[420px] bg-gray-100 p-6 rounded-lg drop-shadow-lg font-medium'>
-								<h1 className='font-bold text-3xl'>Task</h1>
-								<h1 className='font-bold py-2 border-b'><span className='font-medium text-gray-500'>From column </span>Title</h1>
-								
-								<div className='my-5 flex flex-col gap-3'>
-									<div className=''>
-										<h3 className='font-bold'>Title</h3>
-										<p className='text-gray-500'>{ openedData.title }</p>
-									</div>
-									<div className=''>
-										<h3 className='font-bold'>Description</h3>
-										<p className='text-gray-500'>{ openedData.description }</p>
-									</div>
-								</div>
-
-								<div className='mt-5 flex flex-col gap-3'>
-									<div className=''>
-										<h3 className='font-bold'>Due Date</h3>
-										{/* 24-11 ////// 12-23 */}
-										{
-											openedData.dueDate !== 'No due date' ? (
-												<>
-													<p className='text-gray-500'>{`${ months[openedData.dueDate.slice(5, 7) - 1] } ${ openedData.dueDate.slice(8, 10) }, ${ openedData.dueDate.slice(0, 4)}` }</p>
-													<p className='text-gray-500'>{`${+openedData.dueDate.slice(11, 13) > 11 && +openedData.dueDate.slice(11, 13) < 24 ? (+openedData.dueDate.slice(11, 13) - 12 < 10 ? '0' + (+openedData.dueDate.slice(11, 13) - 12) : +openedData.dueDate.slice(11, 13) - 12) + ':' + openedData.dueDate.slice(14) + ' PM' : +openedData.dueDate.slice(11, 13) + ':' + openedData.dueDate.slice(14) + ' AM'}`}</p>
-												</>
-											) : <p className='text-gray-500'>N/A No due date</p>
-										}
-									</div>
-									<div className=''>
-										<h3 className='font-bold'>Marks</h3>
-										<div className='flex items-center gap-2'>
-											<div className='text-sm py-1 px-3 bg-gray-600 w-fit text-white font-medium rounded-md flex items-center gap-1'>
-												<span><FaStickyNote /></span>
-												<span>Todo</span>
-											</div>
-											{
-												openedData.marks.marked && (
-													<div className='text-sm py-1 px-3 bg-gray-600 w-fit text-white font-medium rounded-md flex items-center gap-1'>
-														<span><FaStar /></span>
-														<span>Important</span>
-													</div>
-												)
-											}
-
-										</div>
-									</div>
-								</div>
-
-								<div className='mt-10 grid grid-cols-3 gap-2'>
-									<button className='hover:bg-[#FF6D60] bg-gray-600 duration-200 ease-in-out h-[38px] rounded-md w-full font-medium text-white shadow'>Edit</button>
-									<button className='hover:bg-emerald-theme bg-gray-600 duration-200 ease-in-out h-[38px] rounded-md w-full font-medium text-white shadow'>Archive</button>
-									<button className='hover:bg-pink-theme bg-gray-600 duration-200 ease-in-out h-[38px] rounded-md w-full font-medium text-white shadow'>Delete</button>
-								</div>
-							</div>
+							<OpenData openedDataId={openedDataId} />
 						)
 					}
 					
-
 				</div>
 			</div>
 			{
