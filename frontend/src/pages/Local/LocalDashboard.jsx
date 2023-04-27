@@ -8,11 +8,16 @@ import { toast } from 'react-toastify'
 import DisplayTask from './DisplayTask'
 
 const LocalDashboard = () => {
+	const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+
 	const {tasks, setTasks, colums, setColumns} = useTodos()
-	const [addColumnToggle, setAddColumnToggle] = useState(false)
-	const [addColumn, setAddColumn] = useState('')
+
+	const [time, setTime] = useState('')
+	const [today, setToday] = useState('')
 	const [tooltip, setTooltip] = useState('')
 	const [destinationColumn, setDestinationColumn] = useState('')
+	const [addColumn, setAddColumn] = useState('')
+	const [addColumnToggle, setAddColumnToggle] = useState(false)
 
 	const handleAddColumn = e => {
 		setAddColumn(e.target.value)
@@ -30,7 +35,6 @@ const LocalDashboard = () => {
 		} else {
 			toast.error('Column already exists')
 		}
-
 	}
 
 	const fetchLocalstorage = () => {
@@ -87,13 +91,41 @@ const LocalDashboard = () => {
 		fetchLocalstorage()
 	}
 
+	const currentDate = () => {
+		const date = new Date()
+			
+		const calendar = date.getDate() < 10 ? `0${date.getDate()}` : date.getDate()
+		const month = (date.getMonth() + 1) < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1
+		const year = date.getFullYear()
+
+		const hour = date.getHours() < 13 ? date.getHours() : date.getHours() - 12
+		const minute = date.getMinutes() < 10 ? `0${date.getMinutes()}` : date.getMinutes()
+		const meridiem = date.getHours() < 12 && date.getHours() > 24  ? 'AM' : 'PM' 
+		
+
+		setTime(`${hour}:${minute} ${meridiem}`)
+		setToday(`${year}-${month}-${calendar}`)
+	}
+
+	useEffect(() => {
+		currentDate()
+
+		setInterval(() => {
+			currentDate()
+
+			console.log('fired');
+		}, 30000)
+
+		console.log('render');
+	}, [])
+
 	useEffect(() => {
 		fetchLocalstorage()
 	}, [destinationColumn])
 
 	return (
 		<>
-			<div className='flex justify-between text-[#232931]'>
+			<div className='hidden md:flex justify-between text-[#232931]'>
 				<div className='w-[28%] h-screen p-5'>
 					<div className='flex flex-col gap-5 w-full h-full drop-shadow-lg rounded-lg py-5 px-5 bg-[#f8f8f8] overflow-hidden'>
 
@@ -185,10 +217,36 @@ const LocalDashboard = () => {
 						</div>
 					</div>
 				</div>
-				<div className='w-[72%] p-5 bg-red-50'>
-					<DisplayTask tasks={tasks} />
+				<div className='w-[72%] h-screen p-5 relative bg-red-400'>
+					<div className='h-[80px] bg-gray-400 flex items-center gap-2'>
+						<h1 className='text-5xl'>{time}</h1>
+						<div className='flex items-center gap-2'>
+							<h1 className='text-5xl'>{ today.slice(8)}</h1>
+							<div className='flex flex-col font-medium'>
+								<p className='text-sm leading-5'>{ today.slice(0, 4)}</p>
+								<p className='text-lg leading-5'>{ months[+today.slice(5, 7) - 1]}</p>
+							</div>
+						</div>
+					</div>
+					<div className='h-full overflow-y-auto'>
+						<DisplayTask tasks={tasks} />
+					</div>
+					<button className='absolute bottom-5 right-5 aspect-square h-[30px] bg-red-200'>U</button>
+					<div className='absolute bottom-4 right-[0] mr-[50px] w-[400px] h-[400px] bg-yellow-200'>
+
+					</div>
 				</div>
 			</div>
+			{
+				<div className='md:hidden h-screen w-screen grid place-items-center duration-100'>
+					<div className='flex flex-col gap-4'>
+						<h1 className='text-xl font-mono font-bold'>For Desktop Only</h1>
+						<div className='flex flex-col gap-1'>
+							<button onClick={() => { location.href = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ' }} className='rotate text-white font-medium bg-[#333] py-2 px-3 rounded-md w-full'>saжnu puas</button>
+						</div>
+					</div>
+				</div>
+			}
 			{
 				destinationColumn && <AddTaskModal destinationColumn={destinationColumn} setDestinationColumn={setDestinationColumn} />
 			}
