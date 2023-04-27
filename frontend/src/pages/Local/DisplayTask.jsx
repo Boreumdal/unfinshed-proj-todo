@@ -55,14 +55,14 @@ const DisplayTask = ({tasks, setOpenedDataId, openedDataId, setOpenedDataToggle}
 							<div className='grid grid-cols-3 gap-2 mt-4'>
 								{
 									tasks && tasks.tasks.length > 0 && tasks.tasks.filter(task => task.marks.deleted !== true && task.dueDate.slice(0,10) === date).map(item => (
-										<div key={item.id} className={((item.status !== 'todo' && 'opacity-50') + (openedDataId && openedDataId !== item.id && ' brightness-90')) + ' duration-200 font-medium bg-[#EEEEEE] w-full h-[35px] flex items-center justify-between px-3 rounded shadow-sm'}>
+										<div key={item.id} onClick={() => openTaskHandler(item.id)} className={((item.status !== 'todo' && 'opacity-50') + (openedDataId && openedDataId !== item.id ? ' bg-[#EEEEEE]' : ' bg-[#f7f7f7]')) + ' cursor-pointer hover:bg-[#fbfbfb] hover:shadow-none duration-200 font-medium w-full h-[35px] flex items-center justify-between px-3 rounded shadow-sm'}>
 											<div className='flex items-center gap-2'>
 												{
 													item.status === 'todo' ? item.marks.marked ? <span><BsCalendar2Heart /></span> : <span><BsCalendar2 /></span> : item.marks.marked ? <span><BsCalendar2Heart /></span> : <span><BsCalendar2Check /></span> 
 												}
 												<h1 className='font-medium'>{item.title}</h1>
 											</div>
-											<button onClick={() => openTaskHandler(item.id)} className='text-lg'>{ openedDataId === item.id ? <BsFolder2Open /> : <BsFolder2 /> }</button>
+											<span className='text-lg'>{ openedDataId === item.id ? <BsFolder2Open /> : <BsFolder2 /> }</span>
 										</div>
 									))
 								}
@@ -83,14 +83,14 @@ const DisplayTask = ({tasks, setOpenedDataId, openedDataId, setOpenedDataToggle}
 					<div className='grid grid-cols-3 gap-2'>
 						{
 							noDue && noDue.filter(item => item.marks.deleted !== true).map((item, idx) => (
-								<div key={idx} className={((item.status !== 'todo' && 'opacity-50') + (openedDataId && openedDataId !== item.id && ' brightness-90')) + ' duration-200 font-medium bg-[#EEEEEE] w-full h-[35px] flex items-center justify-between px-3 rounded shadow-sm'}>
+								<div key={idx} onClick={() => openTaskHandler(item.id)} className={((item.status !== 'todo' && 'opacity-50') + (openedDataId && openedDataId !== item.id ? ' bg-[#EEEEEE]' : ' bg-[#f7f7f7]')) + ' cursor-pointer hover:bg-[#fbfbfb] hover:shadow-none duration-200 font-medium w-full h-[35px] flex items-center justify-between px-3 rounded shadow-sm'}>
 									<div className='flex items-center gap-2'>
 										{
 											item.status === 'todo' ? item.marks.marked ? <span><BsCalendar2Heart /></span> : <span><BsCalendar2 /></span> : item.marks.marked ? <span><BsCalendar2Heart /></span> : <span><BsCalendar2Check /></span>
 										}
 										<h1 className='font-medium'>{item.title}</h1>
 									</div>
-									<button onClick={() => openTaskHandler(item.id)} className='text-lg'>{ openedDataId === item.id ? <BsFolder2Open /> : <BsFolder2 /> }</button>
+									<span className='text-lg'>{ openedDataId === item.id ? <BsFolder2Open /> : <BsFolder2 /> }</span>
 								</div>
 							))
 						}

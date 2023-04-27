@@ -17,7 +17,7 @@ const OpenData = ({ openedDataId }) => {
     return <>
         {
             openedData.id && (
-                <div className='absolute bottom-6 mb-[44px] right-7 w-[420px] bg-gray-100 p-6 rounded-lg drop-shadow-lg font-medium'>
+                <div className='absolute bottom-6 mb-[44px] right-7 w-[420px] bg-[#f8f8f8] p-6 rounded-lg drop-shadow-lg font-medium'>
                     <h1 className='font-bold text-3xl'>Task</h1>
                     <h1 className='font-bold py-2 border-b'><span className='font-medium text-gray-500'>From column </span>Title</h1>
                     
