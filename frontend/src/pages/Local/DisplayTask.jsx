@@ -1,11 +1,25 @@
 import React, { useState, useEffect } from 'react'
 import { BsCalendar2, BsCalendar2Check, BsCalendar2Heart, BsCaretDownFill, BsCaretUpFill } from 'react-icons/bs'
 
-const DisplayTask = ({tasks, setOpenedData}) => {
+const DisplayTask = ({tasks, setOpenedData, openedData, setOpenedDataToggle}) => {
 	const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 	const year = new Date().getFullYear()
 	const [noDue, setNoDue] = useState([])
 	const [dates, setDates] = useState([])
+
+	const openTaskHandler = item => {
+		setOpenedData(item)
+
+		if (!openedData){
+			const timed = setTimeout(() => {
+				setOpenedDataToggle(true)
+
+				return () => clearTimeout(timed)
+			}, 400)
+		} else {
+			setOpenedDataToggle(true)
+		}
+	}
 
 	useEffect(() => {
 
@@ -47,7 +61,7 @@ const DisplayTask = ({tasks, setOpenedData}) => {
 											}
 											<h1 className='font-medium'>{item.title}</h1>
 										</div>
-										<button onClick={() => setOpenedData(item)}>Open</button>
+										<button onClick={() => openTaskHandler(item)}>Open</button>
 									</div>
 								))
 							}
@@ -74,7 +88,7 @@ const DisplayTask = ({tasks, setOpenedData}) => {
 									}
 									<h1 className='font-medium'>{item.title}</h1>
 								</div>
-								<button onClick={() => setOpenedData(item)}>Open</button>
+								<button onClick={() => openTaskHandler(item)}>Open</button>
 							</div>
 						))
 					}
