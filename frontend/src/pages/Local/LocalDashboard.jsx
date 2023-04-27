@@ -141,6 +141,13 @@ const LocalDashboard = () => {
 		fetchLocalstorage()
 	}, [destinationColumn])
 
+	// useEffect(() => {
+	// 	if (tasks){
+	// 		console.log();
+
+	// 	}
+	// }, [tasks])
+
 	return (
 		<>
 			<div className='hidden md:flex justify-between text-[#232931]'>
@@ -150,8 +157,7 @@ const LocalDashboard = () => {
 						<div className='h-[38px] flex items-center justify-between'>
 							<h1 className='text-3xl font-bold'>TodoList</h1>
 							<div className='flex items-center gap-3'>
-								<button onClick={() => setAddColumnToggle(!addColumnToggle)} className='text-xl bg-[#393E46] text-white rounded-md h-[32px] aspect-square flex items-center justify-center'>{ addColumnToggle ? <RxCross2 /> : <GoPlus />}</button>
-								<button className='text-xl bg-[#393E46] text-white rounded-md h-[32px] aspect-square flex items-center justify-center'><BsFillGearFill /></button>
+								<button onClick={() => setAddColumnToggle(!addColumnToggle)} className='text-xl bg-[#393E46] hover:bg-[#4ECCA3] duration-300 ease-in text-white rounded-md h-[32px] aspect-square flex items-center justify-center'>{ addColumnToggle ? <RxCross2 /> : <GoPlus />}</button>
 							</div>
 						</div>
 						{
@@ -185,39 +191,39 @@ const LocalDashboard = () => {
 											</div>
 											<div className='flex flex-col gap-2 overflow-y-auto'>
 												{
-													tasks.tasks.filter(todo => todo.column === task).length > 0 ? tasks.tasks.filter(todo => todo.column === task && !todo.marks.deleted).map(item => (
-															<div key={item?.id} onMouseLeave={() => setTooltip('')} className={(item?.status !== 'todo' && 'opacity-40 line-through') + ' flex items-center gap-2 h-[28px] px-2 hover:bg-[#f8f8f8] duration-300 rounded-sm relative task-item'}>
-																<span>{ item?.status !== 'todo' ? <BsCheckLg /> : <BsBox />}</span>
-																<p className={(tooltip === item?.id ? 'w-[54%]' : 'task-item-text w-[84%]') + ' truncate '}>{item?.title}</p>
-																<div className='h-full hidden duration-200 items-center gap-1 absolute right-2 task-item-action	z-20'>
-																	{
-																		tooltip === item?.id && (
-																			<div className='flex items-center gap-1 bg-[#f8f8f8]'>
-																				<button onClick={() => deleteTask(item?.id)} className='w-[22px] hover:text-white hover:bg-[#393E46] aspect-square rounded-md grid place-items-center duration-200'><BsTrashFill /></button>
-																				{
-																					item?.status === 'todo'
-																					? <button onClick={() => doneTask(item?.id)} className='w-[22px] hover:text-white hover:bg-[#393E46] aspect-square rounded-md grid place-items-center duration-200'><BsCheckLg /></button>
-																					: <button onClick={() => undoDoneTask(item?.id)} className='w-[22px] hover:text-white hover:bg-[#393E46] aspect-square rounded-md grid place-items-center duration-200'><BsArrowCounterclockwise /></button>
-																				}
-																				
-																				
-																				<button onClick={() => removeMark(item?.id)}  className='w-[22px] hover:text-white hover:bg-[#393E46] aspect-square rounded-md grid place-items-center duration-200'>{ item?.marks.marked ? <span className='text-sunglow'><BsStarFill /></span> : <span><BsStar /></span> }</button>
-																			</div>
-																		)
-																	}
-																	<button onClick={() => item?.id === tooltip ? setTooltip('') : setTooltip(item?.id)} className='w-[22px] hover:text-white hover:bg-[#393E46] aspect-square rounded-md grid place-items-center duration-200'>{ item?.id === tooltip ? <RxCross2 /> : <BsThreeDots /> }</button>
-																</div>
+													tasks.tasks && tasks.tasks.filter(todo => todo.column === task && todo.marks.deleted === false).length !== 0 
+													? tasks.tasks.filter(todo => todo.column === task && todo.marks.deleted === false).map(item => (
+														<div key={item?.id} onMouseLeave={() => setTooltip('')} className={(item?.status !== 'todo' && 'opacity-40 line-through') + ' flex items-center gap-2 h-[28px] px-2 hover:bg-[#f8f8f8] duration-300 rounded-sm relative task-item'}>
+															<span>{ item?.status !== 'todo' ? <BsCheckLg /> : <BsBox />}</span>
+															<p className={(tooltip === item?.id ? 'w-[54%]' : 'task-item-text w-[84%]') + ' truncate '}>{item?.title}</p>
+															<div className='h-full hidden duration-200 items-center gap-1 absolute right-2 task-item-action	z-20'>
 																{
-																	tooltip !== item?.id && (
-																		<div className='absolute right-2 task-mark'>
-																			<span className='w-[22px] aspect-square rounded-md grid place-items-center duration-200'>{ item?.marks.marked && <span className='text-sunglow'><BsStarFill /></span> }</span>
+																	tooltip === item?.id && (
+																		<div className='flex items-center gap-1 bg-[#f8f8f8]'>
+																			<button onClick={() => deleteTask(item?.id)} className='w-[22px] hover:text-white hover:bg-[#393E46] aspect-square rounded-md grid place-items-center duration-200'><BsTrashFill /></button>
+																			{
+																				item?.status === 'todo'
+																				? <button onClick={() => doneTask(item?.id)} className='w-[22px] hover:text-white hover:bg-[#393E46] aspect-square rounded-md grid place-items-center duration-200'><BsCheckLg /></button>
+																				: <button onClick={() => undoDoneTask(item?.id)} className='w-[22px] hover:text-white hover:bg-[#393E46] aspect-square rounded-md grid place-items-center duration-200'><BsArrowCounterclockwise /></button>
+																			}
+																			
+																			
+																			<button onClick={() => removeMark(item?.id)}  className='w-[22px] hover:text-white hover:bg-[#393E46] aspect-square rounded-md grid place-items-center duration-200'>{ item?.marks.marked ? <span className='text-sunglow'><BsStarFill /></span> : <span><BsStar /></span> }</button>
 																		</div>
 																	)
 																}
-
+																<button onClick={() => item?.id === tooltip ? setTooltip('') : setTooltip(item?.id)} className='w-[22px] hover:text-white hover:bg-[#393E46] aspect-square rounded-md grid place-items-center duration-200'>{ item?.id === tooltip ? <RxCross2 /> : <BsThreeDots /> }</button>
 															</div>
+															{
+																tooltip !== item?.id && (
+																	<div className='absolute right-2 task-mark'>
+																		<span className='w-[22px] aspect-square rounded-md grid place-items-center duration-200'>{ item?.marks.marked && <span className='text-sunglow'><BsStarFill /></span> }</span>
+																	</div>
+																)
+															}
+														</div>
 													)) : (
-														<div className='flex items-center gap-2 h-[28px] px-2 hover:bg-[#f8f8f8] duration-300 rounded-sm cursor-pointer'>
+														<div className='flex items-center gap-2 h-[28px] px-2 hover:bg-[#f8f8f8] cursor-default duration-300 rounded-sm'>
 															<span><BsBoxSeam /></span>
 															<p className='truncate'>No task added</p>
 														</div>
