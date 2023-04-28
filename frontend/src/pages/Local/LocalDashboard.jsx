@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import { BsFillGearFill, BsBox, BsBoxSeam, BsTrash3, BsStarFill, BsStar, BsThreeDots, BsCheckLg, BsArrowCounterclockwise, BsFillPersonFill, BsCaretUpFill } from 'react-icons/bs'
+import { BsFillGearFill, BsBox, BsBoxSeam, BsTrash3, BsStarFill, BsStar, BsThreeDots, BsCheckLg, BsArrowCounterclockwise, BsFillPersonFill, BsCaretUpFill, BsMoonStarsFill, BsSunFill } from 'react-icons/bs'
 import { GoPlus } from 'react-icons/go'
-import { RxCross2 } from 'react-icons/rx'
+import { RxCross2, RxColorWheel } from 'react-icons/rx'
 import { HiMenu, HiMenuAlt3 } from 'react-icons/hi'
 import { FaStickyNote, FaStar } from 'react-icons/fa'
 import { useNavigate } from 'react-router-dom'
@@ -144,6 +144,8 @@ const LocalDashboard = () => {
 			currentDate()
 		}, 45000)
 
+		console.log(tasks);
+
 		console.log('Be advised: A function will fired every 45s for the clock');
 	}, [])
 
@@ -245,8 +247,8 @@ const LocalDashboard = () => {
 					</div>
 				</div>
 
-				<div className={(menu ? 'w-[50%]' : 'w-[72%]') + ' duration-300 origin-left h-screen py-5 pr-5 relative '}>
-					<div className='h-[9vh] flex items-center justify-between bg-[#f8f8f8] px-4 rounded-lg shadow-md'>
+				<div className={(menu ? 'w-[50%]' : 'w-[72%] pr-5') + ' duration-300 origin-left h-screen py-5 relative '}>
+					<div className='h-[9vh] flex items-center justify-between bg-[#f8f8f8] px-4 rounded-lg shadow-md z-40'>
 						<div className='flex items-center gap-3 font-mono'>
 							<div className='flex flex-col items-center'>
 								<h1 className='text-3xl font-bold'>Calendar</h1>
@@ -262,18 +264,12 @@ const LocalDashboard = () => {
 								</div>
 							</div> */}
 						</div>
-						<div className='flex items-center gap-1'>
-							<button onClick={() => console.log('oi')} className='text-sm py-1 px-3 font-bold bg-red-400 text-white rounded-md'>Debug Button</button>
-							<button onClick={() => purge()} className='text-sm py-1 px-3 font-bold bg-red-400 text-white rounded-md' disabled={openedDataToggle}>Clear</button>
-							<button onClick={() => refill()} className='text-sm py-1 px-3 font-bold bg-red-400 text-white rounded-md'>Fill</button>
-							
-						</div>
 						<button onClick={() => setMenu(!menu)} className='w-[36px] text-[#393E46] aspect-square grid place-items-center text-2xl rounded-full'>
-							<span className=''><HiMenu /></span>
+							<span className=''>{ menu ? <HiMenu /> : <HiMenuAlt3 /> }</span>
 						</button>
 					</div>
 					
-					<div className='h-[91%] overflow-y-auto p-4'>
+					<div className='h-[91%] overflow-y-auto p-4 z-30'>
 						<DisplayTask tasks={tasks} setOpenedDataId={setOpenedDataId} openedDataId={openedDataId} setOpenedDataToggle={setOpenedDataToggle} setEditingDataToggle={setEditingDataToggle} setEditDateToggle={setEditDateToggle}  />
 					</div>
 
@@ -300,29 +296,32 @@ const LocalDashboard = () => {
 						<div className='flex flex-col gap-5 w-full h-full justify-between drop-shadow-lg rounded-lg py-5 px-5 bg-[#f8f8f8] overflow-hidden'>
 							<div>
 								<h1 className='text-3xl font-bold'>Menu</h1>
-								<div>
-									<h5>Data</h5>
+								<div className='my-5 flex flex-col gap-1'>
+									<div className='flex flex-col items-center justify-center bg-white shadow rounded text-sm font-medium py-3'>
+										<span className='text-3xl font-bold'>{ tasks?.tasks?.filter(task => task.status === 'todo').length }</span>
+										<span>Task to do</span>
+									</div>
 									<div className='grid grid-cols-[40%_auto] gap-1'>
-										<div className='flex flex-col items-center justify-center bg-white shadow rounded'>
-											<span className='text-3xl font-bold'>aa</span>
+										<div className='flex flex-col items-center justify-center bg-white shadow rounded text-sm font-medium'>
+											<span className='text-3xl font-bold'>{ tasks?.tasks?.length }</span>
 											<span>Total Task</span>
 										</div>
 										<div className='grid grid-cols-2 gap-1'>
-											<div className='flex flex-col items-center bg-white shadow rounded justify-center aspect-square text-sm'>
-												<span className='text-2xl font-bold'>12</span>
+											<div className='flex flex-col items-center bg-white shadow rounded justify-center aspect-square text-sm font-medium'>
+												<span className='text-2xl font-bold'>{ tasks?.tasks?.filter(task => task.marks.marked).length }</span>
 												<span>Important</span>
 											</div>
-											<div className='flex flex-col items-center bg-white shadow rounded justify-center aspect-square text-sm'>
-												<span className='text-2xl font-bold'>12</span>
+											<div className='flex flex-col items-center bg-white shadow rounded justify-center aspect-square text-sm font-medium'>
+												<span className='text-2xl font-bold'>{ tasks?.tasks?.filter(task => task.status !== 'todo').length }</span>
 												<span>Done</span>
 											</div>
-											<div className='flex flex-col items-center bg-white shadow rounded justify-center aspect-square text-sm'>
-												<span className='text-2xl font-bold'>12</span>
+											<div className='flex flex-col items-center bg-white shadow rounded justify-center aspect-square text-sm font-medium'>
+												<span className='text-2xl font-bold'>{ tasks?.tasks?.filter(task => task.marks.archived).length }</span>
 												<span>Archived</span>
 											</div>
-											<div className='flex flex-col items-center bg-white shadow rounded justify-center aspect-square text-sm'>
-												<span className='text-2xl font-bold'>12</span>
-												<span>Delete</span>
+											<div className='flex flex-col items-center bg-white shadow rounded justify-center aspect-square text-sm font-medium'>
+												<span className='text-2xl font-bold'>{ tasks?.tasks?.filter(task => task.marks.deleted).length }</span>
+												<span>Bin</span>
 											</div>
 										</div>
 									</div>
@@ -330,7 +329,13 @@ const LocalDashboard = () => {
 							</div>
 
 							<div className='flex flex-col gap-1'>
-								<button className='text-white w-full h-[32px] rounded-md font-medium bg-[#393E46]'>Debug Options</button>
+								
+								<div className='flex flex-col items-center gap-1'>
+									<button onClick={() => console.log('oi')} className='text-white w-full h-[32px] rounded-md font-medium bg-[#393E46]'>Debug Button</button>
+									<button onClick={() => purge()} className='text-white w-full h-[32px] rounded-md font-medium bg-[#393E46]' disabled={openedDataToggle}>Clear</button>
+									<button onClick={() => refill()} className='text-white w-full h-[32px] rounded-md font-medium bg-[#393E46]'>Fill</button>
+								</div>
+								<button className='text-white w-full h-[32px] rounded-md font-medium bg-[#393E46] opacity-70' disabled>Debug Options</button>
 								<button className='text-white w-full h-[32px] rounded-md font-medium bg-pink-theme'>Return Home</button>
 							</div>
 						</div>
