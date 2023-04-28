@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react'
-import { BsFillGearFill, BsBox, BsBoxSeam, BsTrash3, BsStarFill, BsStar, BsThreeDots, BsCheckLg, BsArrowCounterclockwise, BsFillPersonFill, BsWrench, BsCaretUpFill } from 'react-icons/bs'
+import { BsFillGearFill, BsBox, BsBoxSeam, BsTrash3, BsStarFill, BsStar, BsThreeDots, BsCheckLg, BsArrowCounterclockwise, BsFillPersonFill, BsCaretUpFill } from 'react-icons/bs'
 import { GoPlus } from 'react-icons/go'
 import { RxCross2 } from 'react-icons/rx'
+import { HiMenu, HiMenuAlt3 } from 'react-icons/hi'
+
 import { FaStickyNote, FaStar } from 'react-icons/fa'
 import { useTodos } from '../../data/context/TodosContext'
 import AddTaskModal from './AddTaskModal'
@@ -22,6 +24,7 @@ const LocalDashboard = () => {
 	const [destinationColumn, setDestinationColumn] = useState('')
 	const [addColumn, setAddColumn] = useState('')
 	const [addColumnToggle, setAddColumnToggle] = useState(false)
+	const [menu, setMenu] = useState(true)
 
 	const [openedDataId, setOpenedDataId] = useState('')
 	const [openedDataToggle, setOpenedDataToggle] = useState(false)
@@ -131,6 +134,8 @@ const LocalDashboard = () => {
 		fetchLocalstorage()
 	}
 
+
+
 	useEffect(() => {
 		currentDate()
 
@@ -147,8 +152,8 @@ const LocalDashboard = () => {
 
 	return (
 		<>
-			<div className='hidden md:flex justify-between text-[#232931]'>
-				<div className='w-[28%] h-screen p-5'>
+			<div className='hidden md:flex text-[#232931]'>
+				<div className=' w-[28%] max-w-[28%] min-w-[28%] h-screen p-5'>
 					<div className='flex flex-col gap-5 w-full h-full drop-shadow-lg rounded-lg py-5 px-5 bg-[#f8f8f8] overflow-hidden'>
 
 						<div className='h-[38px] flex items-center justify-between'>
@@ -239,7 +244,7 @@ const LocalDashboard = () => {
 					</div>
 				</div>
 
-				<div className='w-[72%] h-screen py-5 pr-5 relative '>
+				<div className={(menu ? 'w-[50%]' : 'w-[72%]') + ' duration-300 origin-left h-screen py-5 pr-5 relative '}>
 					<div className='h-[9vh] flex items-center justify-between bg-[#f8f8f8] px-4 rounded-lg shadow-md'>
 						<div className='flex items-center gap-3 font-mono'>
 							<div className='flex flex-col items-center'>
@@ -260,7 +265,11 @@ const LocalDashboard = () => {
 							<button onClick={() => console.log('oi')} className='text-sm py-1 px-3 font-bold bg-red-400 text-white rounded-md'>Debug Button</button>
 							<button onClick={() => purge()} className='text-sm py-1 px-3 font-bold bg-red-400 text-white rounded-md' disabled={openedDataToggle}>Clear</button>
 							<button onClick={() => refill()} className='text-sm py-1 px-3 font-bold bg-red-400 text-white rounded-md'>Fill</button>
+							
 						</div>
+						<button onClick={() => setMenu(!menu)} className='w-[36px] text-[#393E46] aspect-square grid place-items-center text-2xl rounded-full'>
+							<span className=''><HiMenu /></span>
+						</button>
 					</div>
 					
 					<div className='h-[91%] overflow-y-auto p-4'>
@@ -283,6 +292,16 @@ const LocalDashboard = () => {
 					}
 					
 				</div>
+				
+				{
+					menu && 
+					<div className='w-[22%] origin-right duration-1000 absolute right-0 h-full p-5'>
+						<div className='flex flex-col gap-5 w-full h-full drop-shadow-lg rounded-lg py-5 px-5 bg-[#f8f8f8] overflow-hidden'>
+
+						</div>
+					</div>
+				}
+				
 			</div>
 			{
 				<div className='md:hidden h-screen w-screen grid place-items-center duration-100'>

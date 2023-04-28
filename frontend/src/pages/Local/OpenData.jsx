@@ -38,6 +38,9 @@ const OpenData = ({ openedDataId, deleteTask, setOpenedDataToggle, setOpenedData
         setEditingDataToggle(true)
         setEditingDataId(id)
         setEditingData(data)
+        if (data.dueDate !== 'No due date'){
+            setEditDateToggle(true)
+        }
     }
 
     const handleEditHasDue = e => {
