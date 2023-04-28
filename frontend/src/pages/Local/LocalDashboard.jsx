@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { BsFillGearFill, BsBox, BsBoxSeam, BsTrashFill, BsStarFill, BsStar, BsThreeDots, BsCheckLg, BsArrowCounterclockwise, BsFillPersonFill, BsWrench, BsCaretUpFill } from 'react-icons/bs'
+import { BsFillGearFill, BsBox, BsBoxSeam, BsTrash3, BsStarFill, BsStar, BsThreeDots, BsCheckLg, BsArrowCounterclockwise, BsFillPersonFill, BsWrench, BsCaretUpFill } from 'react-icons/bs'
 import { GoPlus } from 'react-icons/go'
 import { RxCross2 } from 'react-icons/rx'
 import { FaStickyNote, FaStar } from 'react-icons/fa'
@@ -25,6 +25,9 @@ const LocalDashboard = () => {
 
 	const [openedDataId, setOpenedDataId] = useState('')
 	const [openedDataToggle, setOpenedDataToggle] = useState(false)
+
+	const [editingDataId, setEditingDataId] = useState('')
+	const [editingDataToggle, setEditingDataToggle] = useState(false)
 
 	const handleAddColumn = e => {
 		setAddColumn(e.target.value)
@@ -193,7 +196,7 @@ const LocalDashboard = () => {
 																{
 																	tooltip === item?.id && (
 																		<div className='flex items-center gap-1 bg-[#f8f8f8]'>
-																			<button onClick={() => deleteTask(item?.id)} className='w-[22px] hover:text-white hover:bg-[#393E46] aspect-square rounded-md grid place-items-center duration-200'><BsTrashFill /></button>
+																			<button onClick={() => deleteTask(item?.id)} className='w-[22px] hover:text-white hover:bg-[#393E46] aspect-square rounded-md grid place-items-center duration-200'><BsTrash3 /></button>
 																			{
 																				item?.status === 'todo'
 																				? <button onClick={() => doneTask(item?.id)} className='w-[22px] hover:text-white hover:bg-[#393E46] aspect-square rounded-md grid place-items-center duration-200'><BsCheckLg /></button>
@@ -242,15 +245,15 @@ const LocalDashboard = () => {
 								<h1 className='text-3xl font-bold'>Calendar</h1>
 								<p className='text-xl font-bold'>{`${day} ${time}`}</p>
 							</div>
-							<div>
-								{/* <div className='flex items-center gap-1'>
+							{/* <div>
+								<div className='flex items-center gap-1'>
 									<h1 className='text-5xl'>{ today.slice(8)}</h1>
 									<div className='flex flex-col font-medium'>
 										<p className='text-sm leading-5'>{ today.slice(0, 4)}</p>
 										<p className='text-lg leading-5 font-bold'>{ months[+today.slice(5, 7) - 1]}</p>
 									</div>
-								</div> */}
-							</div>
+								</div>
+							</div> */}
 						</div>
 						<div className='flex items-center gap-1'>
 							<button onClick={() => console.log('oi')} className='text-sm py-1 px-3 font-bold bg-red-400 text-white rounded-md'>Debug Button</button>
@@ -260,7 +263,7 @@ const LocalDashboard = () => {
 					</div>
 					
 					<div className='h-[91%] overflow-y-auto p-4'>
-						<DisplayTask tasks={tasks} setOpenedDataId={setOpenedDataId} openedDataId={openedDataId} setOpenedDataToggle={setOpenedDataToggle} />
+						<DisplayTask tasks={tasks} setOpenedDataId={setOpenedDataId} openedDataId={openedDataId} setOpenedDataToggle={setOpenedDataToggle} setEditingDataToggle={setEditingDataToggle} />
 					</div>
 
 					{
@@ -274,7 +277,7 @@ const LocalDashboard = () => {
 
 					{
 						openedDataToggle && (
-							<OpenData openedDataId={openedDataId} />
+							<OpenData openedDataId={openedDataId} deleteTask={deleteTask} setOpenedDataId={setOpenedDataId} setOpenedDataToggle={setOpenedDataToggle} fetchLocalstorage={fetchLocalstorage} editingDataToggle={editingDataToggle} setEditingDataToggle={setEditingDataToggle} editingDataId={editingDataId} setEditingDataId={setEditingDataId} />
 						)
 					}
 					
