@@ -73,7 +73,7 @@ const OpenData = ({ openedDataId, deleteTask, setOpenedDataToggle, setOpenedData
 		const indexOfTarget = localStored.tasks.findIndex(item => item.id === data.id)
 
 		localStored.tasks[indexOfTarget].title = data.title
-        localStored.tasks[indexOfTarget].description = data.description
+        localStored.tasks[indexOfTarget].description = data.description ? data.description : 'No description'
         localStored.tasks[indexOfTarget].dueDate = data.dueDate
 
 		localStorage.setItem('p1project', JSON.stringify(localStored))
@@ -97,7 +97,6 @@ const OpenData = ({ openedDataId, deleteTask, setOpenedDataToggle, setOpenedData
                                 ? <input className='text-gray-500 w-full px-1' name='title' value={editingData.title} onChange={handleEditOnchange} />
                                 : <p className='text-gray-500 px-1'>{ openedData.title }</p>
                             }
-                            
                         </div>
                         <div className=''>
                             <h3 className='font-bold px-1'>Description</h3>
@@ -106,7 +105,6 @@ const OpenData = ({ openedDataId, deleteTask, setOpenedDataToggle, setOpenedData
                                 ? <textarea className='text-gray-500 w-full px-1 bg-white drop-shadow-sm' name='description' rows='4' value={editingData.description} onChange={handleEditOnchange}></textarea>
                                 : <p className='text-gray-500 px-1'>{ openedData.description }</p>
                             }
-                            
                         </div>
                     </div>
 
