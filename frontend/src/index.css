@@ -12,7 +12,7 @@ body {
 
 /* .todo-item-list */
 
-::-webkit-scrollbar {
+/* ::-webkit-scrollbar {
     appearance: none;
     width: 3px;
     border-radius: 2px;
@@ -20,20 +20,24 @@ body {
 
 ::-webkit-scrollbar-thumb {
     background-color: #ecb465;
-}
+} */
 
 ::-webkit-scrollbar-track {
     background-color: transparent;
 }
 
-.task-list-nav::-webkit-scrollbar {
+::-webkit-scrollbar {
     appearance: none;
     width: 4px;
 }
-.task-list-nav::-webkit-scrollbar-thumb {
+::-webkit-scrollbar-thumb {
     background-color: #393e46;
     border-radius: 5px;
 }
+/* .task-list-nav::-webkit-scrollbar-thumb {
+    background-color: #393e46;
+    border-radius: 5px;
+} */
 
 .task-item:hover .task-item-text {
     width: 76%;

@@ -25,7 +25,7 @@ const LocalDashboard = () => {
 	const [destinationColumn, setDestinationColumn] = useState('')
 	const [addColumn, setAddColumn] = useState('')
 	const [addColumnToggle, setAddColumnToggle] = useState(false)
-	const [menu, setMenu] = useState(true)
+	const [menu, setMenu] = useState(false)
 
 	const [openedDataId, setOpenedDataId] = useState('')
 	const [openedDataToggle, setOpenedDataToggle] = useState(false)
