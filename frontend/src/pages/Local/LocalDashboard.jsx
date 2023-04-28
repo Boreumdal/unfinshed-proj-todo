@@ -25,6 +25,7 @@ const LocalDashboard = () => {
 
 	const [openedDataId, setOpenedDataId] = useState('')
 	const [openedDataToggle, setOpenedDataToggle] = useState(false)
+    const [editDateToggle, setEditDateToggle] = useState(false)
 
 	const [editingDataId, setEditingDataId] = useState('')
 	const [editingDataToggle, setEditingDataToggle] = useState(false)
@@ -263,7 +264,7 @@ const LocalDashboard = () => {
 					</div>
 					
 					<div className='h-[91%] overflow-y-auto p-4'>
-						<DisplayTask tasks={tasks} setOpenedDataId={setOpenedDataId} openedDataId={openedDataId} setOpenedDataToggle={setOpenedDataToggle} setEditingDataToggle={setEditingDataToggle} />
+						<DisplayTask tasks={tasks} setOpenedDataId={setOpenedDataId} openedDataId={openedDataId} setOpenedDataToggle={setOpenedDataToggle} setEditingDataToggle={setEditingDataToggle} setEditDateToggle={setEditDateToggle}  />
 					</div>
 
 					{
@@ -277,7 +278,7 @@ const LocalDashboard = () => {
 
 					{
 						openedDataToggle && (
-							<OpenData openedDataId={openedDataId} deleteTask={deleteTask} setOpenedDataId={setOpenedDataId} setOpenedDataToggle={setOpenedDataToggle} fetchLocalstorage={fetchLocalstorage} editingDataToggle={editingDataToggle} setEditingDataToggle={setEditingDataToggle} editingDataId={editingDataId} setEditingDataId={setEditingDataId} />
+							<OpenData openedDataId={openedDataId} deleteTask={deleteTask} setOpenedDataId={setOpenedDataId} setOpenedDataToggle={setOpenedDataToggle} fetchLocalstorage={fetchLocalstorage} editingDataToggle={editingDataToggle} setEditingDataToggle={setEditingDataToggle} editingDataId={editingDataId} setEditingDataId={setEditingDataId} editDateToggle={editDateToggle} setEditDateToggle={setEditDateToggle} />
 						)
 					}
 					

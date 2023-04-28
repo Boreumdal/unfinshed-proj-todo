@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { BsCalendar2, BsCalendar2Check, BsCalendar2Heart, BsCaretDownFill, BsCaretUpFill, BsFolder2Open, BsFolder2  } from 'react-icons/bs'
 
-const DisplayTask = ({tasks, setOpenedDataId, openedDataId, setOpenedDataToggle, setEditingDataToggle }) => {
+const DisplayTask = ({tasks, setOpenedDataId, openedDataId, setOpenedDataToggle, setEditingDataToggle, setEditDateToggle }) => {
 	const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 	const year = new Date().getFullYear()
 	const [noDue, setNoDue] = useState([])
@@ -10,6 +10,7 @@ const DisplayTask = ({tasks, setOpenedDataId, openedDataId, setOpenedDataToggle,
 	const openTaskHandler = item => {
 		setOpenedDataId(item)
 		setEditingDataToggle(false)
+		setEditDateToggle(false)
 
 		if (!openedDataId){
 			const timed = setTimeout(() => {
