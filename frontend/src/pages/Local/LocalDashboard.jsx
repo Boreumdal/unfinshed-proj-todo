@@ -3,8 +3,8 @@ import { BsFillGearFill, BsBox, BsBoxSeam, BsTrash3, BsStarFill, BsStar, BsThree
 import { GoPlus } from 'react-icons/go'
 import { RxCross2 } from 'react-icons/rx'
 import { HiMenu, HiMenuAlt3 } from 'react-icons/hi'
-
 import { FaStickyNote, FaStar } from 'react-icons/fa'
+import { useNavigate } from 'react-router-dom'
 import { useTodos } from '../../data/context/TodosContext'
 import AddTaskModal from './AddTaskModal'
 import { toast } from 'react-toastify'
@@ -14,6 +14,7 @@ import OpenData from './OpenData'
 const LocalDashboard = () => {
 	const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 	const days = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT']
+	const navigate = useNavigate()
 
 	const {tasks, setTasks, colums, setColumns} = useTodos()
 
@@ -296,8 +297,42 @@ const LocalDashboard = () => {
 				{
 					menu && 
 					<div className='w-[22%] origin-right duration-1000 absolute right-0 h-full p-5'>
-						<div className='flex flex-col gap-5 w-full h-full drop-shadow-lg rounded-lg py-5 px-5 bg-[#f8f8f8] overflow-hidden'>
+						<div className='flex flex-col gap-5 w-full h-full justify-between drop-shadow-lg rounded-lg py-5 px-5 bg-[#f8f8f8] overflow-hidden'>
+							<div>
+								<h1 className='text-3xl font-bold'>Menu</h1>
+								<div>
+									<h5>Data</h5>
+									<div className='grid grid-cols-[40%_auto] gap-1'>
+										<div className='flex flex-col items-center justify-center bg-white shadow rounded'>
+											<span className='text-3xl font-bold'>aa</span>
+											<span>Total Task</span>
+										</div>
+										<div className='grid grid-cols-2 gap-1'>
+											<div className='flex flex-col items-center bg-white shadow rounded justify-center aspect-square text-sm'>
+												<span className='text-2xl font-bold'>12</span>
+												<span>Important</span>
+											</div>
+											<div className='flex flex-col items-center bg-white shadow rounded justify-center aspect-square text-sm'>
+												<span className='text-2xl font-bold'>12</span>
+												<span>Done</span>
+											</div>
+											<div className='flex flex-col items-center bg-white shadow rounded justify-center aspect-square text-sm'>
+												<span className='text-2xl font-bold'>12</span>
+												<span>Archived</span>
+											</div>
+											<div className='flex flex-col items-center bg-white shadow rounded justify-center aspect-square text-sm'>
+												<span className='text-2xl font-bold'>12</span>
+												<span>Delete</span>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
 
+							<div className='flex flex-col gap-1'>
+								<button className='text-white w-full h-[32px] rounded-md font-medium bg-[#393E46]'>Debug Options</button>
+								<button className='text-white w-full h-[32px] rounded-md font-medium bg-pink-theme'>Return Home</button>
+							</div>
 						</div>
 					</div>
 				}
