@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { BsCalendar2, BsCalendar2Check, BsCalendar2Heart, BsCaretDownFill, BsCaretUpFill, BsFolder2Open, BsFolder2, BsSave2 , BsExclamationCircle  } from 'react-icons/bs'
+import { BsCalendar2, BsCalendar2Check, BsCalendar2Heart, BsCaretDownFill, BsCaretUpFill, BsFolder2Open, BsFolder2, BsSave2 , BsExclamationCircle, BsEmojiSmile, BsBox2, BsEnvelopePaper } from 'react-icons/bs'
 
 const DisplayTask = ({tasks, setOpenedDataId, openedDataId, setOpenedDataToggle, setEditingDataToggle, setEditDateToggle, tab }) => {
 	const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
@@ -41,7 +41,7 @@ const DisplayTask = ({tasks, setOpenedDataId, openedDataId, setOpenedDataToggle,
 	}, [tasks])
 
 	return (
-		<div className='flex flex-col gap-5'>
+		<div className='flex flex-col gap-5 h-full'>
 			{
 				tab === 'todo' && dates && dates.length > 0 && dates.sort((a, b) => Date.parse(a) - Date.parse(b))
 					.map((date, idx) => tasks && tasks.tasks.length > 0 && tasks.tasks.filter(task => task.marks.deleted !== true && task.dueDate.slice(0,10) === date && task.marks.archived !== true).length > 0 && (
@@ -220,23 +220,27 @@ const DisplayTask = ({tasks, setOpenedDataId, openedDataId, setOpenedDataToggle,
 			}
 			{
 				tab === 'todo' && noDue && noDue?.length === 0 && tasks && tasks?.tasks?.length === 0 && (
-					<div>
-						<p className='font-medium'>No dates found</p>
+					<div className='w-full h-full flex items-center justify-center gap-2'>
+						<span className='text-2xl'><BsEnvelopePaper /></span>
+						<p className=''>No task to do found</p>
 					</div>
 				)
 			}
 			{
 				tab === 'archive' && noDue && noDue?.filter(task => task.marks.archived === true && task.marks.deleted === false).length === 0 && tasks && tasks?.tasks?.filter(task => task.marks.archived === true && task.marks.deleted === false).length === 0 && (
-					<div>
-						<p className='font-medium'>No archived task found</p>
+					<div className='w-full h-full flex items-center justify-center gap-2'>
+						<span className='text-2xl'><BsBox2 /></span>
+						<p className=''>You don't have archived task</p>
 					</div>
 				)
 			}
 			{
 				tab === 'bin' && noDue && noDue?.filter(task => task.marks.deleted === true).length === 0 && tasks && tasks?.tasks?.filter(task => task.marks.deleted === true).length === 0 && (
-					<div>
-						<p className='font-medium'>No deleted task found</p>
+					<div className='w-full h-full flex items-center justify-center gap-2'>
+						<span className='text-2xl'><BsEmojiSmile /></span>
+						<p className=''>Nice! Your deleted task bin is empty</p>
 					</div>
+					
 				)
 			}
 		</div>

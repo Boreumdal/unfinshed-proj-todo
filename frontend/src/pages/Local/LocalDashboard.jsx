@@ -96,6 +96,7 @@ const LocalDashboard = () => {
 		
 		fetchLocalstorage()
 	}
+	
 	const archiveTask = id => {
 		const localStored = JSON.parse(localStorage.getItem('p1project'))
 		const indexOfTarget = localStored.tasks.findIndex(item => item.id === id)
@@ -132,7 +133,7 @@ const LocalDashboard = () => {
 	const permanentDeleteTask = id => {
 		const localStored = JSON.parse(localStorage.getItem('p1project'))
 		const indexOfTarget = localStored.tasks.findIndex(item => item.id === id)
-		
+
 		localStored.tasks.splice(indexOfTarget, 1)
 		localStorage.setItem('p1project', JSON.stringify(localStored))
 		
@@ -169,7 +170,8 @@ const LocalDashboard = () => {
 	}
 
 	const handleTabSwap = val => {
-		setTab(val)
+		setOpenedDataId('')
+		setOpenedDataToggle(false)
 
 		if (tab === val){
 			setTab('todo')
