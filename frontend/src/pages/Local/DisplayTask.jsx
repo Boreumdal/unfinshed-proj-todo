@@ -74,6 +74,99 @@ const DisplayTask = ({tasks, setOpenedDataId, openedDataId, setOpenedDataToggle,
 				)
 			}
 			{
+				tab === 'standby' && dates && dates.length > 0 && dates.sort((a, b) => Date.parse(a) - Date.parse(b))
+					.map((date, idx) => tasks && tasks.tasks.length > 0 && tasks.tasks.filter(task => task.marks.deleted !== true && task.dueDate.slice(0,10) === date && task.marks.archived !== true && task.status === 'todo').length > 0 && (
+						<div key={idx} className='mt-2'>
+							<div className='flex items-center font-medium gap-2 border-b pb-2'>
+								<h1 className='text-5xl'>{date.slice(8)}</h1>
+								<div className='flex flex-col'>
+									<p className='text-sm leading-5'>{date.slice(0, 4)}</p>
+									<p className='text-lg leading-5'>{months[+date.slice(5, 7) - 1]}</p>
+								</div>
+							</div>
+
+							<div className='grid grid-cols-3 gap-2 mt-4'>
+								{
+									tasks && tasks.tasks.length > 0 && tasks.tasks.filter(task => task.marks.deleted !== true && task.dueDate.slice(0,10) === date && task.marks.archived !== true && task.status === 'todo').map(item => (
+										<div key={item.id} onClick={() => openTaskHandler(item.id)} className={((item.status !== 'todo' && 'opacity-50') + (openedDataId && openedDataId !== item.id ? ' bg-[#EEEEEE]' : ' bg-[#f7f7f7]')) + ' cursor-pointer hover:brightness-105 hover:shadow-none duration-200 font-medium w-full h-[35px] flex items-center justify-between px-3 rounded shadow-sm'}>
+											<div className='flex items-center gap-2'>
+												{
+													item.status === 'todo' ? item.marks.marked ? <span><BsCalendar2Heart /></span> : <span><BsCalendar2 /></span> : item.marks.marked ? <span><BsCalendar2Heart /></span> : <span><BsCalendar2Check /></span> 
+												}
+												<h1 className='font-medium truncate max-w-[140px]'>{item.title}</h1>
+											</div>
+											<span className='text-lg'>{ openedDataId === item.id ? <BsFolder2Open /> : <BsFolder2 /> }</span>
+										</div>
+									))
+								}
+							</div>
+						</div>
+					)
+				)
+			}
+			{
+				tab === 'important' && dates && dates.length > 0 && dates.sort((a, b) => Date.parse(a) - Date.parse(b))
+					.map((date, idx) => tasks && tasks.tasks.length > 0 && tasks.tasks.filter(task => task.marks.deleted !== true && task.dueDate.slice(0,10) === date && task.marks.marked === true).length > 0 && (
+						<div key={idx} className='mt-2'>
+							<div className='flex items-center font-medium gap-2 border-b pb-2'>
+								<h1 className='text-5xl'>{date.slice(8)}</h1>
+								<div className='flex flex-col'>
+									<p className='text-sm leading-5'>{date.slice(0, 4)}</p>
+									<p className='text-lg leading-5'>{months[+date.slice(5, 7) - 1]}</p>
+								</div>
+							</div>
+
+							<div className='grid grid-cols-3 gap-2 mt-4'>
+								{
+									tasks && tasks.tasks.length > 0 && tasks.tasks.filter(task => task.marks.deleted !== true && task.dueDate.slice(0,10) === date && task.marks.marked === true).map(item => (
+										<div key={item.id} onClick={() => openTaskHandler(item.id)} className={((item.status !== 'todo' && 'opacity-50') + (openedDataId && openedDataId !== item.id ? ' bg-[#EEEEEE]' : ' bg-[#f7f7f7]')) + ' cursor-pointer hover:brightness-105 hover:shadow-none duration-200 font-medium w-full h-[35px] flex items-center justify-between px-3 rounded shadow-sm'}>
+											<div className='flex items-center gap-2'>
+												{
+													item.status === 'todo' ? item.marks.marked ? <span><BsCalendar2Heart /></span> : <span><BsCalendar2 /></span> : item.marks.marked ? <span><BsCalendar2Heart /></span> : <span><BsCalendar2Check /></span> 
+												}
+												<h1 className='font-medium truncate max-w-[140px]'>{item.title}</h1>
+											</div>
+											<span className='text-lg'>{ openedDataId === item.id ? <BsFolder2Open /> : <BsFolder2 /> }</span>
+										</div>
+									))
+								}
+							</div>
+						</div>
+					)
+				)
+			}
+			{
+				tab === 'done' && dates && dates.length > 0 && dates.sort((a, b) => Date.parse(a) - Date.parse(b))
+					.map((date, idx) => tasks && tasks.tasks.length > 0 && tasks.tasks.filter(task => task.marks.deleted !== true && task.dueDate.slice(0,10) === date && task.status !== 'todo').length > 0 && (
+						<div key={idx} className='mt-2'>
+							<div className='flex items-center font-medium gap-2 border-b pb-2'>
+								<h1 className='text-5xl'>{date.slice(8)}</h1>
+								<div className='flex flex-col'>
+									<p className='text-sm leading-5'>{date.slice(0, 4)}</p>
+									<p className='text-lg leading-5'>{months[+date.slice(5, 7) - 1]}</p>
+								</div>
+							</div>
+
+							<div className='grid grid-cols-3 gap-2 mt-4'>
+								{
+									tasks && tasks.tasks.length > 0 && tasks.tasks.filter(task => task.marks.deleted !== true && task.dueDate.slice(0,10) === date && task.status !== 'todo').map(item => (
+										<div key={item.id} onClick={() => openTaskHandler(item.id)} className={((item.status !== 'todo' && 'opacity-50') + (openedDataId && openedDataId !== item.id ? ' bg-[#EEEEEE]' : ' bg-[#f7f7f7]')) + ' cursor-pointer hover:brightness-105 hover:shadow-none duration-200 font-medium w-full h-[35px] flex items-center justify-between px-3 rounded shadow-sm'}>
+											<div className='flex items-center gap-2'>
+												{
+													item.status === 'todo' ? item.marks.marked ? <span><BsCalendar2Heart /></span> : <span><BsCalendar2 /></span> : item.marks.marked ? <span><BsCalendar2Heart /></span> : <span><BsCalendar2Check /></span> 
+												}
+												<h1 className='font-medium truncate max-w-[140px]'>{item.title}</h1>
+											</div>
+											<span className='text-lg'>{ openedDataId === item.id ? <BsFolder2Open /> : <BsFolder2 /> }</span>
+										</div>
+									))
+								}
+							</div>
+						</div>
+					)
+				)
+			}
+			{
 				tab === 'archive' && dates && dates.length > 0 && dates.sort((a, b) => Date.parse(a) - Date.parse(b))
 					.map((date, idx) => tasks && tasks.tasks.length > 0 && tasks.tasks.filter(task => task.marks.archived === true && task.dueDate.slice(0,10) === date).length > 0 && (
 						<div key={idx} className='mt-2'>
@@ -139,9 +232,41 @@ const DisplayTask = ({tasks, setOpenedDataId, openedDataId, setOpenedDataToggle,
 			}
 			{
 				noDue && noDue.length > 0 && <>
-
 					{
 						tab === 'todo' && noDue && noDue.filter(item => item.marks.deleted !== true && item.marks.archived !== true).length !== 0 && (
+							<div className='flex items-center font-medium gap-2 border-b pb-2'>
+								<h1 className='text-5xl'>00</h1>
+								<div className='flex flex-col'>
+									<p className='text-sm leading-5'>{year}</p>
+									<p className='text-lg leading-5'>No Due</p>
+								</div>
+							</div>
+						)
+					}
+					{
+						tab === 'standby' && noDue && noDue.filter(item => item.marks.deleted !== true && item.marks.archived !== true && item.status === 'todo').length !== 0 && (
+							<div className='flex items-center font-medium gap-2 border-b pb-2'>
+								<h1 className='text-5xl'>00</h1>
+								<div className='flex flex-col'>
+									<p className='text-sm leading-5'>{year}</p>
+									<p className='text-lg leading-5'>No Due</p>
+								</div>
+							</div>
+						)
+					}
+					{
+						tab === 'important' && noDue && noDue.filter(item => item.marks.deleted !== true && item.marks.marked === true).length !== 0 && (
+							<div className='flex items-center font-medium gap-2 border-b pb-2'>
+								<h1 className='text-5xl'>00</h1>
+								<div className='flex flex-col'>
+									<p className='text-sm leading-5'>{year}</p>
+									<p className='text-lg leading-5'>No Due</p>
+								</div>
+							</div>
+						)
+					}
+					{
+						tab === 'done' && noDue && noDue.filter(item => item.marks.deleted !== true && item.status !== 'todo').length !== 0 && (
 							<div className='flex items-center font-medium gap-2 border-b pb-2'>
 								<h1 className='text-5xl'>00</h1>
 								<div className='flex flex-col'>
@@ -176,6 +301,45 @@ const DisplayTask = ({tasks, setOpenedDataId, openedDataId, setOpenedDataToggle,
 					<div className='grid grid-cols-3 gap-2'>
 						{
 							tab === 'todo' && noDue && noDue.filter(item => item.marks.deleted !== true && item.marks.archived !== true).map((item, idx) => (
+								<div key={idx} onClick={() => openTaskHandler(item.id)} className={((item.status !== 'todo' && 'opacity-50') + (openedDataId && openedDataId !== item.id ? ' bg-[#EEEEEE]' : ' bg-[#f7f7f7]')) + ' cursor-pointer hover:brightness-105 hover:shadow-none duration-200 font-medium w-full h-[35px] flex items-center justify-between px-3 rounded shadow-sm'}>
+									<div className='flex items-center gap-2'>
+										{
+											item.status === 'todo' ? item.marks.marked ? <span><BsCalendar2Heart /></span> : <span><BsCalendar2 /></span> : item.marks.marked ? <span><BsCalendar2Heart /></span> : <span><BsCalendar2Check /></span>
+										}
+										<h1 className='font-medium truncate max-w-[140px]'>{item.title}</h1>
+									</div>
+									<span className='text-lg'>{ openedDataId === item.id ? <BsFolder2Open /> : <BsFolder2 /> }</span>
+								</div>
+							))
+						}
+						{
+							tab === 'standby' && noDue && noDue.filter(item => item.marks.deleted !== true && item.marks.archived !== true && item.status === 'todo').map((item, idx) => (
+								<div key={idx} onClick={() => openTaskHandler(item.id)} className={((item.status !== 'todo' && 'opacity-50') + (openedDataId && openedDataId !== item.id ? ' bg-[#EEEEEE]' : ' bg-[#f7f7f7]')) + ' cursor-pointer hover:brightness-105 hover:shadow-none duration-200 font-medium w-full h-[35px] flex items-center justify-between px-3 rounded shadow-sm'}>
+									<div className='flex items-center gap-2'>
+										{
+											item.status === 'todo' ? item.marks.marked ? <span><BsCalendar2Heart /></span> : <span><BsCalendar2 /></span> : item.marks.marked ? <span><BsCalendar2Heart /></span> : <span><BsCalendar2Check /></span>
+										}
+										<h1 className='font-medium truncate max-w-[140px]'>{item.title}</h1>
+									</div>
+									<span className='text-lg'>{ openedDataId === item.id ? <BsFolder2Open /> : <BsFolder2 /> }</span>
+								</div>
+							))
+						}
+						{
+							tab === 'important' && noDue && noDue.filter(item => item.marks.deleted !== true && item.marks.marked === true).map((item, idx) => (
+								<div key={idx} onClick={() => openTaskHandler(item.id)} className={((item.status !== 'todo' && 'opacity-50') + (openedDataId && openedDataId !== item.id ? ' bg-[#EEEEEE]' : ' bg-[#f7f7f7]')) + ' cursor-pointer hover:brightness-105 hover:shadow-none duration-200 font-medium w-full h-[35px] flex items-center justify-between px-3 rounded shadow-sm'}>
+									<div className='flex items-center gap-2'>
+										{
+											item.status === 'todo' ? item.marks.marked ? <span><BsCalendar2Heart /></span> : <span><BsCalendar2 /></span> : item.marks.marked ? <span><BsCalendar2Heart /></span> : <span><BsCalendar2Check /></span>
+										}
+										<h1 className='font-medium truncate max-w-[140px]'>{item.title}</h1>
+									</div>
+									<span className='text-lg'>{ openedDataId === item.id ? <BsFolder2Open /> : <BsFolder2 /> }</span>
+								</div>
+							))
+						}
+						{
+							tab === 'done' && noDue && noDue.filter(item => item.marks.deleted !== true && item.status !== 'todo').map((item, idx) => (
 								<div key={idx} onClick={() => openTaskHandler(item.id)} className={((item.status !== 'todo' && 'opacity-50') + (openedDataId && openedDataId !== item.id ? ' bg-[#EEEEEE]' : ' bg-[#f7f7f7]')) + ' cursor-pointer hover:brightness-105 hover:shadow-none duration-200 font-medium w-full h-[35px] flex items-center justify-between px-3 rounded shadow-sm'}>
 									<div className='flex items-center gap-2'>
 										{
@@ -227,10 +391,34 @@ const DisplayTask = ({tasks, setOpenedDataId, openedDataId, setOpenedDataToggle,
 				)
 			}
 			{
+				tab === 'standby' && noDue && noDue?.filter(task => task.marks.deleted !== true && task.marks.archived !== true && task.status === 'todo').length === 0 && tasks && tasks?.tasks?.filter(task => task.marks.deleted !== true && task.marks.archived !== true && task.status === 'todo').length === 0 && (
+					<div className='w-full h-full flex items-center justify-center gap-2'>
+						<span className='text-2xl'><BsBox2 /></span>
+						<p className=''>You don't have task to do</p>
+					</div>
+				)
+			}
+			{
 				tab === 'archive' && noDue && noDue?.filter(task => task.marks.archived === true && task.marks.deleted === false).length === 0 && tasks && tasks?.tasks?.filter(task => task.marks.archived === true && task.marks.deleted === false).length === 0 && (
 					<div className='w-full h-full flex items-center justify-center gap-2'>
 						<span className='text-2xl'><BsBox2 /></span>
 						<p className=''>You don't have archived task</p>
+					</div>
+				)
+			}
+			{
+				tab === 'important' && noDue && noDue?.filter(task => task.marks.deleted !== true && task.marks.marked === true).length === 0 && tasks && tasks?.tasks?.filter(task => task.marks.deleted !== true && task.marks.marked === true).length === 0 && (
+					<div className='w-full h-full flex items-center justify-center gap-2'>
+						<span className='text-2xl'><BsBox2 /></span>
+						<p className=''>You don't have important task listed</p>
+					</div>
+				)
+			}
+			{
+				tab === 'done' && noDue && noDue?.filter(task => task.marks.deleted !== true && task.status !== 'todo').length === 0 && tasks && tasks?.tasks?.filter(task => task.marks.deleted !== true && task.status !== 'todo').length === 0 && (
+					<div className='w-full h-full flex items-center justify-center gap-2'>
+						<span className='text-2xl'><BsBox2 /></span>
+						<p className=''>You don't have important task listed</p>
 					</div>
 				)
 			}

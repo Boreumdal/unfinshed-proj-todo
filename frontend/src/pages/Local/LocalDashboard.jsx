@@ -96,7 +96,7 @@ const LocalDashboard = () => {
 		
 		fetchLocalstorage()
 	}
-	
+
 	const archiveTask = id => {
 		const localStored = JSON.parse(localStorage.getItem('p1project'))
 		const indexOfTarget = localStored.tasks.findIndex(item => item.id === id)
@@ -337,34 +337,34 @@ const LocalDashboard = () => {
 						<div className='flex flex-col gap-5 w-full h-full justify-between drop-shadow-lg rounded-lg py-5 px-5 bg-[#f8f8f8] overflow-hidden'>
 							<div>
 								<h1 className='text-3xl font-bold'>Menu</h1>
-								<div className='my-5 flex flex-col gap-1'>
-									<div className='flex flex-col items-center justify-center bg-white shadow rounded text-sm font-medium py-3'>
-										<span className='text-3xl font-bold'>{ tasks?.tasks?.filter(task => task.status === 'todo').length }</span>
-										<span>Task to do</span>
+								<div className='my-5 flex flex-col gap-2'>
+									<div className='flex flex-col items-center justify-center bg-white shadow rounded text-sm font-medium py-6'>
+										<span className='text-3xl font-bold'>{ tasks?.tasks?.length }</span>
+										<span>Total Tasks</span>
 									</div>
-									<div className='grid grid-cols-[40%_auto] gap-1'>
-										<div className='flex flex-col items-center justify-center bg-white shadow rounded text-sm font-medium'>
-											<span className='text-3xl font-bold'>{ tasks?.tasks?.length }</span>
-											<span>Total Task</span>
-										</div>
-										<div className='grid grid-cols-2 gap-1'>
-											<div className='flex flex-col items-center bg-white shadow rounded justify-center aspect-square text-sm font-medium'>
-												<span className='text-2xl font-bold'>{ tasks?.tasks?.filter(task => task.marks.marked).length }</span>
-												<span>Important</span>
-											</div>
-											<div className='flex flex-col items-center bg-white shadow rounded justify-center aspect-square text-sm font-medium'>
-												<span className='text-2xl font-bold'>{ tasks?.tasks?.filter(task => task.status !== 'todo').length }</span>
-												<span>Done</span>
-											</div>
-											<button onClick={() => handleTabSwap('archive')} className={(tab === 'archive' ? 'bg-[#393E46] text-white scale-105 border-transparent' : 'bg-white border-transparent hover:border-[#393E46]') + ' border-2 duration-300 flex flex-col items-center shadow rounded justify-center aspect-square text-sm font-medium'}>
-												<span className='text-2xl font-bold'>{ tasks?.tasks?.filter(task => task.marks.archived).length }</span>
-												<span>Archived</span>
-											</button>
-											<button onClick={() => handleTabSwap('bin')} className={(tab === 'bin' ? 'bg-[#393E46] text-white scale-105 border-transparent' : 'bg-white border-transparent hover:border-[#393E46]') + ' border-2 duration-300 flex flex-col items-center shadow rounded justify-center aspect-square text-sm font-medium'}>
-												<span className='text-2xl font-bold'>{ tasks?.tasks?.filter(task => task.marks.deleted).length }</span>
-												<span>Bin</span>
-											</button>
-										</div>
+									<div className='grid grid-cols-3 gap-2'>
+										<button onClick={() => handleTabSwap('standby')} className={(tab === 'standby' ? 'bg-[#393E46] text-white scale-105 border-transparent' : 'bg-white border-transparent hover:border-[#393E46]') + ' border-2 duration-300 flex flex-col items-center shadow rounded justify-center aspect-square text-sm font-medium'}>
+											<span className='text-3xl font-bold'>{ tasks?.tasks?.filter(task => task.status === 'todo').length }</span>
+											<span>To do</span>
+										</button>
+										<button onClick={() => handleTabSwap('important')} className={(tab === 'important' ? 'bg-[#393E46] text-white scale-105 border-transparent' : 'bg-white border-transparent hover:border-[#393E46]') + ' border-2 duration-300 flex flex-col items-center shadow rounded justify-center aspect-square text-sm font-medium'}>
+											<span className='text-2xl font-bold'>{ tasks?.tasks?.filter(task => task.marks.marked).length }</span>
+											<span>Important</span>
+										</button>
+										<button onClick={() => handleTabSwap('done')} className={(tab === 'done' ? 'bg-[#393E46] text-white scale-105 border-transparent' : 'bg-white border-transparent hover:border-[#393E46]') + ' border-2 duration-300 flex flex-col items-center shadow rounded justify-center aspect-square text-sm font-medium'}>
+											<span className='text-2xl font-bold'>{ tasks?.tasks?.filter(task => task.status !== 'todo').length }</span>
+											<span>Done</span>
+										</button>
+									</div>
+									<div className='grid grid-cols-2 gap-2'>
+										<button onClick={() => handleTabSwap('archive')} className={(tab === 'archive' ? 'bg-[#393E46] text-white scale-105 border-transparent' : 'bg-white border-transparent hover:border-[#393E46]') + ' border-2 duration-300 flex flex-col items-center shadow rounded justify-center text-sm font-medium py-4'}>
+											<span className='text-2xl font-bold'>{ tasks?.tasks?.filter(task => task.marks.archived).length }</span>
+											<span>Archived</span>
+										</button>
+										<button onClick={() => handleTabSwap('bin')} className={(tab === 'bin' ? 'bg-[#393E46] text-white scale-105 border-transparent' : 'bg-white border-transparent hover:border-[#393E46]') + ' border-2 duration-300 flex flex-col items-center shadow rounded justify-center text-sm font-medium py-4'}>
+											<span className='text-2xl font-bold'>{ tasks?.tasks?.filter(task => task.marks.deleted).length }</span>
+											<span>Bin</span>
+										</button>
 									</div>
 								</div>
 							</div>
