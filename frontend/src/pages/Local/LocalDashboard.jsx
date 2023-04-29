@@ -302,7 +302,7 @@ const LocalDashboard = () => {
 
 					{
 						openedDataToggle && (
-							<OpenData openedDataId={openedDataId} deleteTask={deleteTask} archiveTask={archiveTask} setOpenedDataId={setOpenedDataId} setOpenedDataToggle={setOpenedDataToggle} fetchLocalstorage={fetchLocalstorage} editingDataToggle={editingDataToggle} setEditingDataToggle={setEditingDataToggle} editingDataId={editingDataId} setEditingDataId={setEditingDataId} editDateToggle={editDateToggle} setEditDateToggle={setEditDateToggle} />
+							<OpenData openedDataId={openedDataId} deleteTask={deleteTask} archiveTask={archiveTask} setOpenedDataId={setOpenedDataId} setOpenedDataToggle={setOpenedDataToggle} fetchLocalstorage={fetchLocalstorage} editingDataToggle={editingDataToggle} setEditingDataToggle={setEditingDataToggle} editingDataId={editingDataId} setEditingDataId={setEditingDataId} editDateToggle={editDateToggle} setEditDateToggle={setEditDateToggle} tab={tab} />
 						)
 					}
 					
