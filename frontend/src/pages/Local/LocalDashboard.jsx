@@ -118,6 +118,27 @@ const LocalDashboard = () => {
 		fetchLocalstorage()
 	}
 
+	const restoreTask = id => {
+		const localStored = JSON.parse(localStorage.getItem('p1project'))
+		const indexOfTarget = localStored.tasks.findIndex(item => item.id === id)
+
+		localStored.tasks[indexOfTarget].marks.deleted = false
+
+		localStorage.setItem('p1project', JSON.stringify(localStored))
+		
+		fetchLocalstorage()
+	}
+
+	const permanentDeleteTask = id => {
+		const localStored = JSON.parse(localStorage.getItem('p1project'))
+		const indexOfTarget = localStored.tasks.findIndex(item => item.id === id)
+		
+		localStored.tasks.splice(indexOfTarget, 1)
+		localStorage.setItem('p1project', JSON.stringify(localStored))
+		
+		setTimeout(() => fetchLocalstorage(), 1000)
+	}
+
 	const currentDate = () => {
 		const date = new Date()
 			
@@ -302,7 +323,7 @@ const LocalDashboard = () => {
 
 					{
 						openedDataToggle && (
-							<OpenData openedDataId={openedDataId} deleteTask={deleteTask} archiveTask={archiveTask} setOpenedDataId={setOpenedDataId} setOpenedDataToggle={setOpenedDataToggle} fetchLocalstorage={fetchLocalstorage} editingDataToggle={editingDataToggle} setEditingDataToggle={setEditingDataToggle} editingDataId={editingDataId} setEditingDataId={setEditingDataId} editDateToggle={editDateToggle} setEditDateToggle={setEditDateToggle} tab={tab} />
+							<OpenData openedDataId={openedDataId} deleteTask={deleteTask} archiveTask={archiveTask} setOpenedDataId={setOpenedDataId} setOpenedDataToggle={setOpenedDataToggle} fetchLocalstorage={fetchLocalstorage} permanentDeleteTask={permanentDeleteTask} restoreTask={restoreTask} editingDataToggle={editingDataToggle} setEditingDataToggle={setEditingDataToggle} editingDataId={editingDataId} setEditingDataId={setEditingDataId} editDateToggle={editDateToggle} setEditDateToggle={setEditDateToggle} tab={tab} />
 						)
 					}
 					
@@ -325,11 +346,11 @@ const LocalDashboard = () => {
 											<span>Total Task</span>
 										</div>
 										<div className='grid grid-cols-2 gap-1'>
-											<div className='flex flex-col items-center border-2 bg-white shadow rounded justify-center aspect-square text-sm font-medium'>
+											<div className='flex flex-col items-center bg-white shadow rounded justify-center aspect-square text-sm font-medium'>
 												<span className='text-2xl font-bold'>{ tasks?.tasks?.filter(task => task.marks.marked).length }</span>
 												<span>Important</span>
 											</div>
-											<div className='flex flex-col items-center border-2 bg-white shadow rounded justify-center aspect-square text-sm font-medium'>
+											<div className='flex flex-col items-center bg-white shadow rounded justify-center aspect-square text-sm font-medium'>
 												<span className='text-2xl font-bold'>{ tasks?.tasks?.filter(task => task.status !== 'todo').length }</span>
 												<span>Done</span>
 											</div>

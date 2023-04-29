@@ -4,7 +4,7 @@ import { FaStickyNote, FaStar } from 'react-icons/fa'
 import { useTodos } from '../../data/context/TodosContext'
 import { toast } from 'react-toastify'
 
-const OpenData = ({ openedDataId, deleteTask, archiveTask, setOpenedDataToggle, setOpenedDataId, fetchLocalstorage, editingDataToggle, setEditingDataToggle, editingDataId, setEditingDataId, editDateToggle, setEditDateToggle, tab }) => {
+const OpenData = ({ openedDataId, deleteTask, archiveTask, setOpenedDataToggle, setOpenedDataId, fetchLocalstorage, editingDataToggle, setEditingDataToggle, editingDataId, setEditingDataId, editDateToggle, setEditDateToggle, tab, restoreTask, permanentDeleteTask }) => {
 	const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 	const {tasks, setTasks } = useTodos()
 
@@ -73,6 +73,21 @@ const OpenData = ({ openedDataId, deleteTask, archiveTask, setOpenedDataToggle, 
 
     const handleArchive = (id, title) => {
         archiveTask(id)
+        setOpenedDataToggle(false)
+        setOpenedDataId('')
+
+        toast.success(title)
+    }
+
+    const handleRestore = (id, title) => {
+        restoreTask(id)
+        setOpenedDataToggle(false)
+        setOpenedDataId('')
+
+        toast.success(title)
+    }
+    const handlePermanentDelete = (id, title) => {
+        permanentDeleteTask(id)
         setOpenedDataToggle(false)
         setOpenedDataId('')
 
@@ -164,7 +179,7 @@ const OpenData = ({ openedDataId, deleteTask, archiveTask, setOpenedDataToggle, 
                             </div>
                         </div>
                     </div>
-                    <div className={(editingDataToggle ? 'grid-cols-2' : tab !== 'archive' ? 'grid-cols-3' : 'grid-cols-2')+ ' mt-10 grid gap-2'}>
+                    <div className={(editingDataToggle ? 'grid-cols-2' : tab === 'todo' ? 'grid-cols-3' : 'grid-cols-2')+ ' mt-10 grid gap-2'}>
                         {
                             editingDataToggle ? (
                                 <>
@@ -173,9 +188,14 @@ const OpenData = ({ openedDataId, deleteTask, archiveTask, setOpenedDataToggle, 
                                 </>
                             ) : (
                                 <>
-                                    <button onClick={() => handleEdit(openedDataId, openedData)} className='hover:bg-[#FF6D60] bg-gray-600 duration-200 ease-in-out h-[38px] rounded-md w-full font-medium text-white shadow'>Edit</button>
-                                    { tab !== 'archive' && <button onClick={() => handleArchive(openedDataId, openedData.title)} className='hover:bg-emerald-theme bg-gray-600 duration-200 ease-in-out h-[38px] rounded-md w-full font-medium text-white shadow'>Archive</button> }
-                                    <button onClick={() => handleDelete(openedDataId, openedData.title)} className='hover:bg-pink-theme bg-gray-600 duration-200 ease-in-out h-[38px] rounded-md w-full font-medium text-white shadow'>Delete</button>
+                                    { tab !== 'bin' && <button onClick={() => handleEdit(openedDataId, openedData)} className='hover:bg-[#FF6D60] bg-gray-600 duration-200 ease-in-out h-[38px] rounded-md w-full font-medium text-white shadow'>Edit</button> }
+                                    { tab === 'todo' && <button onClick={() => handleArchive(openedDataId, openedData.title)} className='hover:bg-emerald-theme bg-gray-600 duration-200 ease-in-out h-[38px] rounded-md w-full font-medium text-white shadow'>Archive</button> }
+                                    { tab === 'bin' && <button onClick={() => handleRestore(openedDataId, openedData.title)} className='hover:bg-steelblue-theme bg-gray-600 duration-200 ease-in-out h-[38px] rounded-md w-full font-medium text-white shadow'>Restore</button> }
+                                    { 
+                                        tab !== 'bin' 
+                                        ? <button onClick={() => handleDelete(openedDataId, openedData.title)} className='hover:bg-pink-theme bg-gray-600 duration-200 ease-in-out h-[38px] rounded-md w-full font-medium text-white shadow'>Delete</button>
+                                        : <button onClick={() => handlePermanentDelete(openedDataId, openedData.title)} className='hover:bg-pink-theme bg-gray-600 duration-200 ease-in-out h-[38px] rounded-md w-full font-medium text-white shadow'>Perma Delete</button>
+                                    }
                                 </>
                             )
                         }
