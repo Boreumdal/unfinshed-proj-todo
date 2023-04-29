@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react'
 
 import { FaStickyNote, FaStar } from 'react-icons/fa'
 import { useTodos } from '../../data/context/TodosContext'
+import { toast } from 'react-toastify'
 
-const OpenData = ({ openedDataId, deleteTask, setOpenedDataToggle, setOpenedDataId, fetchLocalstorage, editingDataToggle, setEditingDataToggle, editingDataId, setEditingDataId, editDateToggle, setEditDateToggle }) => {
+const OpenData = ({ openedDataId, deleteTask, archiveTask, setOpenedDataToggle, setOpenedDataId, fetchLocalstorage, editingDataToggle, setEditingDataToggle, editingDataId, setEditingDataId, editDateToggle, setEditDateToggle }) => {
 	const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 	const {tasks, setTasks } = useTodos()
 
@@ -28,10 +29,12 @@ const OpenData = ({ openedDataId, deleteTask, setOpenedDataToggle, setOpenedData
         })
     }
 
-    const handleDelete = () => {
-        deleteTask(openedDataId)
+    const handleDelete = (id, title) => {
+        deleteTask(id)
         setOpenedDataToggle(false)
         setOpenedDataId('')
+
+        toast.error(title)
     }
 
     const handleEdit = (id, data) => {
@@ -66,6 +69,14 @@ const OpenData = ({ openedDataId, deleteTask, setOpenedDataToggle, setOpenedData
 
     const handleCancel = () => {
         setEditingDataToggle(false)
+    }
+
+    const handleArchive = (id, title) => {
+        archiveTask(id)
+        setOpenedDataToggle(false)
+        setOpenedDataId('')
+
+        toast.success(title)
     }
 
     const handleSaveEdit = data => {
@@ -163,8 +174,8 @@ const OpenData = ({ openedDataId, deleteTask, setOpenedDataToggle, setOpenedData
                             ) : (
                                 <>
                                     <button onClick={() => handleEdit(openedDataId, openedData)} className='hover:bg-[#FF6D60] bg-gray-600 duration-200 ease-in-out h-[38px] rounded-md w-full font-medium text-white shadow'>Edit</button>
-                                    <button className='hover:bg-emerald-theme bg-gray-600 duration-200 ease-in-out h-[38px] rounded-md w-full font-medium text-white shadow'>Archive</button>
-                                    <button onClick={handleDelete} className='hover:bg-pink-theme bg-gray-600 duration-200 ease-in-out h-[38px] rounded-md w-full font-medium text-white shadow'>Delete</button>
+                                    <button onClick={() => handleArchive(openedDataId, openedData.title)} className='hover:bg-emerald-theme bg-gray-600 duration-200 ease-in-out h-[38px] rounded-md w-full font-medium text-white shadow'>Archive</button>
+                                    <button onClick={() => handleDelete(openedDataId, openedData.title)} className='hover:bg-pink-theme bg-gray-600 duration-200 ease-in-out h-[38px] rounded-md w-full font-medium text-white shadow'>Delete</button>
                                 </>
                             )
                         }

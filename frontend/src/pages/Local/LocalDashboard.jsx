@@ -34,6 +34,8 @@ const LocalDashboard = () => {
 	const [editingDataId, setEditingDataId] = useState('')
 	const [editingDataToggle, setEditingDataToggle] = useState(false)
 
+	const [tab, setTab] = useState('todo')
+
 	const handleAddColumn = e => {
 		setAddColumn(e.target.value)
 	}
@@ -94,6 +96,16 @@ const LocalDashboard = () => {
 		
 		fetchLocalstorage()
 	}
+	const archiveTask = id => {
+		const localStored = JSON.parse(localStorage.getItem('p1project'))
+		const indexOfTarget = localStored.tasks.findIndex(item => item.id === id)
+
+		localStored.tasks[indexOfTarget].marks.archived = true
+
+		localStorage.setItem('p1project', JSON.stringify(localStored))
+		
+		fetchLocalstorage()
+	}
 
 	const undoDoneTask = id => {
 		const localStored = JSON.parse(localStorage.getItem('p1project'))
@@ -135,7 +147,15 @@ const LocalDashboard = () => {
 		fetchLocalstorage()
 	}
 
+	const handleTabSwap = val => {
+		setTab(val)
 
+		if (tab === val){
+			setTab('todo')
+		} else {
+			setTab(val)
+		}
+	}
 
 	useEffect(() => {
 		currentDate()
@@ -143,8 +163,6 @@ const LocalDashboard = () => {
 		setInterval(() => {
 			currentDate()
 		}, 45000)
-
-		console.log(tasks);
 
 		console.log('Be advised: A function will fired every 45s for the clock');
 	}, [])
@@ -196,8 +214,8 @@ const LocalDashboard = () => {
 											</div>
 											<div className='flex flex-col gap-2 overflow-y-auto'>
 												{
-													tasks.tasks && tasks.tasks.filter(todo => todo.column === task && todo.marks.deleted === false).length !== 0 
-													? tasks.tasks.filter(todo => todo.column === task && todo.marks.deleted === false).map(item => (
+													tasks.tasks && tasks.tasks.filter(todo => todo.column === task && todo.marks.deleted === false && todo.marks.archived !== true).length !== 0 
+													? tasks.tasks.filter(todo => todo.column === task && todo.marks.deleted === false && todo.marks.archived !== true).map(item => (
 														<div key={item?.id} onMouseLeave={() => setTooltip('')} className={(item?.status !== 'todo' && 'opacity-40 line-through') + ' flex items-center gap-2 h-[28px] px-2 hover:bg-[#f8f8f8] duration-300 rounded-sm relative task-item'}>
 															<span>{ item?.status !== 'todo' ? <BsCheckLg /> : <BsBox />}</span>
 															<p className={(tooltip === item?.id ? 'w-[54%]' : 'task-item-text w-[84%]') + ' truncate '}>{item?.title}</p>
@@ -270,7 +288,7 @@ const LocalDashboard = () => {
 					</div>
 					
 					<div className='h-[91%] overflow-y-auto p-4 z-30'>
-						<DisplayTask tasks={tasks} setOpenedDataId={setOpenedDataId} openedDataId={openedDataId} setOpenedDataToggle={setOpenedDataToggle} setEditingDataToggle={setEditingDataToggle} setEditDateToggle={setEditDateToggle}  />
+						<DisplayTask tasks={tasks} setOpenedDataId={setOpenedDataId} openedDataId={openedDataId} setOpenedDataToggle={setOpenedDataToggle} setEditingDataToggle={setEditingDataToggle} setEditDateToggle={setEditDateToggle} tab={tab}  />
 					</div>
 
 					{
@@ -284,14 +302,14 @@ const LocalDashboard = () => {
 
 					{
 						openedDataToggle && (
-							<OpenData openedDataId={openedDataId} deleteTask={deleteTask} setOpenedDataId={setOpenedDataId} setOpenedDataToggle={setOpenedDataToggle} fetchLocalstorage={fetchLocalstorage} editingDataToggle={editingDataToggle} setEditingDataToggle={setEditingDataToggle} editingDataId={editingDataId} setEditingDataId={setEditingDataId} editDateToggle={editDateToggle} setEditDateToggle={setEditDateToggle} />
+							<OpenData openedDataId={openedDataId} deleteTask={deleteTask} archiveTask={archiveTask} setOpenedDataId={setOpenedDataId} setOpenedDataToggle={setOpenedDataToggle} fetchLocalstorage={fetchLocalstorage} editingDataToggle={editingDataToggle} setEditingDataToggle={setEditingDataToggle} editingDataId={editingDataId} setEditingDataId={setEditingDataId} editDateToggle={editDateToggle} setEditDateToggle={setEditDateToggle} />
 						)
 					}
 					
 				</div>
 				
 				{
-					menu && 
+					menu &&
 					<div className='w-[22%] origin-right duration-1000 absolute right-0 h-full p-5'>
 						<div className='flex flex-col gap-5 w-full h-full justify-between drop-shadow-lg rounded-lg py-5 px-5 bg-[#f8f8f8] overflow-hidden'>
 							<div>
@@ -307,27 +325,26 @@ const LocalDashboard = () => {
 											<span>Total Task</span>
 										</div>
 										<div className='grid grid-cols-2 gap-1'>
-											<div className='flex flex-col items-center bg-white shadow rounded justify-center aspect-square text-sm font-medium'>
+											<div className='flex flex-col items-center border-2 bg-white shadow rounded justify-center aspect-square text-sm font-medium'>
 												<span className='text-2xl font-bold'>{ tasks?.tasks?.filter(task => task.marks.marked).length }</span>
 												<span>Important</span>
 											</div>
-											<div className='flex flex-col items-center bg-white shadow rounded justify-center aspect-square text-sm font-medium'>
+											<div className='flex flex-col items-center border-2 bg-white shadow rounded justify-center aspect-square text-sm font-medium'>
 												<span className='text-2xl font-bold'>{ tasks?.tasks?.filter(task => task.status !== 'todo').length }</span>
 												<span>Done</span>
 											</div>
-											<div className='flex flex-col items-center bg-white shadow rounded justify-center aspect-square text-sm font-medium'>
+											<button onClick={() => handleTabSwap('archive')} className={(tab === 'archive' ? 'bg-[#393E46] text-white scale-105 border-transparent' : 'bg-white border-transparent hover:border-[#393E46]') + ' border-2 duration-300 flex flex-col items-center shadow rounded justify-center aspect-square text-sm font-medium'}>
 												<span className='text-2xl font-bold'>{ tasks?.tasks?.filter(task => task.marks.archived).length }</span>
 												<span>Archived</span>
-											</div>
-											<div className='flex flex-col items-center bg-white shadow rounded justify-center aspect-square text-sm font-medium'>
+											</button>
+											<button onClick={() => handleTabSwap('bin')} className={(tab === 'bin' ? 'bg-[#393E46] text-white scale-105 border-transparent' : 'bg-white border-transparent hover:border-[#393E46]') + ' border-2 duration-300 flex flex-col items-center shadow rounded justify-center aspect-square text-sm font-medium'}>
 												<span className='text-2xl font-bold'>{ tasks?.tasks?.filter(task => task.marks.deleted).length }</span>
 												<span>Bin</span>
-											</div>
+											</button>
 										</div>
 									</div>
 								</div>
 							</div>
-
 							<div className='flex flex-col gap-1'>
 								
 								<div className='flex flex-col items-center gap-1'>
