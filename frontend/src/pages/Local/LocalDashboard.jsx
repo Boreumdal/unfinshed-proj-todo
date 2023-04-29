@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { BsFillGearFill, BsBox, BsBoxSeam, BsTrash3, BsStarFill, BsStar, BsThreeDots, BsCheckLg, BsArrowCounterclockwise, BsFillPersonFill, BsCaretUpFill, BsMoonStarsFill, BsSunFill } from 'react-icons/bs'
+import { BsFillGearFill, BsBox, BsBoxSeam, BsTrash3, BsStarFill, BsStar, BsThreeDots, BsCheckLg, BsArrowCounterclockwise, BsFillPersonFill, BsCaretUpFill, BsFillMoonStarsFill, BsSun } from 'react-icons/bs'
 import { GoPlus } from 'react-icons/go'
 import { RxCross2, RxColorWheel } from 'react-icons/rx'
 import { HiMenu, HiMenuAlt3 } from 'react-icons/hi'
@@ -10,13 +10,14 @@ import AddTaskModal from './AddTaskModal'
 import { toast } from 'react-toastify'
 import DisplayTask from './DisplayTask'
 import OpenData from './OpenData'
+import TestingOptions from './TestingOptions'
 
 const LocalDashboard = () => {
 	const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 	const days = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT']
 	const navigate = useNavigate()
 
-	const {tasks, setTasks, colums, setColumns} = useTodos()
+	const {tasks, setTasks, colums, setColumns, light, setLight} = useTodos()
 
 	const [time, setTime] = useState('')
 	const [today, setToday] = useState('')
@@ -35,6 +36,8 @@ const LocalDashboard = () => {
 	const [editingDataToggle, setEditingDataToggle] = useState(false)
 
 	const [tab, setTab] = useState('todo')
+
+	const [testingToggle, setTestingToggle] = useState(true)
 
 	const handleAddColumn = e => {
 		setAddColumn(e.target.value)
@@ -292,8 +295,15 @@ const LocalDashboard = () => {
 					<div className='h-[9vh] flex items-center justify-between bg-[#f8f8f8] px-4 rounded-lg shadow-md z-40'>
 						<div className='flex items-center gap-3 font-mono'>
 							<div className='flex flex-col items-center'>
-								<h1 className='text-3xl font-bold'>Calendar</h1>
-								<p className='text-xl font-bold'>{`${day} ${time}`}</p>
+								<div className='flex items-center gap-2'>
+									<h1 className='text-3xl font-bold'>Calendar</h1>
+									{
+										tab !== 'todo' && <span className='text-sm font-bold bg-[#393E46] py-1 px-3 rounded-lg text-white'>
+											{ tab !== 'todo' ? tab === 'done' ? 'Done' : tab === 'important' ? 'Important' : tab=== 'archive' ? 'Archive' : tab === 'bin' ? 'Bin' : 'Todo' : '' }
+										</span>
+									}
+								</div>
+								<p className='text-xl font-bold self-start'>{`${day} ${time}`}</p>
 							</div>
 							{/* <div>
 								<div className='flex items-center gap-1'>
@@ -325,7 +335,23 @@ const LocalDashboard = () => {
 
 					{
 						openedDataToggle && (
-							<OpenData openedDataId={openedDataId} deleteTask={deleteTask} archiveTask={archiveTask} setOpenedDataId={setOpenedDataId} setOpenedDataToggle={setOpenedDataToggle} fetchLocalstorage={fetchLocalstorage} permanentDeleteTask={permanentDeleteTask} restoreTask={restoreTask} editingDataToggle={editingDataToggle} setEditingDataToggle={setEditingDataToggle} editingDataId={editingDataId} setEditingDataId={setEditingDataId} editDateToggle={editDateToggle} setEditDateToggle={setEditDateToggle} tab={tab} />
+							<OpenData 
+								openedDataId={openedDataId} 
+								deleteTask={deleteTask} 
+								archiveTask={archiveTask} 
+								setOpenedDataId={setOpenedDataId} 
+								setOpenedDataToggle={setOpenedDataToggle} 
+								fetchLocalstorage={fetchLocalstorage} 
+								permanentDeleteTask={permanentDeleteTask} 
+								restoreTask={restoreTask} 
+								editingDataToggle={editingDataToggle} 
+								setEditingDataToggle={setEditingDataToggle} 
+								editingDataId={editingDataId} 
+								setEditingDataId={setEditingDataId} 
+								editDateToggle={editDateToggle} 
+								setEditDateToggle={setEditDateToggle} 
+								tab={tab} 
+							/>
 						)
 					}
 					
@@ -336,32 +362,40 @@ const LocalDashboard = () => {
 					<div className='w-[22%] origin-right duration-1000 absolute right-0 h-full p-5'>
 						<div className='flex flex-col gap-5 w-full h-full justify-between drop-shadow-lg rounded-lg py-5 px-5 bg-[#f8f8f8] overflow-hidden'>
 							<div>
-								<h1 className='text-3xl font-bold'>Menu</h1>
+								<div className='flex items-center justify-between'>
+									<h1 className='text-3xl font-bold'>Menu</h1>
+									
+									
+									{
+										light ? <button onClick={() => setLight(false)} className='text-xl rounded-full p-2 grid place-items-center shadow bg-white'><BsSun /></button> : <button onClick={() => setLight(true)} className='text-xl rounded-full p-2 grid text-white bg-[#393E46] place-items-center shadow'><BsFillMoonStarsFill /></button>
+									}
+								</div>
 								<div className='my-5 flex flex-col gap-2'>
-									<div className='flex flex-col items-center justify-center bg-white shadow rounded text-sm font-medium py-6'>
+									
+									<button onClick={() => handleTabSwap('todo')} className={(tab === 'todo' ? 'bg-[#393E46] text-white border-transparent' : 'bg-white border-transparent hover:border-[#393E46]') + ' border-2 duration-300 flex flex-col items-center justify-center shadow rounded text-sm font-medium py-6'}>
 										<span className='text-3xl font-bold'>{ tasks?.tasks?.length }</span>
 										<span>Total Tasks</span>
-									</div>
+									</button>
 									<div className='grid grid-cols-3 gap-2'>
-										<button onClick={() => handleTabSwap('standby')} className={(tab === 'standby' ? 'bg-[#393E46] text-white scale-105 border-transparent' : 'bg-white border-transparent hover:border-[#393E46]') + ' border-2 duration-300 flex flex-col items-center shadow rounded justify-center aspect-square text-sm font-medium'}>
+										<button onClick={() => handleTabSwap('standby')} className={(tab === 'standby' ? 'bg-[#393E46] text-white scale-105 border-transparent' : tab === 'todo' ? 'bg-[#393E46] text-white border-transparent hover:border-[#393e46] hover:bg-white hover:text-[#393e46]' : 'bg-white border-transparent hover:border-[#393E46]') + ' border-2 duration-300 flex flex-col items-center shadow rounded justify-center aspect-square text-sm font-medium'}>
 											<span className='text-3xl font-bold'>{ tasks?.tasks?.filter(task => task.status === 'todo').length }</span>
 											<span>To do</span>
 										</button>
-										<button onClick={() => handleTabSwap('important')} className={(tab === 'important' ? 'bg-[#393E46] text-white scale-105 border-transparent' : 'bg-white border-transparent hover:border-[#393E46]') + ' border-2 duration-300 flex flex-col items-center shadow rounded justify-center aspect-square text-sm font-medium'}>
+										<button onClick={() => handleTabSwap('important')} className={(tab === 'important' ? 'bg-[#393E46] text-white scale-105 border-transparent' : tab === 'todo' ? 'bg-[#393E46] text-white border-transparent hover:border-[#393e46] hover:bg-white hover:text-[#393e46]' : 'bg-white border-transparent hover:border-[#393E46]') + ' border-2 duration-300 flex flex-col items-center shadow rounded justify-center aspect-square text-sm font-medium'}>
 											<span className='text-2xl font-bold'>{ tasks?.tasks?.filter(task => task.marks.marked).length }</span>
 											<span>Important</span>
 										</button>
-										<button onClick={() => handleTabSwap('done')} className={(tab === 'done' ? 'bg-[#393E46] text-white scale-105 border-transparent' : 'bg-white border-transparent hover:border-[#393E46]') + ' border-2 duration-300 flex flex-col items-center shadow rounded justify-center aspect-square text-sm font-medium'}>
+										<button onClick={() => handleTabSwap('done')} className={(tab === 'done' ? 'bg-[#393E46] text-white scale-105 border-transparent' : tab === 'todo' ? 'bg-[#393E46] text-white border-transparent hover:border-[#393e46] hover:bg-white hover:text-[#393e46]' : 'bg-white border-transparent hover:border-[#393E46]') + ' border-2 duration-300 flex flex-col items-center shadow rounded justify-center aspect-square text-sm font-medium'}>
 											<span className='text-2xl font-bold'>{ tasks?.tasks?.filter(task => task.status !== 'todo').length }</span>
 											<span>Done</span>
 										</button>
 									</div>
 									<div className='grid grid-cols-2 gap-2'>
-										<button onClick={() => handleTabSwap('archive')} className={(tab === 'archive' ? 'bg-[#393E46] text-white scale-105 border-transparent' : 'bg-white border-transparent hover:border-[#393E46]') + ' border-2 duration-300 flex flex-col items-center shadow rounded justify-center text-sm font-medium py-4'}>
+										<button onClick={() => handleTabSwap('archive')} className={(tab === 'archive' ? 'bg-[#393E46] text-white scale-105 border-transparent' : tab === 'todo' ? 'bg-[#393E46] text-white border-transparent hover:border-[#393e46] hover:bg-white hover:text-[#393e46]' : 'bg-white border-transparent hover:border-[#393E46]') + ' border-2 duration-300 flex flex-col items-center shadow rounded justify-center text-sm font-medium py-4'}>
 											<span className='text-2xl font-bold'>{ tasks?.tasks?.filter(task => task.marks.archived).length }</span>
 											<span>Archived</span>
 										</button>
-										<button onClick={() => handleTabSwap('bin')} className={(tab === 'bin' ? 'bg-[#393E46] text-white scale-105 border-transparent' : 'bg-white border-transparent hover:border-[#393E46]') + ' border-2 duration-300 flex flex-col items-center shadow rounded justify-center text-sm font-medium py-4'}>
+										<button onClick={() => handleTabSwap('bin')} className={(tab === 'bin' ? 'bg-[#393E46] text-white scale-105 border-transparent' : tab === 'todo' ? 'bg-[#393E46] text-white border-transparent hover:border-[#393e46] hover:bg-white hover:text-[#393e46]' : 'bg-white border-transparent hover:border-[#393E46]') + ' border-2 duration-300 flex flex-col items-center shadow rounded justify-center text-sm font-medium py-4'}>
 											<span className='text-2xl font-bold'>{ tasks?.tasks?.filter(task => task.marks.deleted).length }</span>
 											<span>Bin</span>
 										</button>
@@ -369,14 +403,8 @@ const LocalDashboard = () => {
 								</div>
 							</div>
 							<div className='flex flex-col gap-1'>
-								
-								<div className='flex flex-col items-center gap-1'>
-									<button onClick={() => console.log('oi')} className='text-white w-full h-[32px] rounded-md font-medium bg-[#393E46]'>Debug Button</button>
-									<button onClick={() => purge()} className='text-white w-full h-[32px] rounded-md font-medium bg-[#393E46]' disabled={openedDataToggle}>Clear</button>
-									<button onClick={() => refill()} className='text-white w-full h-[32px] rounded-md font-medium bg-[#393E46]'>Fill</button>
-								</div>
-								<button className='text-white w-full h-[32px] rounded-md font-medium bg-[#393E46] opacity-70' disabled>Debug Options</button>
-								<button className='text-white w-full h-[32px] rounded-md font-medium bg-pink-theme'>Return Home</button>
+								<button onClick={() => setTestingToggle(true)} className='text-white w-full h-[32px] rounded-md font-medium bg-[#393E46] hover:opacity-90 duration-200'>Debug Options</button>
+								<button onClick={() => navigate('/')} className='text-white w-full h-[32px] rounded-md font-medium bg-pink-theme hover:opacity-90 duration-200'>Return Home</button>
 							</div>
 						</div>
 					</div>
@@ -395,6 +423,9 @@ const LocalDashboard = () => {
 			}
 			{
 				destinationColumn && <AddTaskModal destinationColumn={destinationColumn} setDestinationColumn={setDestinationColumn} />
+			}
+			{
+				testingToggle && <TestingOptions purge={purge} refill={refill} openedDataToggle={openedDataToggle} setTestingToggle={setTestingToggle} />
 			}
 		</>
 	)

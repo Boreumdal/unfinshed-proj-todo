@@ -7,8 +7,8 @@ export default {
   theme: {
     extend: {
       colors: {
-        'pink-theme': '#EF476F',
         'emerald-theme': '#06D6A0',
+        'pink-theme': '#c74025',
         'sunglow': '#FFD166',
         'ncs': '#118AB2',
         'blue-theme': '#00A6FB',
