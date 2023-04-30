@@ -1,8 +1,22 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { BsSearch, BsFolder2, BsCalendar2Heart } from 'react-icons/bs'
 import { MdClose } from 'react-icons/md'
 
 const Search = ({ setSearchToggle }) => {
+	useEffect(() => {
+		let a = 0
+		const aaa = setInterval(() => {
+			a++
+			console.log('Executed = '+ a)
+			clearer()
+		}, 1000)
+		function clearer(){
+			if (a === 3){
+				clearInterval(aaa)
+
+			}
+		}
+	}, [])
 	return (
 		<div className='absolute grid place-items-center inset-0 bg-[#3d3d3d2e]'>
 			<div className='w-[548px] bg-white rounded-lg overflow-hidden'>
@@ -12,7 +26,7 @@ const Search = ({ setSearchToggle }) => {
 					<span className='text-2xl h-full aspect-square grid place-items-center'><MdClose /></span>
 				</div>
 				<div className='flex flex-col'>
-					<div className='py-3 px-4'>
+					<div className='py-3 px-4 flex items-center'>
 						<h1 className='text-lg font-medium'>Results</h1>
 					</div>
 					<div className='grid grid-cols-2 gap-1 px-2 pb-2'>
