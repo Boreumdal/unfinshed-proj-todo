@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react'
-
+import { BsFillGearFill, BsBox, BsBoxSeam, BsTrash3, BsStarFill, BsStar, BsThreeDots, BsCheckLg, BsArrowCounterclockwise, BsFillPersonFill, BsCaretUpFill, BsFillMoonStarsFill, BsSun } from 'react-icons/bs'
 import { FaStickyNote, FaStar } from 'react-icons/fa'
 import { useTodos } from '../../data/context/TodosContext'
 import { toast } from 'react-toastify'
 
-const OpenData = ({ openedDataId, deleteTask, archiveTask, setOpenedDataToggle, setOpenedDataId, fetchLocalstorage, editingDataToggle, setEditingDataToggle, editingDataId, setEditingDataId, editDateToggle, setEditDateToggle, tab, restoreTask, permanentDeleteTask }) => {
+const OpenData = ({ doneTask, undoDoneTask, removeMark, openedDataId, deleteTask, archiveTask, setOpenedDataToggle, setOpenedDataId, fetchLocalstorage, editingDataToggle, setEditingDataToggle, editingDataId, setEditingDataId, editDateToggle, setEditDateToggle, tab, restoreTask, permanentDeleteTask }) => {
 	const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 	const {tasks, setTasks } = useTodos()
 
@@ -112,8 +112,29 @@ const OpenData = ({ openedDataId, deleteTask, archiveTask, setOpenedDataToggle, 
         {
             openedData.id && (
                 <div className='absolute bottom-6 mb-[44px] right-7 w-[420px] bg-[#f8f8f8] py-6 px-5 rounded-lg drop-shadow-lg font-medium'>
-                    <h1 className='font-bold text-3xl'>Task</h1>
+                    <div className='flex items-center justify-between'>
+                        <h1 className='font-bold text-3xl max-w-[140px] truncate'>{ openedData.title }</h1>
+                        <div className='flex text-xl items-center gap-1 bg-[#f8f8f8]'>
+                            {
+                                openedData.status === 'todo'
+                                ? <button onClick={() => doneTask(openedData.id)} className='w-[22px] hover:text-white hover:bg-[#393E46] aspect-square rounded-md grid place-items-center duration-200'><BsCheckLg /></button>
+                                : <button onClick={() => undoDoneTask(openedData.id)} className='w-[22px] hover:text-white hover:bg-[#393E46] aspect-square rounded-md grid place-items-center duration-200'><BsArrowCounterclockwise /></button>
+                            }
+                            <button onClick={() => removeMark(openedData.id)}  className='w-[22px] hover:text-white hover:bg-[#393E46] aspect-square rounded-md grid place-items-center duration-200'>{ openedData?.marks?.marked ? <span className='text-sunglow'><BsStarFill /></span> : <span><BsStar /></span> }</button>
+                        </div>
+                    </div>
+                    <div className='flex items-center justify-between'>
                     <h1 className='font-bold py-2 border-b'><span className='font-medium text-gray-500'>From column </span>{ openedData.column}</h1>
+                        <div>
+
+                        </div>
+                        {
+                            openedData.status !== 'todo' && <div className='bg-green-600 text-sm text-white h-[25px] flex gap-1 items-center px-3 rounded-md shadow'>
+                                    <span><BsCheckLg /></span>
+                                    <span>Done</span>
+                                </div>
+                        }
+                    </div>
                     
                     <div className='my-5 flex flex-col gap-3'>
                         <div className=''>

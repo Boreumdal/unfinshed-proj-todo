@@ -11,6 +11,7 @@ import { toast } from 'react-toastify'
 import DisplayTask from './DisplayTask'
 import OpenData from './OpenData'
 import TestingOptions from './TestingOptions'
+import Search from './Search'
 
 const LocalDashboard = () => {
 	const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
@@ -37,7 +38,9 @@ const LocalDashboard = () => {
 
 	const [tab, setTab] = useState('todo')
 
-	const [testingToggle, setTestingToggle] = useState(true)
+	const [testingToggle, setTestingToggle] = useState(false)
+
+	const [searchToggle, setSearchToggle] = useState(false)
 
 	const handleAddColumn = e => {
 		setAddColumn(e.target.value)
@@ -178,9 +181,26 @@ const LocalDashboard = () => {
 
 		if (tab === val){
 			setTab('todo')
+			let close = setTimeout(() => {
+				setMenu(false)
+				return () => clearTimeout(close)
+			}, 750)
 		} else {
 			setTab(val)
+			if (val === 'todo'){
+				let close = setTimeout(() => {
+					setMenu(false)
+					return () => clearTimeout(close)
+				}, 750)
+			}
+
 		}
+
+
+	}
+
+	const handleSearchToggle = () => {
+		setSearchToggle(!searchToggle)
 	}
 
 	useEffect(() => {
@@ -203,12 +223,13 @@ const LocalDashboard = () => {
 				<div className=' w-[28%] max-w-[28%] min-w-[28%] h-screen p-5'>
 					<div className='flex flex-col gap-5 w-full h-full drop-shadow-lg rounded-lg py-5 px-5 bg-[#f8f8f8] overflow-hidden'>
 
-						<div className='h-[38px] flex items-center justify-between'>
+						<div className='h-[40px] flex items-center justify-between'>
 							<h1 className='text-3xl font-bold'>TodoList</h1>
 							<div className='flex items-center gap-3'>
 								<button onClick={() => setAddColumnToggle(!addColumnToggle)} className='text-xl bg-[#393E46] hover:bg-[#4ECCA3] duration-300 ease-in text-white rounded-md h-[32px] aspect-square flex items-center justify-center'>{ addColumnToggle ? <RxCross2 /> : <GoPlus />}</button>
 							</div>
 						</div>
+
 						{
 							addColumnToggle && (
 								<div className='absolute inset-0 grid place-items-center z-50'>
@@ -315,9 +336,12 @@ const LocalDashboard = () => {
 								</div>
 							</div> */}
 						</div>
-						<button onClick={() => setMenu(!menu)} className='w-[36px] text-[#393E46] aspect-square grid place-items-center text-2xl rounded-full'>
-							<span className=''>{ menu ? <HiMenu /> : <HiMenuAlt3 /> }</span>
-						</button>
+						<div className='flex items-center'>
+							<button onClick={() => handleSearchToggle()} className='text-xl bg-[#393E46] hover:bg-[#4ECCA3] duration-300 ease-in text-white rounded-md h-[32px] aspect-square flex items-center justify-center'>search</button>
+							<button onClick={() => setMenu(!menu)} className='w-[36px] text-[#393E46] aspect-square grid place-items-center text-2xl rounded-full'>
+								<span className=''>{ menu ? <HiMenu /> : <HiMenuAlt3 /> }</span>
+							</button>
+						</div>
 					</div>
 					
 					<div className='h-[91%] overflow-y-auto p-4 z-30'>
@@ -350,7 +374,11 @@ const LocalDashboard = () => {
 								setEditingDataId={setEditingDataId} 
 								editDateToggle={editDateToggle} 
 								setEditDateToggle={setEditDateToggle} 
-								tab={tab} 
+								tab={tab}
+								doneTask={doneTask}
+								undoDoneTask={undoDoneTask}
+								removeMark={removeMark}
+								
 							/>
 						)
 					}
@@ -378,7 +406,7 @@ const LocalDashboard = () => {
 									</button>
 									<div className='grid grid-cols-3 gap-2'>
 										<button onClick={() => handleTabSwap('standby')} className={(tab === 'standby' ? 'bg-[#393E46] text-white scale-105 border-transparent' : tab === 'todo' ? 'bg-[#393E46] text-white border-transparent hover:border-[#393e46] hover:bg-white hover:text-[#393e46]' : 'bg-white border-transparent hover:border-[#393E46]') + ' border-2 duration-300 flex flex-col items-center shadow rounded justify-center aspect-square text-sm font-medium'}>
-											<span className='text-3xl font-bold'>{ tasks?.tasks?.filter(task => task.status === 'todo').length }</span>
+											<span className='text-3xl font-bold'>{ tasks?.tasks?.filter(task => task.status === 'todo' && task.marks.deleted !== true).length }</span>
 											<span>To do</span>
 										</button>
 										<button onClick={() => handleTabSwap('important')} className={(tab === 'important' ? 'bg-[#393E46] text-white scale-105 border-transparent' : tab === 'todo' ? 'bg-[#393E46] text-white border-transparent hover:border-[#393e46] hover:bg-white hover:text-[#393e46]' : 'bg-white border-transparent hover:border-[#393E46]') + ' border-2 duration-300 flex flex-col items-center shadow rounded justify-center aspect-square text-sm font-medium'}>
@@ -386,7 +414,7 @@ const LocalDashboard = () => {
 											<span>Important</span>
 										</button>
 										<button onClick={() => handleTabSwap('done')} className={(tab === 'done' ? 'bg-[#393E46] text-white scale-105 border-transparent' : tab === 'todo' ? 'bg-[#393E46] text-white border-transparent hover:border-[#393e46] hover:bg-white hover:text-[#393e46]' : 'bg-white border-transparent hover:border-[#393E46]') + ' border-2 duration-300 flex flex-col items-center shadow rounded justify-center aspect-square text-sm font-medium'}>
-											<span className='text-2xl font-bold'>{ tasks?.tasks?.filter(task => task.status !== 'todo').length }</span>
+											<span className='text-2xl font-bold'>{ tasks?.tasks?.filter(task => task.status !== 'todo' && task.marks.deleted !== true).length }</span>
 											<span>Done</span>
 										</button>
 									</div>
@@ -426,6 +454,9 @@ const LocalDashboard = () => {
 			}
 			{
 				testingToggle && <TestingOptions purge={purge} refill={refill} openedDataToggle={openedDataToggle} setTestingToggle={setTestingToggle} />
+			}
+			{
+				searchToggle && <Search setSearchToggle={setSearchToggle} />
 			}
 		</>
 	)
