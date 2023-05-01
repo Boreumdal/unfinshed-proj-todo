@@ -14,7 +14,9 @@ export default {
         'blue-theme': '#00A6FB',
         'steelblue-theme': '#0582CA',
         'accent-1': '#041C32',
-        'accent-2': '#ECB365'
+        'accent-2': '#ECB365',
+        'theme-1': '#393E46',
+        'theme-2': '#FFFFFF'
       }
     },
   },

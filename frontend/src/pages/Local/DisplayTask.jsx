@@ -11,16 +11,7 @@ const DisplayTask = ({tasks, setOpenedDataId, openedDataId, setOpenedDataToggle,
 		setOpenedDataId(item)
 		setEditingDataToggle(false)
 		setEditDateToggle(false)
-
-		if (!openedDataId){
-			const timed = setTimeout(() => {
-				setOpenedDataToggle(true)
-
-				return () => clearTimeout(timed)
-			}, 400)
-		} else {
-			setOpenedDataToggle(true)
-		}
+		setOpenedDataToggle(true)
 	}
 
 	useEffect(() => {

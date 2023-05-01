@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { BsFillGearFill, BsBox, BsBoxSeam, BsTrash3, BsStarFill, BsStar, BsThreeDots, BsCheckLg, BsArrowCounterclockwise, BsFillPersonFill, BsCaretUpFill, BsFillMoonStarsFill, BsSun } from 'react-icons/bs'
+import { BsFillGearFill, BsBox, BsBoxSeam, BsTrash3, BsStarFill, BsStar, BsThreeDots, BsCheckLg, BsArrowCounterclockwise, BsSearch, BsCaretUpFill, BsFillMoonStarsFill, BsSun } from 'react-icons/bs'
 import { GoPlus } from 'react-icons/go'
 import { RxCross2, RxColorWheel } from 'react-icons/rx'
 import { HiMenu, HiMenuAlt3 } from 'react-icons/hi'
@@ -337,7 +337,7 @@ const LocalDashboard = () => {
 							</div> */}
 						</div>
 						<div className='flex items-center'>
-							<button onClick={() => handleSearchToggle()} className='text-xl bg-[#393E46] hover:bg-[#4ECCA3] duration-300 ease-in text-white rounded-md h-[32px] aspect-square flex items-center justify-center'>search</button>
+							<button onClick={() => handleSearchToggle()} className='w-[36px] text-[#393E46] aspect-square grid place-items-center text-xl rounded-full'><BsSearch /></button>
 							<button onClick={() => setMenu(!menu)} className='w-[36px] text-[#393E46] aspect-square grid place-items-center text-2xl rounded-full'>
 								<span className=''>{ menu ? <HiMenu /> : <HiMenuAlt3 /> }</span>
 							</button>
@@ -456,7 +456,7 @@ const LocalDashboard = () => {
 				testingToggle && <TestingOptions purge={purge} refill={refill} openedDataToggle={openedDataToggle} setTestingToggle={setTestingToggle} />
 			}
 			{
-				searchToggle && <Search setSearchToggle={setSearchToggle} />
+				searchToggle && <Search setSearchToggle={setSearchToggle} setOpenedDataId={setOpenedDataId} setOpenedDataToggle={setOpenedDataToggle} />
 			}
 		</>
 	)
