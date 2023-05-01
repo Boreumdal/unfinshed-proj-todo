@@ -18,7 +18,7 @@ export default {
         'theme-dark': '#131213',
         'theme-dark-back': '#1c1d1c',
         'theme-dark-fore': '#3c4143',
-        'theme-dark-text': '#e3e3e3',
+        'theme-dark-text': '#dbdada',
         'theme-light': '#FFFFFF',
         'theme-light-text': '#0f0e0f'
       }

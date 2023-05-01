@@ -3,6 +3,7 @@ import { GoPlus } from 'react-icons/go'
 import PulseLoader from 'react-spinners/PulseLoader'
 import { v4 as uuidv4 } from 'uuid'
 import { toast } from 'react-toastify';
+import { useTodos } from '../../data/context/TodosContext';
 
 const AddTaskModal = ({ destinationColumn, setDestinationColumn }) => {
     const taskDefault = {
@@ -21,6 +22,8 @@ const AddTaskModal = ({ destinationColumn, setDestinationColumn }) => {
         },
         createdAt: 0
     }
+
+    const { light } = useTodos()
 
     const [uiLoading, setUiLoading] = useState(false)
     const [hasDue, setHasDue] = useState(false)
@@ -87,22 +90,22 @@ const AddTaskModal = ({ destinationColumn, setDestinationColumn }) => {
 
     return (
         <div className='absolute inset-0 grid place-items-center'>
-            <div className='absolute w-[370px] z-20 bg-white shadow-md rounded-md'>
+            <div className={(light ? 'bg-white' : 'bg-theme-dark-fore text-theme-dark-text') + ' absolute w-[370px] z-20 shadow-md rounded-md'}>
                 <div className='py-4 mx-5 border-b'>
                     <h1 className='text-xl font-medium'>Add Task to <span className='font-mono font-bold text-[#4ECCA3]'>{ destinationColumn }</span></h1>
                 </div>
-                <form onSubmit={handleSubmit} className='px-7 py-4 flex flex-col gap-3'>
+                <form onSubmit={handleSubmit} className=' px-7 py-4 flex flex-col gap-3'>
                     <div>
                         <label htmlFor="title" className='font-medium'>Title</label>
-                        <input type="text" name='title' id='title' value={taskItem.title} onChange={handleChanges} className='px-3 border shadow-sm w-full block rounded h-[38px] bg-[#fafafa] mt-1' placeholder='Task title...' disabled={uiLoading} />
+                        <input type="text" name='title' id='title' value={taskItem.title} onChange={handleChanges} className='text-theme-dark-back px-3 border shadow-sm w-full block rounded h-[38px] bg-[#fafafa] mt-1' placeholder='Task title...' disabled={uiLoading} />
                     </div>
                     <div>
                         <label htmlFor="description" className='font-medium'>Description</label>
-                        <textarea type="text" name='description' id='description' value={taskItem.description} onChange={handleChanges} className='px-3 border shadow-sm w-full block rounded py-2 bg-[#fafafa] mt-1' rows='4' placeholder='Task optional description...' disabled={uiLoading} />
+                        <textarea type="text" name='description' id='description' value={taskItem.description} onChange={handleChanges} className='text-theme-dark-back px-3 border shadow-sm w-full block rounded py-2 bg-[#fafafa] mt-1' rows='4' placeholder='Task optional description...' disabled={uiLoading} />
                     </div>
                     <div className={(hasDue ? 'opacity-100' : 'opacity-50 cursor-not-allowed') + ' duration-200'}>
                         <label htmlFor="dueDate" className='font-medium pointer-events-none'>Due Date</label>
-                        <input type="datetime-local" name='dueDate' id='dueDate' value={taskItem.dueDate} onChange={handleChanges} className='px-3 border shadow-sm w-full block rounded py-2 bg-[#fafafa] mt-1 disabled:cursor-not-allowed' disabled={!hasDue} />
+                        <input type="datetime-local" name='dueDate' id='dueDate' value={taskItem.dueDate} onChange={handleChanges} className='text-theme-dark-back px-3 border shadow-sm w-full block rounded py-2 bg-[#fafafa] mt-1 disabled:cursor-not-allowed' disabled={!hasDue} />
                     </div>
                     <div className='flex flex-col gap-2 my-1'>
                         <div className='flex gap-2 font-medium'>
@@ -115,9 +118,8 @@ const AddTaskModal = ({ destinationColumn, setDestinationColumn }) => {
                         </div>
                     </div>
                     <div className='flex gap-2 justify-end mt-2'>
-                        <button type='button' onClick={() => console.log(JSON.parse(localStorage.getItem('p1project')))} className='h-[32px] bg-transparent px-4 flex items-center gap-1 rounded hover:text-blue-theme duration-200'>Show</button>
                         <button type='button' onClick={() => setDestinationColumn('')} className='h-[32px] bg-transparent px-4 flex items-center gap-1 rounded hover:text-blue-theme duration-200'>Cancel</button>
-                        <button type='submit' className='h-[32px] w-[72px] bg-[#4ECCA3] px-4 flex items-center justify-center gap-1 rounded text-white hover:brightness-95 duration-200 disabled:brightness-90 disabled:bg-[#383838] disabled:cursor-not-allowed font-medium' disabled={!taskItem.title || (hasDue && !taskItem.dueDate)}>
+                        <button type='submit' className='h-[32px] w-[72px] bg-[#4ECCA3] px-4 flex items-center justify-center gap-1 rounded text-white hover:brightness-95 duration-200 disabled:brightness-90 disabled:bg-theme-dark-back disabled:cursor-not-allowed font-medium' disabled={!taskItem.title || (hasDue && !taskItem.dueDate)}>
                             {
                                 uiLoading ? <PulseLoader color="#ffffff" size={5} /> : <><GoPlus /><span>Add</span></>
                             }

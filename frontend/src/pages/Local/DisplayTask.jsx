@@ -229,7 +229,7 @@ const DisplayTask = ({tasks, setOpenedDataId, openedDataId, setOpenedDataToggle,
 				noDue && noDue.length > 0 && <>
 					{
 						tab === 'todo' && noDue && noDue.filter(item => item.marks.deleted !== true && item.marks.archived !== true).length !== 0 && (
-							<div className='flex items-center font-medium gap-2 border-b pb-2'>
+							<div className={(light ? 'text-theme-light-text' : 'text-theme-dark-text ') + 'flex items-center font-medium gap-2 border-b pb-2'}>
 								<h1 className='text-5xl'>00</h1>
 								<div className='flex flex-col'>
 									<p className='text-sm leading-5'>{year}</p>
@@ -240,7 +240,7 @@ const DisplayTask = ({tasks, setOpenedDataId, openedDataId, setOpenedDataToggle,
 					}
 					{
 						tab === 'standby' && noDue && noDue.filter(item => item.marks.deleted !== true && item.marks.archived !== true && item.status === 'todo').length !== 0 && (
-							<div className='flex items-center font-medium gap-2 border-b pb-2'>
+							<div className={(light ? 'text-theme-light-text' : 'text-theme-dark-text ') + 'flex items-center font-medium gap-2 border-b pb-2'}>
 								<h1 className='text-5xl'>00</h1>
 								<div className='flex flex-col'>
 									<p className='text-sm leading-5'>{year}</p>
@@ -251,7 +251,7 @@ const DisplayTask = ({tasks, setOpenedDataId, openedDataId, setOpenedDataToggle,
 					}
 					{
 						tab === 'important' && noDue && noDue.filter(item => item.marks.deleted !== true && item.marks.marked === true).length !== 0 && (
-							<div className='flex items-center font-medium gap-2 border-b pb-2'>
+							<div className={(light ? 'text-theme-light-text' : 'text-theme-dark-text ') + 'flex items-center font-medium gap-2 border-b pb-2'}>
 								<h1 className='text-5xl'>00</h1>
 								<div className='flex flex-col'>
 									<p className='text-sm leading-5'>{year}</p>
@@ -262,7 +262,7 @@ const DisplayTask = ({tasks, setOpenedDataId, openedDataId, setOpenedDataToggle,
 					}
 					{
 						tab === 'done' && noDue && noDue.filter(item => item.marks.deleted !== true && item.status !== 'todo').length !== 0 && (
-							<div className='flex items-center font-medium gap-2 border-b pb-2'>
+							<div className={(light ? 'text-theme-light-text' : 'text-theme-dark-text ') + 'flex items-center font-medium gap-2 border-b pb-2'}>
 								<h1 className='text-5xl'>00</h1>
 								<div className='flex flex-col'>
 									<p className='text-sm leading-5'>{year}</p>
@@ -273,7 +273,7 @@ const DisplayTask = ({tasks, setOpenedDataId, openedDataId, setOpenedDataToggle,
 					}
 					{
 						tab === 'archive' && noDue && noDue.filter(item => item.marks.archived === true).length !== 0 && (
-							<div className='flex items-center font-medium gap-2 border-b pb-2'>
+							<div className={(light ? 'text-theme-light-text' : 'text-theme-dark-text ') + 'flex items-center font-medium gap-2 border-b pb-2'}>
 								<h1 className='text-5xl'>00</h1>
 								<div className='flex flex-col'>
 									<p className='text-sm leading-5'>{year}</p>
@@ -284,7 +284,7 @@ const DisplayTask = ({tasks, setOpenedDataId, openedDataId, setOpenedDataToggle,
 					}
 					{
 						tab === 'bin' && noDue && noDue.filter(item => item.marks.deleted === true).length !== 0 && (
-							<div className='flex items-center font-medium gap-2 border-b pb-2'>
+							<div className={(light ? 'text-theme-light-text' : 'text-theme-dark-text ') + 'flex items-center font-medium gap-2 border-b pb-2'}>
 								<h1 className='text-5xl'>00</h1>
 								<div className='flex flex-col'>
 									<p className='text-sm leading-5'>{year}</p>

@@ -6,7 +6,7 @@ import { toast } from 'react-toastify'
 
 const OpenData = ({ doneTask, undoDoneTask, removeMark, openedDataId, deleteTask, archiveTask, setOpenedDataToggle, setOpenedDataId, fetchLocalstorage, editingDataToggle, setEditingDataToggle, editingDataId, setEditingDataId, editDateToggle, setEditDateToggle, tab, restoreTask, permanentDeleteTask }) => {
 	const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
-	const {tasks, setTasks } = useTodos()
+	const {tasks, setTasks, light } = useTodos()
 
     const [openedData, setOpenedData] = useState({})
 	const [editingData, setEditingData] = useState({})
@@ -111,20 +111,20 @@ const OpenData = ({ doneTask, undoDoneTask, removeMark, openedDataId, deleteTask
     return <>
         {
             openedData.id && (
-                <div className='absolute bottom-6 mb-[44px] right-7 w-[420px] bg-[#f8f8f8] py-6 px-5 rounded-lg drop-shadow-lg font-medium'>
+                <div className={(light ? 'bg-[#f8f8f8]' : 'bg-theme-dark-fore') + ' absolute bottom-6 mb-[44px] right-7 w-[420px] py-6 px-5 rounded-lg drop-shadow-lg font-medium'}>
                     <div className='flex items-center justify-between'>
                         <h1 className='font-bold text-3xl max-w-[140px] truncate'>{ openedData.title }</h1>
-                        <div className='flex text-xl items-center gap-1 bg-[#f8f8f8]'>
+                        <div className='flex text-xl items-center gap-1'>
                             {
                                 openedData.status === 'todo'
-                                ? <button onClick={() => doneTask(openedData.id)} className='w-[22px] hover:text-white hover:bg-[#393E46] aspect-square rounded-md grid place-items-center duration-200'><BsCheckLg /></button>
-                                : <button onClick={() => undoDoneTask(openedData.id)} className='w-[22px] hover:text-white hover:bg-[#393E46] aspect-square rounded-md grid place-items-center duration-200'><BsArrowCounterclockwise /></button>
+                                ? <button onClick={() => doneTask(openedData.id)} className='w-[25px] hover:text-white hover:bg-theme-dark-back aspect-square rounded-md grid place-items-center duration-200'><BsCheckLg /></button>
+                                : <button onClick={() => undoDoneTask(openedData.id)} className='w-[25px] hover:text-white hover:bg-theme-dark-back aspect-square rounded-md grid place-items-center duration-200'><BsArrowCounterclockwise /></button>
                             }
-                            <button onClick={() => removeMark(openedData.id)}  className='w-[22px] hover:text-white hover:bg-[#393E46] aspect-square rounded-md grid place-items-center duration-200'>{ openedData?.marks?.marked ? <span className='text-sunglow'><BsStarFill /></span> : <span><BsStar /></span> }</button>
+                            <button onClick={() => removeMark(openedData.id)}  className='w-[25px] hover:text-white hover:bg-theme-dark-back aspect-square rounded-md grid place-items-center duration-200'>{ openedData?.marks?.marked ? <span className='text-sunglow'><BsStarFill /></span> : <span><BsStar /></span> }</button>
                         </div>
                     </div>
                     <div className='flex items-center justify-between'>
-                    <h1 className='font-bold py-2 border-b'><span className='font-medium text-gray-500'>From column </span>{ openedData.column}</h1>
+                    <h1 className='font-bold py-2 border-b'><span className={(light ? 'text-gray-500' : 'text-gray-300') + ' font-medium'}>From column </span>{ openedData.column}</h1>
                         <div>
 
                         </div>
@@ -142,7 +142,7 @@ const OpenData = ({ doneTask, undoDoneTask, removeMark, openedDataId, deleteTask
                             {
                                 editingDataToggle
                                 ? <input className='text-gray-500 w-full px-1' name='title' value={editingData.title} onChange={handleEditOnchange} />
-                                : <p className='text-gray-500 px-1'>{ openedData.title }</p>
+                                : <p className={(light ? 'text-gray-500' : 'text-gray-300') + ' px-1'}>{ openedData.title }</p>
                             }
                         </div>
                         <div className=''>
@@ -150,7 +150,7 @@ const OpenData = ({ doneTask, undoDoneTask, removeMark, openedDataId, deleteTask
                             {
                                 editingDataToggle
                                 ? <textarea className='text-gray-500 w-full px-1 bg-white drop-shadow-sm' name='description' rows='4' value={editingData.description} onChange={handleEditOnchange}></textarea>
-                                : <p className='text-gray-500 px-1'>{ openedData.description }</p>
+                                : <p className={(light ? 'text-gray-500' : 'text-gray-300') + ' px-1'}>{ openedData.description }</p>
                             }
                         </div>
                     </div>
@@ -161,24 +161,24 @@ const OpenData = ({ doneTask, undoDoneTask, removeMark, openedDataId, deleteTask
                             {
                                 openedData.dueDate !== 'No due date' ? (
                                     editingDataToggle ? <>
-                                        <input type='datetime-local' className='text-gray-500 px-1' name='dueDate' disabled={!editDateToggle} value={editingData.dueDate === 'No due date' ? '' : editingData.dueDate} onChange={handleEditOnchange} />
+                                        <input type='datetime-local' className={(light ? 'text-gray-500' : 'text-gray-300') + ' px-1'} name='dueDate' disabled={!editDateToggle} value={editingData.dueDate === 'No due date' ? '' : editingData.dueDate} onChange={handleEditOnchange} />
                                         <div className='text-gray-500 px-1 flex items-center gap-2 pt-1'>
                                             <input type="checkbox" name="due" id="due" checked={editingData.dueDate !== 'No due date'} onChange={handleEditHasDue} />
-                                            <label htmlFor="due">Has due date?</label>
+                                            <label htmlFor="due" className={(light ? 'text-gray-500' : 'text-gray-300')}>Has due date?</label>
                                         </div>
                                     </> : <>
-                                        <p className='text-gray-500 px-1'>{`${ months[openedData.dueDate.slice(5, 7) - 1] } ${ openedData.dueDate.slice(8, 10) }, ${ openedData.dueDate.slice(0, 4)}` }</p>
-                                        <p className='text-gray-500 px-1'>{`${+openedData.dueDate.slice(11, 13) > 11 && +openedData.dueDate.slice(11, 13) < 24 ? (+openedData.dueDate.slice(11, 13) - 12 < 10 ? '0' + (+openedData.dueDate.slice(11, 13) - 12) : +openedData.dueDate.slice(11, 13) - 12) + ':' + openedData.dueDate.slice(14) + ' PM' : +openedData.dueDate.slice(11, 13) + ':' + openedData.dueDate.slice(14) + ' AM'}`}</p>
+                                        <p className={(light ? 'text-gray-500' : 'text-gray-300') + ' px-1'}>{`${ months[openedData.dueDate.slice(5, 7) - 1] } ${ openedData.dueDate.slice(8, 10) }, ${ openedData.dueDate.slice(0, 4)}` }</p>
+                                        <p className={(light ? 'text-gray-500' : 'text-gray-300') + ' px-1'}>{`${+openedData.dueDate.slice(11, 13) > 11 && +openedData.dueDate.slice(11, 13) < 24 ? (+openedData.dueDate.slice(11, 13) - 12 < 10 ? '0' + (+openedData.dueDate.slice(11, 13) - 12) : +openedData.dueDate.slice(11, 13) - 12) + ':' + openedData.dueDate.slice(14) + ' PM' : +openedData.dueDate.slice(11, 13) + ':' + openedData.dueDate.slice(14) + ' AM'}`}</p>
                                     </>
                                 ) : editingDataToggle
                                 ? <>
-                                    <input type='datetime-local' className='text-gray-500 px-1' name='dueDate' disabled={!editDateToggle} value={editingData.dueDate === 'No due date' ? '' : editingData.dueDate} onChange={handleEditOnchange} />
+                                    <input type='datetime-local' className={(light ? 'text-gray-500' : 'text-gray-300') + ' px-1'} name='dueDate' disabled={!editDateToggle} value={editingData.dueDate === 'No due date' ? '' : editingData.dueDate} onChange={handleEditOnchange} />
                                     <div className='text-gray-500 px-1 flex items-center gap-2 pt-1'>
                                         <input type="checkbox" name="due" id="due" checked={editingData.dueDate !== 'No due date'} onChange={handleEditHasDue} />
-                                        <label htmlFor="due">Has due date?</label>
+                                        <label htmlFor="due" className={(light ? 'text-gray-500' : 'text-gray-300')}>Has due date?</label>
                                     </div>
                                 </>
-                                : <p className='text-gray-500 px-1'>N/A No due date</p>
+                                : <p className={(light ? 'text-gray-500' : 'text-gray-300') + ' px-1'}>N/A No due date</p>
                             }
                         </div>
                         <div className=''>
@@ -204,7 +204,7 @@ const OpenData = ({ doneTask, undoDoneTask, removeMark, openedDataId, deleteTask
                         {
                             editingDataToggle ? (
                                 <>
-                                    <button onClick={() => handleCancel()} className='hover:text-pink-theme duration-200 ease-in-out h-[38px] rounded-md w-full font-medium text-gray-600'>Cancel</button>
+                                    <button onClick={() => handleCancel()} className={(light ? 'text-gray-600' : 'text-gray-300') + ' hover:text-pink-theme duration-200 ease-in-out h-[38px] rounded-md w-full font-medium'}>Cancel</button>
                                     <button onClick={() => handleSaveEdit(editingData)} className='hover:bg-emerald-theme bg-gray-600 duration-200 ease-in-out h-[38px] rounded-md w-full font-medium text-white shadow' disabled={editDateToggle === true && editingData.dueDate === ''}>Save</button>
                                 </>
                             ) : (

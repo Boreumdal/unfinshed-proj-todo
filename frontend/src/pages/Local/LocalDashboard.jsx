@@ -233,10 +233,10 @@ const LocalDashboard = () => {
 						{
 							addColumnToggle && (
 								<div className='absolute inset-0 grid place-items-center z-50'>
-									<div className='absolute bg-white shadow-md w-[260px] flex flex-col gap-2 rounded-md'>
+									<div className={(light ? 'bg-white' : 'bg-theme-dark-fore text-white') + ' absolute shadow-md w-[260px] flex flex-col gap-2 rounded-md'}>
 										<h1 className='text-xl font-medium mx-4 pt-4 pb-2 border-b'>Add a column</h1>
 										<div className='flex flex-col items-center justify-between gap-3 px-5 py-3'>
-											<input type="text" name='column' className='h-[38px] px-3 border bg-gray-50 shadow-sm w-full block rounded' value={addColumn} onChange={handleAddColumn} placeholder='Column name...' />
+											<input type="text" name='column' className='h-[38px] px-3 text-theme-dark-back border bg-gray-50 shadow-sm w-full block rounded' value={addColumn} onChange={handleAddColumn} placeholder='Column name...' />
 											<div className='flex justify-end w-full'>
 												<button onClick={() => setAddColumnToggle(false)} className='h-[32px] w-[72px] px-4 flex items-center justify-center gap-1 rounded hover:text-blue-400 hover:brightness-95 duration-200 disabled:brightness-90 disabled:bg-[#383838] disabled:cursor-not-allowed font-medium'>Cancel</button>
 												<button onClick={handleAddColumnSubmit} className='h-[32px] w-[72px] bg-[#4ECCA3] px-4 flex items-center justify-center gap-1 rounded text-white hover:brightness-95 duration-200 disabled:brightness-90 disabled:bg-[#383838] disabled:cursor-not-allowed font-medium'>

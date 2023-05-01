@@ -6,7 +6,7 @@ import { useTodos } from '../../data/context/TodosContext'
 const Search = ({ setSearchToggle, setOpenedDataId, setOpenedDataToggle }) => {
 	const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 
-	const { tasks } = useTodos()
+	const { tasks, light } = useTodos()
 	const [searchTitle, setSearchTitle] = useState('')
 	const [result, setResult] = useState([])
 	const [searchDates, setSearchDates] = useState([])
@@ -44,8 +44,8 @@ const Search = ({ setSearchToggle, setOpenedDataId, setOpenedDataToggle }) => {
 	
 	return (
 		<div className='absolute grid place-items-center inset-0 bg-[#3d3d3d2e]'>
-			<div className='w-[448px] bg-white rounded-lg overflow-hidden'>
-				<div className='h-[44px] w-full flex items-center border gap-1'>
+			<div className={(light ? 'bg-white' : 'bg-theme-dark-fore text-white') + ' w-[448px] rounded-lg overflow-hidden'}>
+				<div className='h-[44px] w-full flex items-center gap-1'>
 					<span className='text-xl h-full aspect-square grid place-items-center'><BsSearch /></span>
 					<input type="text" className='bg-transparent w-full h-full outline-none border-none font-medium' value={searchTitle} onChange={e => setSearchTitle(e.target.value)} placeholder='Search by title...' />
 					<button onClick={() => setSearchToggle(false)} title='Close' className='hover:bg-theme-dark hover:text-theme-light duration-300 ease-in-out text-2xl h-full aspect-square grid place-items-center'><MdClose /></button>
@@ -72,7 +72,7 @@ const Search = ({ setSearchToggle, setOpenedDataId, setOpenedDataToggle }) => {
 													<div className='flex flex-col gap-2'>
 														{
 															result?.filter(task => task.dueDate.slice(0, 10) === date).map(task => (
-																<div key={task.id} onClick={() => handleSearchClicked(task.id)} className={' bg-[#EEEEEE] hover:brightness-105 cursor-pointer hover:shadow-none duration-200 font-medium w-full h-[35px] flex items-center justify-between px-3 rounded shadow-sm'}>
+																<div key={task.id} onClick={() => handleSearchClicked(task.id)} className={(light ? 'bg-[#EEEEEE]' : 'bg-[#ffffff18]') + ' hover:brightness-105 cursor-pointer hover:shadow-none duration-200 font-medium w-full h-[35px] flex items-center justify-between px-3 rounded shadow-sm'}>
 																	<div className='flex items-center gap-2'>
 																		{
 																			task.status === 'todo' ? task.marks.marked ? <span><BsCalendar2Heart /></span> : <span><BsCalendar2 /></span> : task.marks.marked ? <span><BsCalendar2Heart /></span> : <span><BsCalendar2Check /></span> 
