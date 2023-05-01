@@ -219,7 +219,7 @@ const LocalDashboard = () => {
 
 	return (
 		<>
-			<div className='hidden md:flex text-[#232931]'>
+			<div className={'duration-300 ease-in-out hidden md:flex'}>
 				<div className=' w-[28%] max-w-[28%] min-w-[28%] h-screen p-5'>
 					<div className='flex flex-col gap-5 w-full h-full drop-shadow-lg rounded-lg py-5 px-5 bg-[#f8f8f8] overflow-hidden'>
 

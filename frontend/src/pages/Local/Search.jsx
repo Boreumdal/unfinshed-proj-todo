@@ -48,7 +48,7 @@ const Search = ({ setSearchToggle, setOpenedDataId, setOpenedDataToggle }) => {
 				<div className='h-[44px] w-full flex items-center border gap-1'>
 					<span className='text-xl h-full aspect-square grid place-items-center'><BsSearch /></span>
 					<input type="text" className='bg-transparent w-full h-full outline-none border-none font-medium' value={searchTitle} onChange={e => setSearchTitle(e.target.value)} placeholder='Search by title...' />
-					<button onClick={() => setSearchToggle(false)} title='Close' className='hover:bg-theme-1 hover:text-theme-2 duration-300 ease-in-out text-2xl h-full aspect-square grid place-items-center'><MdClose /></button>
+					<button onClick={() => setSearchToggle(false)} title='Close' className='hover:bg-theme-dark hover:text-theme-light duration-300 ease-in-out text-2xl h-full aspect-square grid place-items-center'><MdClose /></button>
 				</div>
 				<div className='flex flex-col'>
 					<div className='py-3 px-4 flex items-center justify-between'>
