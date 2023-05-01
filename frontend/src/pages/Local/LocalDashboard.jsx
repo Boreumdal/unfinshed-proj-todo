@@ -219,7 +219,7 @@ const LocalDashboard = () => {
 
 	return (
 		<>
-			<div className={(light ? 'bg-theme-light ' : 'bg-theme-dark text-white') + ' duration-300 ease-in-out hidden md:flex'}>
+			<div className={(light ? 'bg-theme-light ' : 'bg-theme-dark text-white') + ' duration-500 ease-in-out hidden md:flex'}>
 				<div className=' w-[28%] max-w-[28%] min-w-[28%] h-screen p-5'>
 					<div className={(light ? 'bg-[#f8f8f8]' : 'bg-theme-dark-back ') + ' flex flex-col gap-5 w-full h-full drop-shadow-lg rounded-lg py-5 px-5  overflow-hidden'}>
 
