@@ -219,9 +219,9 @@ const LocalDashboard = () => {
 
 	return (
 		<>
-			<div className={'duration-300 ease-in-out hidden md:flex'}>
+			<div className={(light ? 'bg-theme-light ' : 'bg-theme-dark text-white') + ' duration-300 ease-in-out hidden md:flex'}>
 				<div className=' w-[28%] max-w-[28%] min-w-[28%] h-screen p-5'>
-					<div className='flex flex-col gap-5 w-full h-full drop-shadow-lg rounded-lg py-5 px-5 bg-[#f8f8f8] overflow-hidden'>
+					<div className={(light ? 'bg-[#f8f8f8]' : 'bg-theme-dark-back ') + ' flex flex-col gap-5 w-full h-full drop-shadow-lg rounded-lg py-5 px-5  overflow-hidden'}>
 
 						<div className='h-[40px] flex items-center justify-between'>
 							<h1 className='text-3xl font-bold'>TodoList</h1>
@@ -254,7 +254,7 @@ const LocalDashboard = () => {
 							{
 								tasks.columns && tasks.columns.length > 0 ? (
 									tasks.columns.map((task, idx) => (
-										<div key={idx} className=' flex flex-col gap-2 bg-white rounded-sm shadow-sm py-3 px-3'>
+										<div key={idx} className={(light ? 'bg-theme-light' : 'bg-theme-dark-fore') + ' flex flex-col gap-2 rounded-sm shadow-sm py-3 px-3'}>
 											<div className='flex items-center justify-between font-medium px-2 py-1'>
 												<h3>{ task }</h3>
 												<button onClick={() => setDestinationColumn(task)}><GoPlus /></button>
@@ -263,13 +263,13 @@ const LocalDashboard = () => {
 												{
 													tasks.tasks && tasks.tasks.filter(todo => todo.column === task && todo.marks.deleted === false && todo.marks.archived !== true).length !== 0 
 													? tasks.tasks.filter(todo => todo.column === task && todo.marks.deleted === false && todo.marks.archived !== true).map(item => (
-														<div key={item?.id} onMouseLeave={() => setTooltip('')} className={(item?.status !== 'todo' && 'opacity-40 line-through') + ' flex items-center gap-2 h-[28px] px-2 hover:bg-[#f8f8f8] duration-300 rounded-sm relative task-item'}>
+														<div key={item?.id} onMouseLeave={() => setTooltip('')} className={(item?.status !== 'todo' ? 'opacity-40 line-through ' : '') + (light ? ' hover:bg-[#f8f8f8] ' : 'hover:bg-theme-dark-back ') + ' flex items-center gap-2 h-[28px] px-2  duration-300 rounded-sm relative task-item'}>
 															<span>{ item?.status !== 'todo' ? <BsCheckLg /> : <BsBox />}</span>
 															<p className={(tooltip === item?.id ? 'w-[54%]' : 'task-item-text w-[84%]') + ' truncate '}>{item?.title}</p>
 															<div className='h-full hidden duration-200 items-center gap-1 absolute right-2 task-item-action	z-20'>
 																{
 																	tooltip === item?.id && (
-																		<div className='flex items-center gap-1 bg-[#f8f8f8]'>
+																		<div className='flex items-center gap-1'>
 																			<button onClick={() => deleteTask(item?.id)} className='w-[22px] hover:text-white hover:bg-[#393E46] aspect-square rounded-md grid place-items-center duration-200'><BsTrash3 /></button>
 																			{
 																				item?.status === 'todo'
@@ -313,7 +313,7 @@ const LocalDashboard = () => {
 				</div>
 
 				<div className={(menu ? 'w-[50%]' : 'w-[72%] pr-5') + ' duration-300 origin-left h-screen py-5 relative '}>
-					<div className='h-[9vh] flex items-center justify-between bg-[#f8f8f8] px-4 rounded-lg shadow-md z-40'>
+					<div className={(light ? 'bg-[#f8f8f8]' : 'bg-theme-dark-back') + ' h-[9vh] flex items-center justify-between  px-4 rounded-lg shadow-md z-40'}>
 						<div className='flex items-center gap-3 font-mono'>
 							<div className='flex flex-col items-center'>
 								<div className='flex items-center gap-2'>
@@ -337,20 +337,20 @@ const LocalDashboard = () => {
 							</div> */}
 						</div>
 						<div className='flex items-center'>
-							<button onClick={() => handleSearchToggle()} className='w-[36px] text-[#393E46] aspect-square grid place-items-center text-xl rounded-full'><BsSearch /></button>
-							<button onClick={() => setMenu(!menu)} className='w-[36px] text-[#393E46] aspect-square grid place-items-center text-2xl rounded-full'>
+							<button onClick={() => handleSearchToggle()} className='w-[36px] aspect-square grid place-items-center text-xl rounded-full'><BsSearch /></button>
+							<button onClick={() => setMenu(!menu)} className='w-[36px] aspect-square grid place-items-center text-2xl rounded-full'>
 								<span className=''>{ menu ? <HiMenu /> : <HiMenuAlt3 /> }</span>
 							</button>
 						</div>
 					</div>
 					
 					<div className='h-[91%] overflow-y-auto p-4 z-30'>
-						<DisplayTask tasks={tasks} setOpenedDataId={setOpenedDataId} openedDataId={openedDataId} setOpenedDataToggle={setOpenedDataToggle} setEditingDataToggle={setEditingDataToggle} setEditDateToggle={setEditDateToggle} tab={tab}  />
+						<DisplayTask tasks={tasks} setOpenedDataId={setOpenedDataId} light={light} openedDataId={openedDataId} setOpenedDataToggle={setOpenedDataToggle} setEditingDataToggle={setEditingDataToggle} setEditDateToggle={setEditDateToggle} tab={tab}  />
 					</div>
 
 					{
 						openedDataId !== '' && (
-							<button onClick={() => setOpenedDataToggle(!openedDataToggle)} className='absolute bottom-6 right-7 h-[38px] px-5 gap-2 text-lg bg-gray-100 rounded-lg drop-shadow-md flex items-center font-medium'>
+							<button onClick={() => setOpenedDataToggle(!openedDataToggle)} className={(light ? 'bg-[#f8f8f8]' : 'bg-theme-dark-fore') + ' absolute bottom-6 right-7 h-[38px] px-5 gap-2 text-lg rounded-lg drop-shadow-md flex items-center font-medium'}>
 								<span className={(openedDataToggle ? 'rotate-180' : 'rotate-0') + ' duration-300'}><BsCaretUpFill /></span>
 								<span>{openedDataToggle ? 'Close Task Details' : 'Open Task Details' }</span>
 							</button>
@@ -388,7 +388,7 @@ const LocalDashboard = () => {
 				{
 					menu &&
 					<div className='w-[22%] origin-right duration-1000 absolute right-0 h-full p-5'>
-						<div className='flex flex-col gap-5 w-full h-full justify-between drop-shadow-lg rounded-lg py-5 px-5 bg-[#f8f8f8] overflow-hidden'>
+						<div className={(light ? 'bg-[#f8f8f8]' : 'bg-theme-dark-back') + ' flex flex-col gap-5 w-full h-full justify-between drop-shadow-lg rounded-lg py-5 px-5 overflow-hidden'}>
 							<div>
 								<div className='flex items-center justify-between'>
 									<h1 className='text-3xl font-bold'>Menu</h1>
@@ -405,25 +405,25 @@ const LocalDashboard = () => {
 										<span>Total Tasks</span>
 									</button>
 									<div className='grid grid-cols-3 gap-2'>
-										<button onClick={() => handleTabSwap('standby')} className={(tab === 'standby' ? 'bg-[#393E46] text-white scale-105 border-transparent' : tab === 'todo' ? 'bg-[#393E46] text-white border-transparent hover:border-[#393e46] hover:bg-white hover:text-[#393e46]' : 'bg-white border-transparent hover:border-[#393E46]') + ' border-2 duration-300 flex flex-col items-center shadow rounded justify-center aspect-square text-sm font-medium'}>
+										<button onClick={() => handleTabSwap('standby')} className={(tab === 'standby' ? (light ? 'bg-[#393E46] text-white scale-105 border-transparent' : 'bg-white text-[#393E46] scale-105 border-transparent') : tab === 'todo' ? 'bg-[#393E46] text-white border-transparent hover:border-[#393e46] hover:bg-white hover:text-[#393e46]' : 'bg-white border-transparent hover:border-[#393E46]') + ' border-2 duration-300 flex flex-col items-center shadow rounded justify-center aspect-square text-sm font-medium'}>
 											<span className='text-3xl font-bold'>{ tasks?.tasks?.filter(task => task.status === 'todo' && task.marks.deleted !== true).length }</span>
 											<span>To do</span>
 										</button>
-										<button onClick={() => handleTabSwap('important')} className={(tab === 'important' ? 'bg-[#393E46] text-white scale-105 border-transparent' : tab === 'todo' ? 'bg-[#393E46] text-white border-transparent hover:border-[#393e46] hover:bg-white hover:text-[#393e46]' : 'bg-white border-transparent hover:border-[#393E46]') + ' border-2 duration-300 flex flex-col items-center shadow rounded justify-center aspect-square text-sm font-medium'}>
+										<button onClick={() => handleTabSwap('important')} className={(tab === 'important' ? (light ? 'bg-[#393E46] text-white scale-105 border-transparent' : 'bg-white text-[#393E46] scale-105 border-transparent') : tab === 'todo' ? 'bg-[#393E46] text-white border-transparent hover:border-[#393e46] hover:bg-white hover:text-[#393e46]' : 'bg-white border-transparent hover:border-[#393E46]') + ' border-2 duration-300 flex flex-col items-center shadow rounded justify-center aspect-square text-sm font-medium'}>
 											<span className='text-2xl font-bold'>{ tasks?.tasks?.filter(task => task.marks.marked).length }</span>
 											<span>Important</span>
 										</button>
-										<button onClick={() => handleTabSwap('done')} className={(tab === 'done' ? 'bg-[#393E46] text-white scale-105 border-transparent' : tab === 'todo' ? 'bg-[#393E46] text-white border-transparent hover:border-[#393e46] hover:bg-white hover:text-[#393e46]' : 'bg-white border-transparent hover:border-[#393E46]') + ' border-2 duration-300 flex flex-col items-center shadow rounded justify-center aspect-square text-sm font-medium'}>
+										<button onClick={() => handleTabSwap('done')} className={(tab === 'done' ? (light ? 'bg-[#393E46] text-white scale-105 border-transparent' : 'bg-white text-[#393E46] scale-105 border-transparent') : tab === 'todo' ? 'bg-[#393E46] text-white border-transparent hover:border-[#393e46] hover:bg-white hover:text-[#393e46]' : 'bg-white border-transparent hover:border-[#393E46]') + ' border-2 duration-300 flex flex-col items-center shadow rounded justify-center aspect-square text-sm font-medium'}>
 											<span className='text-2xl font-bold'>{ tasks?.tasks?.filter(task => task.status !== 'todo' && task.marks.deleted !== true).length }</span>
 											<span>Done</span>
 										</button>
 									</div>
 									<div className='grid grid-cols-2 gap-2'>
-										<button onClick={() => handleTabSwap('archive')} className={(tab === 'archive' ? 'bg-[#393E46] text-white scale-105 border-transparent' : tab === 'todo' ? 'bg-[#393E46] text-white border-transparent hover:border-[#393e46] hover:bg-white hover:text-[#393e46]' : 'bg-white border-transparent hover:border-[#393E46]') + ' border-2 duration-300 flex flex-col items-center shadow rounded justify-center text-sm font-medium py-4'}>
+										<button onClick={() => handleTabSwap('archive')} className={(tab === 'archive' ? (light ? 'bg-[#393E46] text-white scale-105 border-transparent' : 'bg-white text-[#393E46] scale-105 border-transparent') : tab === 'todo' ? 'bg-[#393E46] text-white border-transparent hover:border-[#393e46] hover:bg-white hover:text-[#393e46]' : 'bg-white border-transparent hover:border-[#393E46]') + ' border-2 duration-300 flex flex-col items-center shadow rounded justify-center text-sm font-medium py-4'}>
 											<span className='text-2xl font-bold'>{ tasks?.tasks?.filter(task => task.marks.archived).length }</span>
 											<span>Archived</span>
 										</button>
-										<button onClick={() => handleTabSwap('bin')} className={(tab === 'bin' ? 'bg-[#393E46] text-white scale-105 border-transparent' : tab === 'todo' ? 'bg-[#393E46] text-white border-transparent hover:border-[#393e46] hover:bg-white hover:text-[#393e46]' : 'bg-white border-transparent hover:border-[#393E46]') + ' border-2 duration-300 flex flex-col items-center shadow rounded justify-center text-sm font-medium py-4'}>
+										<button onClick={() => handleTabSwap('bin')} className={(tab === 'bin' ? (light ? 'bg-[#393E46] text-white scale-105 border-transparent' : 'bg-white text-[#393E46] scale-105 border-transparent') : tab === 'todo' ? 'bg-[#393E46] text-white border-transparent hover:border-[#393e46] hover:bg-white hover:text-[#393e46]' : 'bg-white border-transparent hover:border-[#393E46]') + ' border-2 duration-300 flex flex-col items-center shadow rounded justify-center text-sm font-medium py-4'}>
 											<span className='text-2xl font-bold'>{ tasks?.tasks?.filter(task => task.marks.deleted).length }</span>
 											<span>Bin</span>
 										</button>

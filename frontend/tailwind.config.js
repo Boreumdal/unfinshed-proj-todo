@@ -16,10 +16,11 @@ export default {
         'accent-1': '#041C32',
         'accent-2': '#ECB365',
         'theme-dark': '#131213',
-        'theme-dark-fore': '#1c1d1c',
+        'theme-dark-back': '#1c1d1c',
+        'theme-dark-fore': '#3c4143',
         'theme-dark-text': '#e3e3e3',
         'theme-light': '#FFFFFF',
-        'theme-light': '#0f0e0f'
+        'theme-light-text': '#0f0e0f'
       }
     },
   },
