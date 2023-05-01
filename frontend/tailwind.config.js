@@ -15,8 +15,11 @@ export default {
         'steelblue-theme': '#0582CA',
         'accent-1': '#041C32',
         'accent-2': '#ECB365',
-        'theme-dark': '#393E46',
-        'theme-light': '#FFFFFF'
+        'theme-dark': '#131213',
+        'theme-dark-fore': '#1c1d1c',
+        'theme-dark-text': '#e3e3e3',
+        'theme-light': '#FFFFFF',
+        'theme-light': '#0f0e0f'
       }
     },
   },
