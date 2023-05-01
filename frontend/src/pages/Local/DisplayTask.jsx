@@ -36,7 +36,7 @@ const DisplayTask = ({tasks, setOpenedDataId, openedDataId, setOpenedDataToggle,
 	}, [tasks])
 
 	return (
-		<div className='flex flex-col gap-5 h-full'>
+		<div className='flex flex-col gap-5 h-fit py-2'>
 			{
 				tab === 'todo' && dates && dates.length > 0 && dates.sort((a, b) => Date.parse(a) - Date.parse(b))
 					.map((date, idx) => tasks && tasks.tasks.length > 0 && tasks.tasks.filter(task => task.marks.deleted !== true && task.dueDate.slice(0,10) === date && task.marks.archived !== true).length > 0 && (
@@ -49,7 +49,7 @@ const DisplayTask = ({tasks, setOpenedDataId, openedDataId, setOpenedDataToggle,
 								</div>
 							</div>
 
-							<div className='grid grid-cols-3 gap-2 mt-4'>
+							<div className='grid grid-cols-2 sm:grid-cols-3 gap-2 mt-5'>
 								{
 									tasks && tasks.tasks.length > 0 && tasks.tasks.filter(task => task.marks.deleted !== true && task.dueDate.slice(0,10) === date && task.marks.archived !== true).map(item => (
 										<div key={item.id} onClick={() => openTaskHandler(item.id)} className={((item.status !== 'todo' ? 'opacity-50 text-gray-400' : '') + (openedDataId && openedDataId !== item.id ? (light ?' bg-[#EEEEEE] hover:brightness-105' : 'bg-theme-dark-back hover:brightness-125') : (light ? ' bg-[#f7f7f7]' : ' bg-theme-dark-fore'))) + ' cursor-pointer hover:shadow-none duration-200 w-full h-[35px] flex items-center justify-between px-3 rounded shadow-sm'}>
@@ -80,7 +80,7 @@ const DisplayTask = ({tasks, setOpenedDataId, openedDataId, setOpenedDataToggle,
 								</div>
 							</div>
 
-							<div className='grid grid-cols-3 gap-2 mt-4'>
+							<div className='grid grid-cols-2 sm:grid-cols-3 gap-2 mt-5'>
 								{
 									tasks && tasks.tasks.length > 0 && tasks.tasks.filter(task => task.marks.deleted !== true && task.dueDate.slice(0,10) === date && task.marks.archived !== true && task.status === 'todo').map(item => (
 										<div key={item.id} onClick={() => openTaskHandler(item.id)} className={((item.status !== 'todo' ? 'opacity-50 text-gray-400' : '') + (openedDataId && openedDataId !== item.id ? (light ?' bg-[#EEEEEE] hover:brightness-105' : 'bg-theme-dark-back hover:brightness-125') : (light ? ' bg-[#f7f7f7]' : ' bg-theme-dark-fore'))) + ' cursor-pointer hover:shadow-none duration-200 w-full h-[35px] flex items-center justify-between px-3 rounded shadow-sm'}>
@@ -111,7 +111,7 @@ const DisplayTask = ({tasks, setOpenedDataId, openedDataId, setOpenedDataToggle,
 								</div>
 							</div>
 
-							<div className='grid grid-cols-3 gap-2 mt-4'>
+							<div className='grid grid-cols-2 sm:grid-cols-3 gap-2 mt-5'>
 								{
 									tasks && tasks.tasks.length > 0 && tasks.tasks.filter(task => task.marks.deleted !== true && task.dueDate.slice(0,10) === date && task.marks.marked === true).map(item => (
 										<div key={item.id} onClick={() => openTaskHandler(item.id)} className={((item.status !== 'todo' ? 'opacity-50 text-gray-400' : '') + (openedDataId && openedDataId !== item.id ? (light ?' bg-[#EEEEEE] hover:brightness-105' : 'bg-theme-dark-back hover:brightness-125') : (light ? ' bg-[#f7f7f7]' : ' bg-theme-dark-fore'))) + ' cursor-pointer hover:shadow-none duration-200 w-full h-[35px] flex items-center justify-between px-3 rounded shadow-sm'}>
@@ -142,7 +142,7 @@ const DisplayTask = ({tasks, setOpenedDataId, openedDataId, setOpenedDataToggle,
 								</div>
 							</div>
 
-							<div className='grid grid-cols-3 gap-2 mt-4'>
+							<div className='grid grid-cols-2 sm:grid-cols-3 gap-2 mt-5'>
 								{
 									tasks && tasks.tasks.length > 0 && tasks.tasks.filter(task => task.marks.deleted !== true && task.dueDate.slice(0,10) === date && task.status !== 'todo').map(item => (
 										<div key={item.id} onClick={() => openTaskHandler(item.id)} className={((item.status !== 'todo' ? 'opacity-50 text-gray-400' : '') + (openedDataId && openedDataId !== item.id ? (light ?' bg-[#EEEEEE] hover:brightness-105' : 'bg-theme-dark-back hover:brightness-125') : (light ? ' bg-[#f7f7f7]' : ' bg-theme-dark-fore'))) + ' cursor-pointer hover:shadow-none duration-200 w-full h-[35px] flex items-center justify-between px-3 rounded shadow-sm'}>
@@ -173,7 +173,7 @@ const DisplayTask = ({tasks, setOpenedDataId, openedDataId, setOpenedDataToggle,
 								</div>
 							</div>
 
-							<div className='grid grid-cols-3 gap-2 mt-4'>
+							<div className='grid grid-cols-2 sm:grid-cols-3 gap-2 mt-5'>
 								{
 									tasks && tasks.tasks.length > 0 && tasks.tasks.filter(task => task.marks.archived === true && task.dueDate.slice(0,10) === date).map(item => (
 										<div key={item.id} onClick={() => openTaskHandler(item.id)} className={((item.status !== 'todo' ? 'opacity-50 text-gray-400' : '') + (openedDataId && openedDataId !== item.id ? (light ?' bg-[#EEEEEE] hover:brightness-105' : 'bg-theme-dark-back hover:brightness-125') : (light ? ' bg-[#f7f7f7]' : ' bg-theme-dark-fore'))) + ' cursor-pointer hover:shadow-none duration-200 w-full h-[35px] flex items-center justify-between px-3 rounded shadow-sm'}>
@@ -205,7 +205,7 @@ const DisplayTask = ({tasks, setOpenedDataId, openedDataId, setOpenedDataToggle,
 								</div>
 							</div>
 
-							<div className='grid grid-cols-3 gap-2 mt-4'>
+							<div className='grid grid-cols-2 sm:grid-cols-3 gap-2 mt-5'>
 								{
 									tasks && tasks.tasks.length > 0 && tasks.tasks.filter(task => task.marks.deleted === true && task.dueDate.slice(0,10) === date).map(item => (
 										<div key={item.id} onClick={() => openTaskHandler(item.id)} className={((item.status !== 'todo' ? 'opacity-50 text-gray-400' : '') + (openedDataId && openedDataId !== item.id ? (light ?' bg-[#EEEEEE] hover:brightness-105' : 'bg-theme-dark-back hover:brightness-125') : (light ? ' bg-[#f7f7f7]' : ' bg-theme-dark-fore'))) + ' cursor-pointer hover:shadow-none duration-200 w-full h-[35px] flex items-center justify-between px-3 rounded shadow-sm'}>
@@ -229,7 +229,7 @@ const DisplayTask = ({tasks, setOpenedDataId, openedDataId, setOpenedDataToggle,
 				noDue && noDue.length > 0 && <>
 					{
 						tab === 'todo' && noDue && noDue.filter(item => item.marks.deleted !== true && item.marks.archived !== true).length !== 0 && (
-							<div className={(light ? 'text-theme-light-text' : 'text-theme-dark-text ') + 'flex items-center font-medium gap-2 border-b pb-2'}>
+							<div className={(light ? 'text-theme-light-text ' : 'text-theme-dark-text ') + 'flex items-center font-medium gap-2 border-b pb-2'}>
 								<h1 className='text-5xl'>00</h1>
 								<div className='flex flex-col'>
 									<p className='text-sm leading-5'>{year}</p>
@@ -240,7 +240,7 @@ const DisplayTask = ({tasks, setOpenedDataId, openedDataId, setOpenedDataToggle,
 					}
 					{
 						tab === 'standby' && noDue && noDue.filter(item => item.marks.deleted !== true && item.marks.archived !== true && item.status === 'todo').length !== 0 && (
-							<div className={(light ? 'text-theme-light-text' : 'text-theme-dark-text ') + 'flex items-center font-medium gap-2 border-b pb-2'}>
+							<div className={(light ? 'text-theme-light-text ' : 'text-theme-dark-text ') + 'flex items-center font-medium gap-2 border-b pb-2'}>
 								<h1 className='text-5xl'>00</h1>
 								<div className='flex flex-col'>
 									<p className='text-sm leading-5'>{year}</p>
@@ -251,7 +251,7 @@ const DisplayTask = ({tasks, setOpenedDataId, openedDataId, setOpenedDataToggle,
 					}
 					{
 						tab === 'important' && noDue && noDue.filter(item => item.marks.deleted !== true && item.marks.marked === true).length !== 0 && (
-							<div className={(light ? 'text-theme-light-text' : 'text-theme-dark-text ') + 'flex items-center font-medium gap-2 border-b pb-2'}>
+							<div className={(light ? 'text-theme-light-text ' : 'text-theme-dark-text ') + 'flex items-center font-medium gap-2 border-b pb-2'}>
 								<h1 className='text-5xl'>00</h1>
 								<div className='flex flex-col'>
 									<p className='text-sm leading-5'>{year}</p>
@@ -262,7 +262,7 @@ const DisplayTask = ({tasks, setOpenedDataId, openedDataId, setOpenedDataToggle,
 					}
 					{
 						tab === 'done' && noDue && noDue.filter(item => item.marks.deleted !== true && item.status !== 'todo').length !== 0 && (
-							<div className={(light ? 'text-theme-light-text' : 'text-theme-dark-text ') + 'flex items-center font-medium gap-2 border-b pb-2'}>
+							<div className={(light ? 'text-theme-light-text ' : 'text-theme-dark-text ') + 'flex items-center font-medium gap-2 border-b pb-2'}>
 								<h1 className='text-5xl'>00</h1>
 								<div className='flex flex-col'>
 									<p className='text-sm leading-5'>{year}</p>
@@ -273,7 +273,7 @@ const DisplayTask = ({tasks, setOpenedDataId, openedDataId, setOpenedDataToggle,
 					}
 					{
 						tab === 'archive' && noDue && noDue.filter(item => item.marks.archived === true).length !== 0 && (
-							<div className={(light ? 'text-theme-light-text' : 'text-theme-dark-text ') + 'flex items-center font-medium gap-2 border-b pb-2'}>
+							<div className={(light ? 'text-theme-light-text ' : 'text-theme-dark-text ') + 'flex items-center font-medium gap-2 border-b pb-2'}>
 								<h1 className='text-5xl'>00</h1>
 								<div className='flex flex-col'>
 									<p className='text-sm leading-5'>{year}</p>
@@ -284,7 +284,7 @@ const DisplayTask = ({tasks, setOpenedDataId, openedDataId, setOpenedDataToggle,
 					}
 					{
 						tab === 'bin' && noDue && noDue.filter(item => item.marks.deleted === true).length !== 0 && (
-							<div className={(light ? 'text-theme-light-text' : 'text-theme-dark-text ') + 'flex items-center font-medium gap-2 border-b pb-2'}>
+							<div className={(light ? 'text-theme-light-text ' : 'text-theme-dark-text ') + 'flex items-center font-medium gap-2 border-b pb-2'}>
 								<h1 className='text-5xl'>00</h1>
 								<div className='flex flex-col'>
 									<p className='text-sm leading-5'>{year}</p>
@@ -293,7 +293,7 @@ const DisplayTask = ({tasks, setOpenedDataId, openedDataId, setOpenedDataToggle,
 							</div>
 						)
 					}
-					<div className='grid grid-cols-3 gap-2'>
+					<div className='grid grid-cols-2 sm:grid-cols-3 gap-2'>
 						{
 							tab === 'todo' && noDue && noDue.filter(item => item.marks.deleted !== true && item.marks.archived !== true).map((item, idx) => (
 								<div key={item.id} onClick={() => openTaskHandler(item.id)} className={((item.status !== 'todo' ? 'opacity-50 text-gray-400' : '') + (openedDataId && openedDataId !== item.id ? (light ?' bg-[#EEEEEE] hover:brightness-105' : 'bg-theme-dark-back hover:brightness-125') : (light ? ' bg-[#f7f7f7]' : ' bg-theme-dark-fore'))) + ' cursor-pointer hover:shadow-none duration-200 w-full h-[35px] flex items-center justify-between px-3 rounded shadow-sm'}>

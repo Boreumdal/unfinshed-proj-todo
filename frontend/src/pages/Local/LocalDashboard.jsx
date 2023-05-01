@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import { BsFillGearFill, BsBox, BsBoxSeam, BsTrash3, BsStarFill, BsStar, BsThreeDots, BsCheckLg, BsArrowCounterclockwise, BsSearch, BsCaretUpFill, BsFillMoonStarsFill, BsSun } from 'react-icons/bs'
+import { BsFillGearFill, BsBox, BsBoxSeam, BsTrash3, BsStarFill, BsStar, BsThreeDots, BsCheckLg, BsArrowCounterclockwise, BsSearch, BsCaretUpFill, BsFillMoonStarsFill, BsFillCaretRightFill, BsSun } from 'react-icons/bs'
 import { GoPlus } from 'react-icons/go'
 import { RxCross2, RxColorWheel } from 'react-icons/rx'
-import { HiMenu, HiMenuAlt3 } from 'react-icons/hi'
+import { HiMenu, HiMenuAlt3, HiMenuAlt2 } from 'react-icons/hi'
 import { FaStickyNote, FaStar } from 'react-icons/fa'
 import { useNavigate } from 'react-router-dom'
 import { useTodos } from '../../data/context/TodosContext'
@@ -41,6 +41,8 @@ const LocalDashboard = () => {
 	const [testingToggle, setTestingToggle] = useState(false)
 
 	const [searchToggle, setSearchToggle] = useState(false)
+
+	const [mobileLeft, setMobileLeft] = useState(false)
 
 	const handleAddColumn = e => {
 		setAddColumn(e.target.value)
@@ -219,14 +221,18 @@ const LocalDashboard = () => {
 
 	return (
 		<>
-			<div className={(light ? 'bg-theme-light ' : 'bg-theme-dark text-white') + ' duration-500 ease-in-out hidden md:flex'}>
-				<div className=' w-[28%] max-w-[28%] min-w-[28%] h-screen p-5'>
+			<div className={(light ? 'bg-theme-light ' : 'bg-theme-dark text-white') + ' duration-500 ease-in-out flex'}>
+
+				<div className={(mobileLeft ? 'block ' : 'hidden ') + ' w-full sm:block sm:w-[28%] h-screen p-5'}>
 					<div className={(light ? 'bg-[#f8f8f8]' : 'bg-theme-dark-back ') + ' flex flex-col gap-5 w-full h-full drop-shadow-lg rounded-lg py-5 px-5  overflow-hidden'}>
 
 						<div className='h-[40px] flex items-center justify-between'>
 							<h1 className='text-3xl font-bold'>TodoList</h1>
-							<div className='flex items-center gap-3'>
-								<button onClick={() => setAddColumnToggle(!addColumnToggle)} className='text-xl bg-[#393E46] hover:bg-[#4ECCA3] duration-300 ease-in text-white rounded-md h-[32px] aspect-square flex items-center justify-center'>{ addColumnToggle ? <RxCross2 /> : <GoPlus />}</button>
+							<div className='flex items-center gap-2'>
+								<button onClick={() => setAddColumnToggle(!addColumnToggle)} className='text-xl bg-[#393E46] hover:bg-[#4ECCA3] duration-200 ease-in text-white rounded-md h-[32px] aspect-square flex items-center justify-center'>{ addColumnToggle ? <RxCross2 /> : <GoPlus />}</button>
+								{
+									mobileLeft && <button onClick={() => setMobileLeft(false)} className='text-xl hover:bg-[#4ECCA3] duration-200 ease-in text-[#393E46] rounded-md h-[32px] aspect-square flex items-center justify-center'><BsFillCaretRightFill /></button>
+								}
 							</div>
 						</div>
 
@@ -312,9 +318,11 @@ const LocalDashboard = () => {
 					</div>
 				</div>
 
-				<div className={(menu ? 'w-[50%]' : 'w-[72%] pr-5') + ' duration-300 origin-left h-screen py-5 relative '}>
-					<div className={(light ? 'bg-[#f8f8f8]' : 'bg-theme-dark-back') + ' h-[9vh] flex items-center justify-between  px-4 rounded-lg shadow-md z-40'}>
+				<div className={(menu ? 'w-full sm:w-[50%]' : 'w-full sm:w-[72%] sm:pr-5') + (mobileLeft ? ' hidden ' : '') + ' duration-300 origin-left h-screen py-5 relative '}>
+
+					<div className={(light ? 'bg-[#f8f8f8]' : 'bg-theme-dark-back') + ' h-[9vh] flex items-center justify-between mx-2 sm:mx-0 px-4 rounded-lg shadow-md z-40'}>
 						<div className='flex items-center gap-3 font-mono'>
+							<button onClick={() => setMobileLeft(!mobileLeft)} className='w-[32px] aspect-square text-2xl grid place-items-center'><HiMenuAlt2 /></button>
 							<div className='flex flex-col items-center'>
 								<div className='flex items-center gap-2'>
 									<h1 className='text-3xl font-bold'>Calendar</h1>
@@ -326,15 +334,6 @@ const LocalDashboard = () => {
 								</div>
 								<p className='text-xl font-bold self-start'>{`${day} ${time}`}</p>
 							</div>
-							{/* <div>
-								<div className='flex items-center gap-1'>
-									<h1 className='text-5xl'>{ today.slice(8)}</h1>
-									<div className='flex flex-col font-medium'>
-										<p className='text-sm leading-5'>{ today.slice(0, 4)}</p>
-										<p className='text-lg leading-5 font-bold'>{ months[+today.slice(5, 7) - 1]}</p>
-									</div>
-								</div>
-							</div> */}
 						</div>
 						<div className='flex items-center'>
 							<button onClick={() => handleSearchToggle()} className='w-[36px] aspect-square grid place-items-center text-xl rounded-full'><BsSearch /></button>
@@ -387,7 +386,7 @@ const LocalDashboard = () => {
 				
 				{
 					menu &&
-					<div className='w-[22%] origin-right duration-1000 absolute right-0 h-full p-5'>
+					<div className='w-full sm:w-[22%] origin-right duration-1000 absolute right-0 h-full p-5 bg-white'>
 						<div className={(light ? 'bg-[#f8f8f8]' : 'bg-theme-dark-back') + ' flex flex-col gap-5 w-full h-full justify-between drop-shadow-lg rounded-lg py-5 px-5 overflow-hidden'}>
 							<div>
 								<div className='flex items-center justify-between'>
@@ -437,18 +436,7 @@ const LocalDashboard = () => {
 						</div>
 					</div>
 				}
-				
 			</div>
-			{
-				<div className='md:hidden h-screen w-screen grid place-items-center duration-100'>
-					<div className='flex flex-col gap-4'>
-						<h1 className='text-xl font-mono font-bold'>For Desktop Only</h1>
-						<div className='flex flex-col gap-1'>
-							<button onClick={() => { location.href = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ' }} className='rotate text-white font-medium bg-[#333] py-2 px-3 rounded-md w-full'>saжnu puas</button>
-						</div>
-					</div>
-				</div>
-			}
 			{
 				destinationColumn && <AddTaskModal destinationColumn={destinationColumn} setDestinationColumn={setDestinationColumn} />
 			}

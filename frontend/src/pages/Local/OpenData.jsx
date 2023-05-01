@@ -111,7 +111,7 @@ const OpenData = ({ doneTask, undoDoneTask, removeMark, openedDataId, deleteTask
     return <>
         {
             openedData.id && (
-                <div className={(light ? 'bg-[#f8f8f8]' : 'bg-theme-dark-fore') + ' absolute bottom-6 mb-[44px] right-7 w-[420px] py-6 px-5 rounded-lg drop-shadow-lg font-medium'}>
+                <div className={(light ? 'bg-[#f8f8f8]' : 'bg-theme-dark-fore') + ' absolute bottom-6 mb-[44px] right-7 w-[342px] sm:w-[420px] py-6 px-5 rounded-lg drop-shadow-lg font-medium'}>
                     <div className='flex items-center justify-between'>
                         <h1 className='font-bold text-3xl max-w-[140px] truncate'>{ openedData.title }</h1>
                         <div className='flex text-xl items-center gap-1'>

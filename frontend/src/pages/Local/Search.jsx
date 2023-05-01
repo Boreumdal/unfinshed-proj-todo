@@ -44,7 +44,7 @@ const Search = ({ setSearchToggle, setOpenedDataId, setOpenedDataToggle }) => {
 	
 	return (
 		<div className='absolute grid place-items-center inset-0 bg-[#3d3d3d2e]'>
-			<div className={(light ? 'bg-white' : 'bg-theme-dark-fore text-white') + ' w-[448px] rounded-lg overflow-hidden'}>
+			<div className={(light ? 'bg-white' : 'bg-theme-dark-fore text-white') + ' w-[90%] sm:w-[448px] rounded-lg overflow-hidden'}>
 				<div className='h-[44px] w-full flex items-center gap-1'>
 					<span className='text-xl h-full aspect-square grid place-items-center'><BsSearch /></span>
 					<input type="text" className='bg-transparent w-full h-full outline-none border-none font-medium' value={searchTitle} onChange={e => setSearchTitle(e.target.value)} placeholder='Search by title...' />
