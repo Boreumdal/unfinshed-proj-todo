@@ -11,6 +11,7 @@ import { toast } from 'react-toastify'
 import DisplayTask from './DisplayTask'
 import OpenData from './OpenData'
 import TestingOptions from './TestingOptions'
+import { useAnimate, motion, AnimatePresence } from "framer-motion"
 import Search from './Search'
 
 const LocalDashboard = () => {
@@ -222,224 +223,294 @@ const LocalDashboard = () => {
 	return (
 		<>
 			<div className={(light ? 'bg-theme-light ' : 'bg-theme-dark text-white') + ' duration-500 ease-in-out flex'}>
+				<AnimatePresence>
 
-				<div className={(mobileLeft ? 'block ' : 'hidden ') + ' w-full sm:block sm:w-[28%] h-screen p-5'}>
-					<div className={(light ? 'bg-[#f8f8f8]' : 'bg-theme-dark-back ') + ' flex flex-col gap-5 w-full h-full drop-shadow-lg rounded-lg py-5 px-5  overflow-hidden'}>
+					<div key='nav' className='w-full hidden sm:block sm:w-[28%] h-screen p-5'>
+						<div className={(light ? 'bg-[#f8f8f8]' : 'bg-theme-dark-back ') + ' flex flex-col gap-5 w-full h-full drop-shadow-lg rounded-lg py-5 px-5  overflow-hidden'}>
 
-						<div className='h-[40px] flex items-center justify-between'>
-							<h1 className='text-3xl font-bold'>TodoList</h1>
-							<div className='flex items-center gap-2'>
-								<button onClick={() => setAddColumnToggle(!addColumnToggle)} className='text-xl bg-[#393E46] hover:bg-[#4ECCA3] duration-200 ease-in text-white rounded-md h-[32px] aspect-square flex items-center justify-center'>{ addColumnToggle ? <RxCross2 /> : <GoPlus />}</button>
-								{
-									mobileLeft && <button onClick={() => setMobileLeft(false)} className='text-lg bg-[#393E46] hover:bg-[#4ECCA3] duration-200 ease-in text-white rounded-md h-[32px] aspect-square flex items-center justify-center'><BsFillCalendar3WeekFill /></button>
-								}
-							</div>
-						</div>
-
-						{
-							addColumnToggle && (
-								<div className='absolute inset-0 grid place-items-center z-50'>
-									<div className={(light ? 'bg-white' : 'bg-theme-dark-fore text-white') + ' absolute shadow-md w-[260px] flex flex-col gap-2 rounded-md'}>
-										<h1 className='text-xl font-medium mx-4 pt-4 pb-2 border-b'>Add a column</h1>
-										<div className='flex flex-col items-center justify-between gap-3 px-5 py-3'>
-											<input type="text" name='column' className='h-[38px] px-3 text-theme-dark-back border bg-gray-50 shadow-sm w-full block rounded' value={addColumn} onChange={handleAddColumn} placeholder='Column name...' />
-											<div className='flex justify-end w-full'>
-												<button onClick={() => setAddColumnToggle(false)} className='h-[32px] w-[72px] px-4 flex items-center justify-center gap-1 rounded hover:text-blue-400 hover:brightness-95 duration-200 disabled:brightness-90 disabled:bg-[#383838] disabled:cursor-not-allowed font-medium'>Cancel</button>
-												<button onClick={handleAddColumnSubmit} className='h-[32px] w-[72px] bg-[#4ECCA3] px-4 flex items-center justify-center gap-1 rounded text-white hover:brightness-95 duration-200 disabled:brightness-90 disabled:bg-[#383838] disabled:cursor-not-allowed font-medium'>
-													<GoPlus />
-													<span>Add</span>
-												</button>
-											</div>
-										</div>
-									</div>
-									<div onClick={() => setAddColumnToggle(false)} className='bg-[#9595952d] w-full h-full'></div>
+							<div className='h-[40px] flex items-center justify-between'>
+								<h1 className='text-3xl font-bold'>TodoList</h1>
+								<div className='flex items-center gap-2'>
+									<button onClick={() => setAddColumnToggle(!addColumnToggle)} className='text-xl bg-[#393E46] hover:bg-[#4ECCA3] duration-200 ease-in text-white rounded-md h-[32px] aspect-square flex items-center justify-center'>{ addColumnToggle ? <RxCross2 /> : <GoPlus />}</button>
+									{
+										mobileLeft && <button onClick={() => setMobileLeft(true)} className='text-lg bg-[#393E46] hover:bg-[#4ECCA3] duration-200 ease-in text-white rounded-md h-[32px] aspect-square flex items-center justify-center'><BsFillCalendar3WeekFill /></button>
+									}
 								</div>
-							)
-						}
-						<div className='h-full overflow-y-auto flex flex-col gap-2 task-list-nav px-1'>
+							</div>
+
 							{
-								tasks.columns && tasks.columns.length > 0 ? (
-									tasks.columns.map((task, idx) => (
-										<div key={idx} className={(light ? 'bg-theme-light' : 'bg-theme-dark-fore') + ' flex flex-col gap-2 rounded-sm shadow-sm py-3 px-3'}>
-											<div className='flex items-center justify-between font-medium px-2 py-1'>
-												<h3>{ task }</h3>
-												<button onClick={() => setDestinationColumn(task)}><GoPlus /></button>
-											</div>
-											<div className='flex flex-col gap-2 overflow-y-auto'>
-												{
-													tasks.tasks && tasks.tasks.filter(todo => todo.column === task && todo.marks.deleted === false && todo.marks.archived !== true).length !== 0 
-													? tasks.tasks.filter(todo => todo.column === task && todo.marks.deleted === false && todo.marks.archived !== true).map(item => (
-														<div key={item?.id} onMouseLeave={() => setTooltip('')} className={(item?.status !== 'todo' ? 'opacity-40 line-through ' : '') + (light ? ' hover:bg-[#f8f8f8] ' : 'hover:bg-theme-dark-back ') + ' flex items-center gap-2 h-[28px] px-2  duration-300 rounded-sm relative task-item'}>
-															<span>{ item?.status !== 'todo' ? <BsCheckLg /> : <BsBox />}</span>
-															<p className={(tooltip === item?.id ? 'w-[54%]' : 'task-item-text w-[84%]') + ' truncate '}>{item?.title}</p>
-															<div className='h-full hidden duration-200 items-center gap-1 absolute right-2 task-item-action	z-20'>
-																{
-																	tooltip === item?.id && (
-																		<div className='flex items-center gap-1'>
-																			<button onClick={() => deleteTask(item?.id)} className='w-[22px] hover:text-white hover:bg-[#393E46] aspect-square rounded-md grid place-items-center duration-200'><BsTrash3 /></button>
-																			{
-																				item?.status === 'todo'
-																				? <button onClick={() => doneTask(item?.id)} className='w-[22px] hover:text-white hover:bg-[#393E46] aspect-square rounded-md grid place-items-center duration-200'><BsCheckLg /></button>
-																				: <button onClick={() => undoDoneTask(item?.id)} className='w-[22px] hover:text-white hover:bg-[#393E46] aspect-square rounded-md grid place-items-center duration-200'><BsArrowCounterclockwise /></button>
-																			}
-																			
-																			
-																			<button onClick={() => removeMark(item?.id)}  className='w-[22px] hover:text-white hover:bg-[#393E46] aspect-square rounded-md grid place-items-center duration-200'>{ item?.marks.marked ? <span className='text-sunglow'><BsStarFill /></span> : <span><BsStar /></span> }</button>
-																		</div>
-																	)
-																}
-																<button onClick={() => item?.id === tooltip ? setTooltip('') : setTooltip(item?.id)} className='w-[22px] hover:text-white hover:bg-[#393E46] aspect-square rounded-md grid place-items-center duration-200'>{ item?.id === tooltip ? <RxCross2 /> : <BsThreeDots /> }</button>
-															</div>
-															{
-																tooltip !== item?.id && (
-																	<div className='absolute right-2 task-mark'>
-																		<span className='w-[22px] aspect-square rounded-md grid place-items-center duration-200'>{ item?.marks.marked && <span className='text-sunglow'><BsStarFill /></span> }</span>
-																	</div>
-																)
-															}
-														</div>
-													)) : (
-														<div className='flex items-center gap-2 h-[28px] px-2 hover:bg-[#f8f8f8] cursor-default duration-300 rounded-sm'>
-															<span><BsBoxSeam /></span>
-															<p className='truncate'>No task added</p>
-														</div>
-													)
-												}
+								addColumnToggle && (
+									<div className='absolute inset-0 grid place-items-center z-50'>
+										<div className={(light ? 'bg-white' : 'bg-theme-dark-fore text-white') + ' absolute shadow-md w-[260px] flex flex-col gap-2 rounded-md'}>
+											<h1 className='text-xl font-medium mx-4 pt-4 pb-2 border-b'>Add a column</h1>
+											<div className='flex flex-col items-center justify-between gap-3 px-5 py-3'>
+												<input type="text" name='column' className='h-[38px] px-3 text-theme-dark-back border bg-gray-50 shadow-sm w-full block rounded' value={addColumn} onChange={handleAddColumn} placeholder='Column name...' />
+												<div className='flex justify-end w-full'>
+													<button onClick={() => setAddColumnToggle(false)} className='h-[32px] w-[72px] px-4 flex items-center justify-center gap-1 rounded hover:text-blue-400 hover:brightness-95 duration-200 disabled:brightness-90 disabled:bg-[#383838] disabled:cursor-not-allowed font-medium'>Cancel</button>
+													<button onClick={handleAddColumnSubmit} className='h-[32px] w-[72px] bg-[#4ECCA3] px-4 flex items-center justify-center gap-1 rounded text-white hover:brightness-95 duration-200 disabled:brightness-90 disabled:bg-[#383838] disabled:cursor-not-allowed font-medium'>
+														<GoPlus />
+														<span>Add</span>
+													</button>
+												</div>
 											</div>
 										</div>
-									))
-								) : (
-									<div>
-										<p className='text-sm font-medium'>No column found.<br />Add one by clicking the + icon above</p>
+										<div onClick={() => setAddColumnToggle(false)} className='bg-[#9595952d] w-full h-full'></div>
 									</div>
 								)
 							}
-						</div>
-					</div>
-				</div>
-
-				<div className={(menu ? 'w-full sm:w-[50%]' : 'w-full sm:w-[72%] sm:pr-5') + (mobileLeft ? ' hidden ' : '') + ' duration-300 origin-left h-screen py-5 relative '}>
-
-					<div className={(light ? 'bg-[#f8f8f8]' : 'bg-theme-dark-back') + ' h-[9vh] flex items-center justify-between mx-2 sm:mx-0 px-4 rounded-lg shadow-md z-40'}>
-						<div className='flex items-center gap-3 font-mono'>
-							<button onClick={() => setMobileLeft(!mobileLeft)} className='w-[32px] aspect-square text-2xl grid place-items-center'><BsCardList /></button>
-							<div className='flex flex-col items-center'>
-								<div className='flex items-center gap-2'>
-									<h1 className='text-2xl sm:text-3xl font-bold'>Calendar</h1>
-									{
-										tab !== 'todo' && <span className='text-sm font-bold bg-[#393E46] py-1 px-3 rounded-lg text-white'>
-											{ tab !== 'todo' ? tab === 'done' ? 'Done' : tab === 'important' ? 'Important' : tab=== 'archive' ? 'Archive' : tab === 'bin' ? 'Bin' : 'Todo' : '' }
-										</span>
-									}
-								</div>
-								<p className='text-sm sm:text-xl font-bold self-start'>{`${day} ${time}`}</p>
+							<div className='h-full overflow-y-auto flex flex-col gap-2 task-list-nav px-1'>
+								{
+									tasks.columns && tasks.columns.length > 0 ? (
+										tasks.columns.map((task, idx) => (
+											<div key={idx} className={(light ? 'bg-theme-light' : 'bg-theme-dark-fore') + ' flex flex-col gap-2 rounded-sm shadow-sm py-3 px-3'}>
+												<div className='flex items-center justify-between font-medium px-2 py-1'>
+													<h3>{ task }</h3>
+													<button onClick={() => setDestinationColumn(task)}><GoPlus /></button>
+												</div>
+												<div className='flex flex-col gap-2 overflow-y-auto'>
+													{
+														tasks.tasks && tasks.tasks.filter(todo => todo.column === task && todo.marks.deleted === false && todo.marks.archived !== true).length !== 0 
+														? tasks.tasks.filter(todo => todo.column === task && todo.marks.deleted === false && todo.marks.archived !== true).map(item => (
+															<div key={item?.id} onMouseLeave={() => setTooltip('')} className={(item?.status !== 'todo' ? 'opacity-40 line-through ' : '') + (light ? ' hover:bg-[#f8f8f8] ' : 'hover:bg-theme-dark-back ') + ' flex items-center gap-2 h-[28px] px-2  duration-300 rounded-sm relative task-item'}>
+																<span>{ item?.status !== 'todo' ? <BsCheckLg /> : <BsBox />}</span>
+																<p className={(tooltip === item?.id ? 'w-[54%]' : 'task-item-text w-[84%]') + ' truncate '}>{item?.title}</p>
+																<div className='h-full hidden duration-200 items-center gap-1 absolute right-2 task-item-action	z-20'>
+																	{
+																		tooltip === item?.id && (
+																			<div className='flex items-center gap-1'>
+																				<button onClick={() => deleteTask(item?.id)} className='w-[22px] hover:text-white hover:bg-[#393E46] aspect-square rounded-md grid place-items-center duration-200'><BsTrash3 /></button>
+																				{
+																					item?.status === 'todo'
+																					? <button onClick={() => doneTask(item?.id)} className='w-[22px] hover:text-white hover:bg-[#393E46] aspect-square rounded-md grid place-items-center duration-200'><BsCheckLg /></button>
+																					: <button onClick={() => undoDoneTask(item?.id)} className='w-[22px] hover:text-white hover:bg-[#393E46] aspect-square rounded-md grid place-items-center duration-200'><BsArrowCounterclockwise /></button>
+																				}
+																				
+																				
+																				<button onClick={() => removeMark(item?.id)}  className='w-[22px] hover:text-white hover:bg-[#393E46] aspect-square rounded-md grid place-items-center duration-200'>{ item?.marks.marked ? <span className='text-sunglow'><BsStarFill /></span> : <span><BsStar /></span> }</button>
+																			</div>
+																		)
+																	}
+																	<button onClick={() => item?.id === tooltip ? setTooltip('') : setTooltip(item?.id)} className='w-[22px] hover:text-white hover:bg-[#393E46] aspect-square rounded-md grid place-items-center duration-200'>{ item?.id === tooltip ? <RxCross2 /> : <BsThreeDots /> }</button>
+																</div>
+																{
+																	tooltip !== item?.id && (
+																		<div className='absolute right-2 task-mark'>
+																			<span className='w-[22px] aspect-square rounded-md grid place-items-center duration-200'>{ item?.marks.marked && <span className='text-sunglow'><BsStarFill /></span> }</span>
+																		</div>
+																	)
+																}
+															</div>
+														)) : (
+															<div className='flex items-center gap-2 h-[28px] px-2 hover:bg-[#f8f8f8] cursor-default duration-300 rounded-sm'>
+																<span><BsBoxSeam /></span>
+																<p className='truncate'>No task added</p>
+															</div>
+														)
+													}
+												</div>
+											</div>
+										))
+									) : (
+										<div>
+											<p className='text-sm font-medium'>No column found.<br />Add one by clicking the + icon above</p>
+										</div>
+									)
+								}
 							</div>
 						</div>
-						<div className='flex items-center'>
-							<button onClick={() => handleSearchToggle()} className='w-[36px] aspect-square grid place-items-center text-xl rounded-full'><BsSearch /></button>
-							<button onClick={() => setMenu(!menu)} className='w-[36px] aspect-square grid place-items-center text-2xl rounded-full'>
-								<span className=''>{ menu ? <HiMenu /> : <HiMenuAlt3 /> }</span>
-							</button>
-						</div>
-					</div>
-					
-					<div className='h-[91%] overflow-y-auto pt-4 px-4 z-30'>
-						<DisplayTask tasks={tasks} setOpenedDataId={setOpenedDataId} light={light} openedDataId={openedDataId} setOpenedDataToggle={setOpenedDataToggle} setEditingDataToggle={setEditingDataToggle} setEditDateToggle={setEditDateToggle} tab={tab}  />
 					</div>
 
 					{
-						openedDataId !== '' && (
-							<button onClick={() => setOpenedDataToggle(!openedDataToggle)} className={(light ? 'bg-[#f8f8f8]' : 'bg-theme-dark-fore') + ' absolute bottom-6 right-7 h-[38px] px-5 gap-2 text-lg rounded-lg drop-shadow-md flex items-center font-medium'}>
-								<span className={(openedDataToggle ? 'rotate-180' : 'rotate-0') + ' duration-300'}><BsCaretUpFill /></span>
-								<span>{openedDataToggle ? 'Close Task Details' : 'Open Task Details' }</span>
-							</button>
-						)
-					}
-
-					{
-						openedDataToggle && (
-							<OpenData 
-								openedDataId={openedDataId} 
-								deleteTask={deleteTask} 
-								archiveTask={archiveTask} 
-								setOpenedDataId={setOpenedDataId} 
-								setOpenedDataToggle={setOpenedDataToggle} 
-								fetchLocalstorage={fetchLocalstorage} 
-								permanentDeleteTask={permanentDeleteTask} 
-								restoreTask={restoreTask} 
-								editingDataToggle={editingDataToggle} 
-								setEditingDataToggle={setEditingDataToggle} 
-								editingDataId={editingDataId} 
-								setEditingDataId={setEditingDataId} 
-								editDateToggle={editDateToggle} 
-								setEditDateToggle={setEditDateToggle} 
-								tab={tab}
-								doneTask={doneTask}
-								undoDoneTask={undoDoneTask}
-								removeMark={removeMark}
-								
-							/>
-						)
-					}
-					
-				</div>
-				
-				{
-					menu &&
-					<div className={(light ? 'bg-white' : 'bg-theme-dark') + ' w-full sm:w-[22%] origin-right duration-1000 absolute right-0 h-full p-5'}>
-						<div className={(light ? 'bg-[#f8f8f8]' : 'bg-theme-dark-back') + ' flex flex-col gap-5 w-full h-full justify-between drop-shadow-lg rounded-lg py-5 px-5 overflow-hidden'}>
-							<div>
-								<div className='flex items-center justify-between'>
-									<div className='flex items-center gap-1'>
-										<button onClick={() => setMenu(false)} className='text-xl rounded-full p-2 grid place-items-center sm:hidden'><BsFillCaretLeftFill /></button>
-										<h1 className='text-3xl font-bold'>Menu</h1>
-
+						<div className={(light ? ' bg-[#f8f8f8]' : ' bg-theme-dark') + ' w-full sm:hidden absolute bg-red-400 sm:relative h-screen py-5'}>
+							<div key='displayHeader' className={(light ? 'bg-[#f8f8f8]' : 'bg-theme-dark-back') + ' h-[9vh] flex items-center justify-between mx-2 sm:mx-0 px-4 rounded-lg shadow-md z-40'}>
+								<div className='flex items-center gap-3 font-mono'>
+									<button onClick={() => setMobileLeft(!mobileLeft)} className='w-[32px] aspect-square text-2xl grid place-items-center sm:hidden'><BsCardList /></button>
+									<div className='flex flex-col items-center'>
+										<div className='flex items-center gap-2'>
+											<h1 className='text-2xl sm:text-3xl font-bold'>Calendara</h1>
+											{
+												tab !== 'todo' && <span className='text-sm font-bold bg-[#393E46] py-1 px-3 rounded-lg text-white'>
+													{ tab !== 'todo' ? tab === 'done' ? 'Done' : tab === 'important' ? 'Important' : tab=== 'archive' ? 'Archive' : tab === 'bin' ? 'Bin' : 'Todo' : '' }
+												</span>
+											}
+										</div>
+										<p className='text-sm sm:text-xl font-bold self-start'>{`${day} ${time}`}</p>
 									</div>
-									
-									
-									{
-										light ? <button onClick={() => setLight(false)} className='text-xl rounded-full p-2 grid place-items-center shadow bg-white'><BsSun /></button> : <button onClick={() => setLight(true)} className='text-xl rounded-full p-2 grid text-white bg-[#393E46] place-items-center shadow'><BsFillMoonStarsFill /></button>
-									}
 								</div>
-								<div className='my-5 flex flex-col gap-2'>
-									
-									<button onClick={() => handleTabSwap('todo')} className={(tab === 'todo' ? (light ? 'bg-white text-[#393E46] border-transparent' : 'bg-theme-dark-fore text-white border-transparent') : (light ? 'bg-white border-transparent hover:border-[#393E46]' : 'bg-theme-dark-fore border-transparent hover:border-white')) + ' border-2 duration-300 flex flex-col items-center justify-center shadow rounded text-sm font-medium py-6'}>
-										<span className='text-3xl font-bold'>{ tasks?.tasks?.length }</span>
-										<span>Total Tasks</span>
+								<div className='flex items-center'>
+									<button onClick={() => handleSearchToggle()} className='w-[36px] aspect-square grid place-items-center text-xl rounded-full'><BsSearch /></button>
+									<button onClick={() => setMenu(!menu)} className='w-[36px] aspect-square grid place-items-center text-2xl rounded-full'>
+										<span className=''>{ menu ? <HiMenu /> : <HiMenuAlt3 /> }</span>
 									</button>
-									<div className='grid grid-cols-3 gap-2'>
-										<button onClick={() => handleTabSwap('standby')} className={(tab === 'standby' ? (light ? 'bg-[#393E46] text-white scale-105 border-transparent' : 'bg-white text-[#393E46] scale-105 border-transparent') : tab === 'todo' ? ( light ? 'text-[#393E46] bg-white border-transparent hover:border-[#393e46] hover:bg-white hover:text-[#393e46]' : 'bg-theme-dark-fore text-white border-transparent hover:border-theme-dark-fore hover:bg-white hover:text-[#393e46]') : (light ? 'bg-white border-transparent hover:border-[#393E46]' : 'bg-theme-dark-fore border-transparent hover:border-white')) + ' border-2 duration-300 flex flex-col items-center shadow rounded justify-center aspect-square text-sm font-medium'}>
-											<span className='text-3xl font-bold'>{ tasks?.tasks?.filter(task => task.status === 'todo' && task.marks.deleted !== true).length }</span>
-											<span>To do</span>
-										</button>
-										<button onClick={() => handleTabSwap('important')} className={(tab === 'important' ? (light ? 'bg-[#393E46] text-white scale-105 border-transparent' : 'bg-white text-[#393E46] scale-105 border-transparent') : tab === 'todo' ? ( light ? 'text-[#393E46] bg-white border-transparent hover:border-[#393e46] hover:bg-white hover:text-[#393e46]' : 'bg-theme-dark-fore text-white border-transparent hover:border-theme-dark-fore hover:bg-white hover:text-[#393e46]') : (light ? 'bg-white border-transparent hover:border-[#393E46]' : 'bg-theme-dark-fore border-transparent hover:border-white')) + ' border-2 duration-300 flex flex-col items-center shadow rounded justify-center aspect-square text-sm font-medium'}>
-											<span className='text-2xl font-bold'>{ tasks?.tasks?.filter(task => task.marks.marked).length }</span>
-											<span>Important</span>
-										</button>
-										<button onClick={() => handleTabSwap('done')} className={(tab === 'done' ? (light ? 'bg-[#393E46] text-white scale-105 border-transparent' : 'bg-white text-[#393E46] scale-105 border-transparent') : tab === 'todo' ? ( light ? 'text-[#393E46] bg-white border-transparent hover:border-[#393e46] hover:bg-white hover:text-[#393e46]' : 'bg-theme-dark-fore text-white border-transparent hover:border-theme-dark-fore hover:bg-white hover:text-[#393e46]') : (light ? 'bg-white border-transparent hover:border-[#393E46]' : 'bg-theme-dark-fore border-transparent hover:border-white')) + ' border-2 duration-300 flex flex-col items-center shadow rounded justify-center aspect-square text-sm font-medium'}>
-											<span className='text-2xl font-bold'>{ tasks?.tasks?.filter(task => task.status !== 'todo' && task.marks.deleted !== true).length }</span>
-											<span>Done</span>
-										</button>
-									</div>
-									<div className='grid grid-cols-2 gap-2'>
-										<button onClick={() => handleTabSwap('archive')} className={(tab === 'archive' ? (light ? 'bg-[#393E46] text-white scale-105 border-transparent' : 'bg-white text-[#393E46] scale-105 border-transparent') : tab === 'todo' ? ( light ? 'text-[#393E46] bg-white border-transparent hover:border-[#393e46] hover:bg-white hover:text-[#393e46]' : 'bg-theme-dark-fore text-white border-transparent hover:border-theme-dark-fore hover:bg-white hover:text-[#393e46]') : (light ? 'bg-white border-transparent hover:border-[#393E46]' : 'bg-theme-dark-fore border-transparent hover:border-white')) + ' border-2 duration-300 flex flex-col items-center shadow rounded justify-center text-sm font-medium py-4'}>
-											<span className='text-2xl font-bold'>{ tasks?.tasks?.filter(task => task.marks.archived).length }</span>
-											<span>Archived</span>
-										</button>
-										<button onClick={() => handleTabSwap('bin')} className={(tab === 'bin' ? (light ? 'bg-[#393E46] text-white scale-105 border-transparent' : 'bg-white text-[#393E46] scale-105 border-transparent') : tab === 'todo' ? ( light ? 'text-[#393E46] bg-white border-transparent hover:border-[#393e46] hover:bg-white hover:text-[#393e46]' : 'bg-theme-dark-fore text-white border-transparent hover:border-theme-dark-fore hover:bg-white hover:text-[#393e46]') : (light ? 'bg-white border-transparent hover:border-[#393E46]' : 'bg-theme-dark-fore border-transparent hover:border-white')) + ' border-2 duration-300 flex flex-col items-center shadow rounded justify-center text-sm font-medium py-4'}>
-											<span className='text-2xl font-bold'>{ tasks?.tasks?.filter(task => task.marks.deleted).length }</span>
-											<span>Bin</span>
-										</button>
-									</div>
 								</div>
 							</div>
-							<div className='flex flex-col gap-1'>
-								<button onClick={() => setTestingToggle(true)} className='text-white w-full h-[32px] rounded-md font-medium bg-[#393E46] hover:opacity-90 duration-200'>Debug Options</button>
-								<button onClick={() => navigate('/')} className='text-white w-full h-[32px] rounded-md font-medium bg-pink-theme hover:opacity-90 duration-200'>Return Home</button>
+							
+							<div key='displayBody' className='h-[91%] overflow-y-auto pt-4 px-4 z-30'>
+								<DisplayTask tasks={tasks} setOpenedDataId={setOpenedDataId} light={light} openedDataId={openedDataId} setOpenedDataToggle={setOpenedDataToggle} setEditingDataToggle={setEditingDataToggle} setEditDateToggle={setEditDateToggle} tab={tab}  />
+							</div>
+
+							<AnimatePresence>
+								{
+									openedDataId !== '' && (
+										<motion.button initial={{ y: 100 }} animate={{ y: 0 }} transition={{ duration: 0.7 }} key='openDataButton' onClick={() => setOpenedDataToggle(!openedDataToggle)} className={(light ? 'bg-[#f8f8f8]' : 'bg-theme-dark-fore') + ' z-30 absolute bottom-6 right-7 h-[38px] px-5 gap-2 text-lg rounded-lg drop-shadow-md flex items-center font-medium'}>
+											<span className={(openedDataToggle ? 'rotate-180' : 'rotate-0') + ' duration-300'}><BsCaretUpFill /></span>
+											<span>{openedDataToggle ? 'Close Task Details' : 'Open Task Details' }</span>
+										</motion.button>
+									)
+								}
+
+								{
+									openedDataToggle && (
+										<OpenData 
+										key='openData'
+											openedDataId={openedDataId} 
+											deleteTask={deleteTask} 
+											archiveTask={archiveTask} 
+											setOpenedDataId={setOpenedDataId} 
+											setOpenedDataToggle={setOpenedDataToggle} 
+											fetchLocalstorage={fetchLocalstorage} 
+											permanentDeleteTask={permanentDeleteTask} 
+											restoreTask={restoreTask} 
+											editingDataToggle={editingDataToggle} 
+											setEditingDataToggle={setEditingDataToggle} 
+											editingDataId={editingDataId} 
+											setEditingDataId={setEditingDataId} 
+											editDateToggle={editDateToggle} 
+											setEditDateToggle={setEditDateToggle} 
+											tab={tab}
+											doneTask={doneTask}
+											undoDoneTask={undoDoneTask}
+											removeMark={removeMark}
+										/>
+									)
+								}
+							</AnimatePresence>
+
+						</div>
+					}
+					
+					<motion.div key='main' initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.5 }}className={(menu ? 'w-full sm:w-[50%]' : 'w-full sm:w-[72%] sm:pr-5') + ' hidden sm:block absolute sm:relative h-screen py-5'}>
+						<div key='displayHeader' className={(light ? 'bg-[#f8f8f8]' : 'bg-theme-dark-back') + ' h-[9vh] flex items-center justify-between mx-2 sm:mx-0 px-4 rounded-lg shadow-md z-40'}>
+							<div className='flex items-center gap-3 font-mono'>
+								<button onClick={() => setMobileLeft(!mobileLeft)} className='w-[32px] aspect-square text-2xl grid place-items-center sm:hidden'><BsCardList /></button>
+								<div className='flex flex-col items-center'>
+									<div className='flex items-center gap-2'>
+										<h1 className='text-2xl sm:text-3xl font-bold'>Calendar</h1>
+										{
+											tab !== 'todo' && <span className='text-sm font-bold bg-[#393E46] py-1 px-3 rounded-lg text-white'>
+												{ tab !== 'todo' ? tab === 'done' ? 'Done' : tab === 'important' ? 'Important' : tab=== 'archive' ? 'Archive' : tab === 'bin' ? 'Bin' : 'Todo' : '' }
+											</span>
+										}
+									</div>
+									<p className='text-sm sm:text-xl font-bold self-start'>{`${day} ${time}`}</p>
+								</div>
+							</div>
+							<div className='flex items-center'>
+								<button onClick={() => handleSearchToggle()} className='w-[36px] aspect-square grid place-items-center text-xl rounded-full'><BsSearch /></button>
+								<button onClick={() => setMenu(!menu)} className='w-[36px] aspect-square grid place-items-center text-2xl rounded-full'>
+									<span className=''>{ menu ? <HiMenu /> : <HiMenuAlt3 /> }</span>
+								</button>
 							</div>
 						</div>
-					</div>
-				}
+						
+						<div key='displayBody' className='h-[91%] overflow-y-auto pt-4 px-4 z-30'>
+							<DisplayTask tasks={tasks} setOpenedDataId={setOpenedDataId} light={light} openedDataId={openedDataId} setOpenedDataToggle={setOpenedDataToggle} setEditingDataToggle={setEditingDataToggle} setEditDateToggle={setEditDateToggle} tab={tab}  />
+						</div>
+
+						<AnimatePresence>
+							{
+								openedDataId !== '' && (
+									<motion.button initial={{ y: 100 }} animate={{ y: 0 }} transition={{ duration: 0.7 }} key='openDataButton' onClick={() => setOpenedDataToggle(!openedDataToggle)} className={(light ? 'bg-[#f8f8f8]' : 'bg-theme-dark-fore') + ' z-30 absolute bottom-6 right-7 h-[38px] px-5 gap-2 text-lg rounded-lg drop-shadow-md flex items-center font-medium'}>
+										<span className={(openedDataToggle ? 'rotate-180' : 'rotate-0') + ' duration-300'}><BsCaretUpFill /></span>
+										<span>{openedDataToggle ? 'Close Task Details' : 'Open Task Details' }</span>
+									</motion.button>
+								)
+							}
+
+							{
+								openedDataToggle && (
+									<OpenData 
+									key='openData'
+										openedDataId={openedDataId} 
+										deleteTask={deleteTask} 
+										archiveTask={archiveTask} 
+										setOpenedDataId={setOpenedDataId} 
+										setOpenedDataToggle={setOpenedDataToggle} 
+										fetchLocalstorage={fetchLocalstorage} 
+										permanentDeleteTask={permanentDeleteTask} 
+										restoreTask={restoreTask} 
+										editingDataToggle={editingDataToggle} 
+										setEditingDataToggle={setEditingDataToggle} 
+										editingDataId={editingDataId} 
+										setEditingDataId={setEditingDataId} 
+										editDateToggle={editDateToggle} 
+										setEditDateToggle={setEditDateToggle} 
+										tab={tab}
+										doneTask={doneTask}
+										undoDoneTask={undoDoneTask}
+										removeMark={removeMark}
+									/>
+								)
+							}
+						</AnimatePresence>
+
+					</motion.div>
+
+					{
+						menu &&
+						<motion.div initial={{ x: window.innerWidth }} animate={{ x: 0 }} exit={{ x: window.innerWidth }} key='menu' transition={{ duration: 0.5 }} className={' w-full sm:w-[22%] absolute sm:right-0 h-full p-5'}>
+							<div className={(light ? 'bg-[#f8f8f8]' : 'bg-theme-dark-back') + ' flex flex-col gap-5 w-full h-full justify-between drop-shadow-lg rounded-lg py-5 px-5 overflow-hidden'}>
+								<div>
+									<div className='flex items-center justify-between'>
+										<div className='flex items-center gap-1'>
+											<button onClick={() => setMenu(false)} className='text-xl rounded-full p-2 grid place-items-center sm:hidden'><BsFillCaretLeftFill /></button>
+											<h1 className='text-3xl font-bold'>Menu</h1>
+
+										</div>
+										{
+											light ? <button onClick={() => setLight(false)} className='text-xl rounded-full p-2 grid place-items-center shadow bg-white'><BsSun /></button> : <button onClick={() => setLight(true)} className='text-xl rounded-full p-2 grid text-white bg-[#393E46] place-items-center shadow'><BsFillMoonStarsFill /></button>
+										}
+									</div>
+									<div className='my-5 flex flex-col gap-2'>
+										
+										<button onClick={() => handleTabSwap('todo')} className={(tab === 'todo' ? (light ? 'bg-white text-[#393E46] border-transparent' : 'bg-theme-dark-fore text-white border-transparent') : (light ? 'bg-white border-transparent hover:border-[#393E46]' : 'bg-theme-dark-fore border-transparent hover:border-white')) + ' border-2 duration-300 flex flex-col items-center justify-center shadow rounded text-sm font-medium py-6'}>
+											<span className='text-3xl font-bold'>{ tasks?.tasks?.length }</span>
+											<span>Total Tasks</span>
+										</button>
+										<div className='grid grid-cols-3 gap-2'>
+											<button onClick={() => handleTabSwap('standby')} className={(tab === 'standby' ? (light ? 'bg-[#393E46] text-white scale-105 border-transparent' : 'bg-white text-[#393E46] scale-105 border-transparent') : tab === 'todo' ? ( light ? 'text-[#393E46] bg-white border-transparent hover:border-[#393e46] hover:bg-white hover:text-[#393e46]' : 'bg-theme-dark-fore text-white border-transparent hover:border-theme-dark-fore hover:bg-white hover:text-[#393e46]') : (light ? 'bg-white border-transparent hover:border-[#393E46]' : 'bg-theme-dark-fore border-transparent hover:border-white')) + ' border-2 duration-300 flex flex-col items-center shadow rounded justify-center aspect-square text-sm font-medium'}>
+												<span className='text-3xl font-bold'>{ tasks?.tasks?.filter(task => task.status === 'todo' && task.marks.deleted !== true).length }</span>
+												<span>To do</span>
+											</button>
+											<button onClick={() => handleTabSwap('important')} className={(tab === 'important' ? (light ? 'bg-[#393E46] text-white scale-105 border-transparent' : 'bg-white text-[#393E46] scale-105 border-transparent') : tab === 'todo' ? ( light ? 'text-[#393E46] bg-white border-transparent hover:border-[#393e46] hover:bg-white hover:text-[#393e46]' : 'bg-theme-dark-fore text-white border-transparent hover:border-theme-dark-fore hover:bg-white hover:text-[#393e46]') : (light ? 'bg-white border-transparent hover:border-[#393E46]' : 'bg-theme-dark-fore border-transparent hover:border-white')) + ' border-2 duration-300 flex flex-col items-center shadow rounded justify-center aspect-square text-sm font-medium'}>
+												<span className='text-2xl font-bold'>{ tasks?.tasks?.filter(task => task.marks.marked).length }</span>
+												<span>Important</span>
+											</button>
+											<button onClick={() => handleTabSwap('done')} className={(tab === 'done' ? (light ? 'bg-[#393E46] text-white scale-105 border-transparent' : 'bg-white text-[#393E46] scale-105 border-transparent') : tab === 'todo' ? ( light ? 'text-[#393E46] bg-white border-transparent hover:border-[#393e46] hover:bg-white hover:text-[#393e46]' : 'bg-theme-dark-fore text-white border-transparent hover:border-theme-dark-fore hover:bg-white hover:text-[#393e46]') : (light ? 'bg-white border-transparent hover:border-[#393E46]' : 'bg-theme-dark-fore border-transparent hover:border-white')) + ' border-2 duration-300 flex flex-col items-center shadow rounded justify-center aspect-square text-sm font-medium'}>
+												<span className='text-2xl font-bold'>{ tasks?.tasks?.filter(task => task.status !== 'todo' && task.marks.deleted !== true).length }</span>
+												<span>Done</span>
+											</button>
+										</div>
+										<div className='grid grid-cols-2 gap-2'>
+											<button onClick={() => handleTabSwap('archive')} className={(tab === 'archive' ? (light ? 'bg-[#393E46] text-white scale-105 border-transparent' : 'bg-white text-[#393E46] scale-105 border-transparent') : tab === 'todo' ? ( light ? 'text-[#393E46] bg-white border-transparent hover:border-[#393e46] hover:bg-white hover:text-[#393e46]' : 'bg-theme-dark-fore text-white border-transparent hover:border-theme-dark-fore hover:bg-white hover:text-[#393e46]') : (light ? 'bg-white border-transparent hover:border-[#393E46]' : 'bg-theme-dark-fore border-transparent hover:border-white')) + ' border-2 duration-300 flex flex-col items-center shadow rounded justify-center text-sm font-medium py-4'}>
+												<span className='text-2xl font-bold'>{ tasks?.tasks?.filter(task => task.marks.archived).length }</span>
+												<span>Archived</span>
+											</button>
+											<button onClick={() => handleTabSwap('bin')} className={(tab === 'bin' ? (light ? 'bg-[#393E46] text-white scale-105 border-transparent' : 'bg-white text-[#393E46] scale-105 border-transparent') : tab === 'todo' ? ( light ? 'text-[#393E46] bg-white border-transparent hover:border-[#393e46] hover:bg-white hover:text-[#393e46]' : 'bg-theme-dark-fore text-white border-transparent hover:border-theme-dark-fore hover:bg-white hover:text-[#393e46]') : (light ? 'bg-white border-transparent hover:border-[#393E46]' : 'bg-theme-dark-fore border-transparent hover:border-white')) + ' border-2 duration-300 flex flex-col items-center shadow rounded justify-center text-sm font-medium py-4'}>
+												<span className='text-2xl font-bold'>{ tasks?.tasks?.filter(task => task.marks.deleted).length }</span>
+												<span>Bin</span>
+											</button>
+										</div>
+									</div>
+								</div>
+								<div className='flex flex-col gap-1'>
+									<button onClick={() => setTestingToggle(true)} className='text-white w-full h-[32px] rounded-md font-medium bg-[#393E46] hover:opacity-90 duration-200'>Debug Options</button>
+									<button onClick={() => navigate('/')} className='text-white w-full h-[32px] rounded-md font-medium bg-pink-theme hover:opacity-90 duration-200'>Return Home</button>
+								</div>
+							</div>
+						</motion.div>
+					}
+				</AnimatePresence>
 			</div>
 			{
 				destinationColumn && <AddTaskModal destinationColumn={destinationColumn} setDestinationColumn={setDestinationColumn} />

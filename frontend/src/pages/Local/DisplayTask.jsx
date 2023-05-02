@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { BsCalendar2, BsCalendar2Check, BsCalendar2Heart, BsCaretDownFill, BsCaretUpFill, BsFolder2Open, BsFolder2, BsSave2 , BsExclamationCircle, BsEmojiSmile, BsBox2, BsEnvelopePaper } from 'react-icons/bs'
+import { useAnimate, motion, AnimatePresence } from "framer-motion"
 import { useTodos } from '../../data/context/TodosContext'
 
 const DisplayTask = ({tasks, setOpenedDataId, openedDataId, setOpenedDataToggle, setEditingDataToggle, setEditDateToggle, tab }) => {

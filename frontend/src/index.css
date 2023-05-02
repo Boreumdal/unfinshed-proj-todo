@@ -6,6 +6,10 @@
     font-size: 15px;
 }
 
+body {
+    overflow-x: hidden;
+}
+
 /* .todo-item-list */
 
 /* ::-webkit-scrollbar {
