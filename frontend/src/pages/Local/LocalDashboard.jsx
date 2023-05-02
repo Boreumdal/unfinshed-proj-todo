@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { BsFillGearFill, BsBox, BsBoxSeam, BsTrash3, BsStarFill, BsStar, BsThreeDots, BsCheckLg, BsArrowCounterclockwise, BsSearch, BsCaretUpFill, BsFillMoonStarsFill, BsFillCaretRightFill, BsSun } from 'react-icons/bs'
+import { BsFillGearFill, BsBox, BsBoxSeam, BsTrash3, BsStarFill, BsStar, BsThreeDots, BsCheckLg, BsArrowCounterclockwise, BsCardList, BsFillCalendar3WeekFill, BsSearch, BsCaretUpFill, BsFillCaretLeftFill, BsFillMoonStarsFill, BsFillCaretRightFill, BsSun } from 'react-icons/bs'
 import { GoPlus } from 'react-icons/go'
 import { RxCross2, RxColorWheel } from 'react-icons/rx'
 import { HiMenu, HiMenuAlt3, HiMenuAlt2 } from 'react-icons/hi'
@@ -231,7 +231,7 @@ const LocalDashboard = () => {
 							<div className='flex items-center gap-2'>
 								<button onClick={() => setAddColumnToggle(!addColumnToggle)} className='text-xl bg-[#393E46] hover:bg-[#4ECCA3] duration-200 ease-in text-white rounded-md h-[32px] aspect-square flex items-center justify-center'>{ addColumnToggle ? <RxCross2 /> : <GoPlus />}</button>
 								{
-									mobileLeft && <button onClick={() => setMobileLeft(false)} className='text-xl hover:bg-[#4ECCA3] duration-200 ease-in text-[#393E46] rounded-md h-[32px] aspect-square flex items-center justify-center'><BsFillCaretRightFill /></button>
+									mobileLeft && <button onClick={() => setMobileLeft(false)} className='text-lg bg-[#393E46] hover:bg-[#4ECCA3] duration-200 ease-in text-white rounded-md h-[32px] aspect-square flex items-center justify-center'><BsFillCalendar3WeekFill /></button>
 								}
 							</div>
 						</div>
@@ -322,17 +322,17 @@ const LocalDashboard = () => {
 
 					<div className={(light ? 'bg-[#f8f8f8]' : 'bg-theme-dark-back') + ' h-[9vh] flex items-center justify-between mx-2 sm:mx-0 px-4 rounded-lg shadow-md z-40'}>
 						<div className='flex items-center gap-3 font-mono'>
-							<button onClick={() => setMobileLeft(!mobileLeft)} className='w-[32px] aspect-square text-2xl grid place-items-center'><HiMenuAlt2 /></button>
+							<button onClick={() => setMobileLeft(!mobileLeft)} className='w-[32px] aspect-square text-2xl grid place-items-center'><BsCardList /></button>
 							<div className='flex flex-col items-center'>
 								<div className='flex items-center gap-2'>
-									<h1 className='text-3xl font-bold'>Calendar</h1>
+									<h1 className='text-2xl sm:text-3xl font-bold'>Calendar</h1>
 									{
 										tab !== 'todo' && <span className='text-sm font-bold bg-[#393E46] py-1 px-3 rounded-lg text-white'>
 											{ tab !== 'todo' ? tab === 'done' ? 'Done' : tab === 'important' ? 'Important' : tab=== 'archive' ? 'Archive' : tab === 'bin' ? 'Bin' : 'Todo' : '' }
 										</span>
 									}
 								</div>
-								<p className='text-xl font-bold self-start'>{`${day} ${time}`}</p>
+								<p className='text-sm sm:text-xl font-bold self-start'>{`${day} ${time}`}</p>
 							</div>
 						</div>
 						<div className='flex items-center'>
@@ -343,7 +343,7 @@ const LocalDashboard = () => {
 						</div>
 					</div>
 					
-					<div className='h-[91%] overflow-y-auto p-4 z-30'>
+					<div className='h-[91%] overflow-y-auto pt-4 px-4 z-30'>
 						<DisplayTask tasks={tasks} setOpenedDataId={setOpenedDataId} light={light} openedDataId={openedDataId} setOpenedDataToggle={setOpenedDataToggle} setEditingDataToggle={setEditingDataToggle} setEditDateToggle={setEditDateToggle} tab={tab}  />
 					</div>
 
@@ -386,11 +386,15 @@ const LocalDashboard = () => {
 				
 				{
 					menu &&
-					<div className='w-full sm:w-[22%] origin-right duration-1000 absolute right-0 h-full p-5 bg-white'>
+					<div className={(light ? 'bg-white' : 'bg-theme-dark') + ' w-full sm:w-[22%] origin-right duration-1000 absolute right-0 h-full p-5'}>
 						<div className={(light ? 'bg-[#f8f8f8]' : 'bg-theme-dark-back') + ' flex flex-col gap-5 w-full h-full justify-between drop-shadow-lg rounded-lg py-5 px-5 overflow-hidden'}>
 							<div>
 								<div className='flex items-center justify-between'>
-									<h1 className='text-3xl font-bold'>Menu</h1>
+									<div className='flex items-center gap-1'>
+										<button onClick={() => setMenu(false)} className='text-xl rounded-full p-2 grid place-items-center sm:hidden'><BsFillCaretLeftFill /></button>
+										<h1 className='text-3xl font-bold'>Menu</h1>
+
+									</div>
 									
 									
 									{

@@ -36,7 +36,7 @@ const DisplayTask = ({tasks, setOpenedDataId, openedDataId, setOpenedDataToggle,
 	}, [tasks])
 
 	return (
-		<div className='flex flex-col gap-5 h-fit py-2'>
+		<div className='flex flex-col gap-5 h-full'>
 			{
 				tab === 'todo' && dates && dates.length > 0 && dates.sort((a, b) => Date.parse(a) - Date.parse(b))
 					.map((date, idx) => tasks && tasks.tasks.length > 0 && tasks.tasks.filter(task => task.marks.deleted !== true && task.dueDate.slice(0,10) === date && task.marks.archived !== true).length > 0 && (
